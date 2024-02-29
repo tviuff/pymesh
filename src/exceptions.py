@@ -1,7 +1,6 @@
-"""Module with everything related to handling errors and exceptions
+"""Module with code for handling errors and exceptions
 """
 
 class NonUniqueInputError(Exception):
-    """...
+    """Raised when two inputs are identical
     """
-    pass
