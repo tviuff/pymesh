@@ -3,12 +3,15 @@
 
 import math
 import numpy as np
+from .points import Point
+from .exceptions import NonUniqueInputError
 
 class Line:
     """Line generated from two points in space
     """
-    def __init__(self, p0, p1):
-        assert (p0 != p1), f"Points P0 {p0} and P1 {p1} cannot be the same."
+    def __init__(self, p0: Point, p1: Point):
+        if p0 == p1:
+            raise NonUniqueInputError(f"input points p0 {p0} and p1 {p1} must not identical.")
         self.p0, self.p1 = p0, p1
 
     def __eq__(self, other):
