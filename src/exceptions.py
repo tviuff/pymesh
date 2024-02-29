@@ -2,5 +2,5 @@
 """
 
 class NonUniqueInputError(Exception):
-    """Raised when two inputs are identical
+    """Raised when different inputs are identical
     """
