@@ -1,7 +1,7 @@
 """Main module for trying out code ideas
 """
 
-from src import Point, Line
+from mesh_generator import Point, Line
 
 point1 = Point(0.0, 0.0, 0.0)
 point2 = Point(1.0, 0.0, 0.0)
