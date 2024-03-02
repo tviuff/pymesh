@@ -27,19 +27,19 @@ The surfaces are used for generation of the final panel mesh and implements the 
 The mesh will be generated using a combination of `csv` and `logger` to generate the GDF file, following<br>
 the protecol in the [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pdf).
 
-> More details about the code beaviour will follow soon.
+> *More details about the code beaviour will follow soon.*
 
 ### Modules to use
 
-- **unittests**, set up test procedures
-- **exceptions**, create custom ones
-- **logger**, could be smart for later GDF generation
+- `unittests` for setting up test procedures
+- `exceptions` for creating custom exceptions
+- `logger` for GDF file generation
 
 ## Resources
 
 - [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pdf)
 - [Markdown Guide](https://www.markdownguide.org/basic-syntax/)
-- ArjanCodes on YouTube:
+- YouTube videos by ArjanCodes:
     - [8 Python Coding Tips](https://www.youtube.com/watch?v=woIkysZytSs)
     - [The Ultimate Guide to Writing Classes](https://www.youtube.com/watch?v=lX9UQp2NwTk)
     - [Cohesion and Coupling](https://www.youtube.com/watch?v=eiDyK_ofPPM)
