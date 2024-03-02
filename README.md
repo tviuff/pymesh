@@ -19,7 +19,7 @@ The package is based on Object-Oriented Programming (OOP) and gives the user the
 
 ### Code behaviour
 
-
+> Details about the code beaviour will be written soon.
 
 ### Modules to use
 
