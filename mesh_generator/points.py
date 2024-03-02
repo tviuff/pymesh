@@ -1,7 +1,6 @@
 """Module containing Point classes.
 """
 
-import csv
 import numpy as np
 
 class Point:
@@ -15,18 +14,3 @@ class Point:
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.x:.2f}, {self.y:.2f}, {self.z:.2f})"
-
-    @classmethod
-    def from_csv(cls, filename):
-        """Reads points from a csv file
-        """
-        with open(filename, mode="r", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            points = list(reader)
-
-        for point in points:
-            cls(
-                x = float(point.get("x")),
-                y = float(point.get("y")),
-                z = float(point.get("z"))
-                )
