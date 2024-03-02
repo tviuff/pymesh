@@ -9,17 +9,25 @@ The package is based on Object-Oriented Programming (OOP) and gives the user the
     - `Point`
 - Curves:
     - `Line`
-    - `Arc3`
+    - `Arc3` *..to be implemented*
 - Surfaces:
-    - `CoonsPatch`
-- GDF generation:
+    - *..to be implemented*
+- Mesh:
     - *..to be implemented*
 
 ## Functionality to be implemented
 
 ### Code behaviour
 
-> Details about the code beaviour will be written soon.
+The package should use OOP with classes for creating points, curves and surfaces in a 3-dimensional space The points are only as helpers for creation of lines and surfaces. Similarly, the lines are used solely for<br>
+generation of surfaces.<br>
+
+The surfaces are used for generation of the final panel mesh and implements the [Coon's Patch](https://youtu.be/TM0GM6xhAoI?t=2090) algorithm.
+
+The mesh will be generated using a combination of `csv` and `logger` to generate the GDF file, following<br>
+the protecol in the [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pdf).
+
+> More details about the code beaviour will follow soon.
 
 ### Modules to use
 
