@@ -37,7 +37,9 @@ the protecol in the [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pd
 
 ## Resources
 
+- [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pdf)
 - [Markdown Guide](https://www.markdownguide.org/basic-syntax/)
-- ArjanCodes: [8 Python Coding Tips](https://www.youtube.com/watch?v=woIkysZytSs)
-- ArjanCodes: [The Ultimate Guide to Writing Classes](https://www.youtube.com/watch?v=lX9UQp2NwTk)
-- ArjanCodes: [Cohesion and Coupling](https://www.youtube.com/watch?v=eiDyK_ofPPM)
+- ArjanCodes on YouTube:
+    - [8 Python Coding Tips](https://www.youtube.com/watch?v=woIkysZytSs)
+    - [The Ultimate Guide to Writing Classes](https://www.youtube.com/watch?v=lX9UQp2NwTk)
+    - [Cohesion and Coupling](https://www.youtube.com/watch?v=eiDyK_ofPPM)
