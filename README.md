@@ -13,9 +13,7 @@ The package is based on Object-Oriented Programming (OOP) and gives the user the
 - Surfaces:
     - `CoonsPatch`
 - GDF generation:
-    - ****To be implemented****
-
----
+    - *..to be implemented*
 
 ## Functionality to be implemented
 
@@ -29,9 +27,9 @@ The package is based on Object-Oriented Programming (OOP) and gives the user the
 - **exceptions**, create custom ones
 - **logger**, could be smart for later GDF generation
 
----
-
 ## Resources
 
-- [Markdown Giude](https://www.markdownguide.org/basic-syntax/)
-- 
+- [Markdown Guide](https://www.markdownguide.org/basic-syntax/)
+- ArjanCodes: [8 Python Coding Tips](https://www.youtube.com/watch?v=woIkysZytSs)
+- ArjanCodes: [The Ultimate Guide to Writing Classes](https://www.youtube.com/watch?v=lX9UQp2NwTk)
+- ArjanCodes: [Cohesion and Coupling](https://www.youtube.com/watch?v=eiDyK_ofPPM)
