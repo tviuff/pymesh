@@ -4,9 +4,9 @@
 import numpy as np
 
 from .points import Point
-from .mesh import Mesher
+from .mesh import CurveMesher
 
-class Line(Mesher):
+class Line(CurveMesher):
     """Line generated from two points in space
     """
 
@@ -15,6 +15,7 @@ class Line(Mesher):
             "Line arguments must be instances of the Point class."
         assert(p0 != p1), "Line points must be unique."
         self.p0, self.p1 = p0, p1
+        self.start, self.end = p0, p1
 
     def __eq__(self, other):
         return self.p0 == other.p0 and self.p1 == other.p1
@@ -27,7 +28,7 @@ class Line(Mesher):
         The options can be read by using the class method '.print_mesh_dist_option_list()'.
         """
         num_points = super()._validate_mesh_num_points(num_points)
-        mesh_dist_func = super()._get_mesh_distribution_function(option)
+        mesh_dist_func = super().get_mesh_distribution_function(option)
         xyz = np.zeros((num_points, 3))
         for i, u in enumerate(np.linspace(0, 1, num_points, endpoint=True)):
             xyz[i, :] = self.p0.xyz + (self.p1.xyz - self.p0.xyz) * mesh_dist_func(u)
