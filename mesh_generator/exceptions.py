@@ -1,6 +1,5 @@
 """Module with code for handling errors and exceptions
 """
 
-class NonUniqueInputError(Exception):
-    """Raised when different inputs are identical
-    """
+class NotFoundError(Exception):
+    """Raised when an item or ressource is not found"""

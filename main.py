@@ -3,10 +3,10 @@
 
 from mesh_generator import Point, Line
 
-point1 = Point(0.0, 0.0, 0.0)
-point2 = Point(1.0, 0.0, 0.0)
-point3 = Point(1.0, 1.0, 0.0)
-point4 = Point(0.0, 1.0, 0.0)
+point1 = Point(0, 0, 0)
+point2 = Point(1, 0, 0)
+point3 = Point(1, 1, 0)
+point4 = Point(0, 1, 0)
 
 for point in [point1, point2, point3, point4]:
     print(point)
@@ -21,7 +21,9 @@ for line in [line1, line2, line3, line4]:
     print(line)
 print()
 
-xyz = line1.get_points(n=5, method="cosine_end1")# needs better input text help
+line1.print_mesh_dist_option_list()
+print()
+xyz = line1.generate_mesh_points(num_points=0, option="linear")
 
 print(xyz)
 print()

@@ -4,11 +4,12 @@
 import numpy as np
 
 from .points import Point
-from .constants import DIST_METHOD_FUNCTIONS, DEFAULT_DIST_METHOD
+from .mesh import Mesher
 
-class Line:
+class Line(Mesher):
     """Line generated from two points in space
     """
+
     def __init__(self, p0: Point, p1: Point):
         assert(isinstance(p0, Point) and isinstance(p1, Point)), \
             "Line arguments must be instances of the Point class."
@@ -21,18 +22,13 @@ class Line:
     def __repr__(self):
         return f"{self.__class__.__name__}({self.p0}, {self.p1})"
 
-    def get_points(self, n:int=10, method:str=DEFAULT_DIST_METHOD):
-        """Distributes n internal points along based on a selected method.
-        The method options are:
-            'linear'     : linearly spaced.
-            'cosine_both': increasingly more closely spaced at the ends.
-            'cosine_end1': increasingly more closely spaced at end1.
-            'cosine_end2': increasingly more closely spaced at end2.
+    def generate_mesh_points(self, num_points:int=10, option:str=None):
+        """Generates 'num_point' mesh points along curve using a selected option.
+        The options can be read by using the class method '.print_mesh_dist_option_list()'.
         """
-        assert (isinstance(n, int) and n > 1), "n must be a positive integer larger than 1."
-        assert (method in DIST_METHOD_FUNCTIONS), f"'{method}' distribution method not recognized."
-        xyz = np.zeros((n, 3))
-        dist_function = DIST_METHOD_FUNCTIONS[method]
-        for i, u in enumerate(np.linspace(0, 1, n, endpoint=True)):
-            xyz[i, :] = self.p0.xyz + (self.p1.xyz - self.p0.xyz) * dist_function(u)
+        num_points = super()._validate_mesh_num_points(num_points)
+        mesh_dist_func = super()._get_mesh_distribution_function(option)
+        xyz = np.zeros((num_points, 3))
+        for i, u in enumerate(np.linspace(0, 1, num_points, endpoint=True)):
+            xyz[i, :] = self.p0.xyz + (self.p1.xyz - self.p0.xyz) * mesh_dist_func(u)
         return xyz
