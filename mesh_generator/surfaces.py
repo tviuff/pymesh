@@ -10,7 +10,7 @@ class CoonsPatch(SurfaceMesher):
     """Not yet working properly
     """
     def __init__(self, curve_u0:Line, curve_u1:Line, curve_0w:Line, curve_1w:Line):
-        """Initializing curves and points in the parametric U-W space
+        """Initializing curves and points in the parametric U-W space.
         """
         super().__init__()
         curve_selection = (curve_u0, curve_u1, curve_0w, curve_1w)
@@ -53,7 +53,9 @@ class CoonsPatch(SurfaceMesher):
         option_0w:str=None, option_1w:str=None
         ):
         """Generates surface mesh points in the non-parametric space.
-        See: https://youtu.be/TM0GM6xhAoI?t=2090 for more information.
+        See also: https://youtu.be/TM0GM6xhAoI?t=2090 for more information.
+        
+        For list of possible options use CurveMesher.print_mesh_dist_option_list()
         """
         pu0 = self.curve_u0.generate_mesh_points(num_points_u, option_u0)
         pu1 = self.curve_u1.generate_mesh_points(num_points_u, option_u1)

@@ -31,9 +31,11 @@ MESH_DISTRIBUTION_OPTIONS: Final = {
     },
 }
 
+
 class CurveMesher:
     """Mesher class used for generating mesh points along curves
     """
+
     def _validate_mesh_num_points(self, num_points:int=DEFAULT_NUM_POINTS):
         """Validates num_point by raising exceptions if not ok
         """
@@ -63,9 +65,11 @@ class CurveMesher:
         for key, nested_dict in MESH_DISTRIBUTION_OPTIONS.items():
             print(f"    {key}: {nested_dict["description"]}")
 
+
 class SurfaceMesher:
     """Mesher class used for generating surface mesh points and panels
     """
+
     def __init__(self):
         self._mesh_points = None
         self._panels = None
