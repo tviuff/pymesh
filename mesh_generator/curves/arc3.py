@@ -46,10 +46,13 @@ class Arc3(Curve):
         return self.point_centre == other.point_centre \
             and self.point_start == other.point_start \
                 and self.point_end == other.point_end
-    
+
     def __repr__(self):
         return f'{self.__class__.__name__}({self.point_centre}, {self.point_start}, {self.point_end})'
-    
+
+    def get_path_fn(num_points:int, dist_method:DistributionMethod):
+        assert (num_points > 1), f'N {num_points} is not larger than 1!'
+
     def get_points(self, N:int=10, method='linear'):
         assert (N > 1), f'N {N} is not larger than 1!'
         assert (method in ['linear', 'cosine', 'cos01', 'cos10']), f'method {method} not recognized!'

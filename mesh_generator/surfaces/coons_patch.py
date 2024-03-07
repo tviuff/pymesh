@@ -3,8 +3,8 @@
 
 import numpy as np
 
-from .surface import Surface
-from ..curves.curve import Curve
+from ..surfaces import Surface
+from ..curves import Curve
 from ..mesh import DistributionMethod, Linear
 from ..point import Point
 
@@ -128,10 +128,10 @@ class CoonsPatch(Surface):
         return self.__mesh_points
 
     def set_panels(self):
-        if self.mesh_points is None:
+        if self.__mesh_points is None:
             _ = self.get_mesh_points()
         panels = []
-        mp = self.mesh_points
+        mp = self.__mesh_points
         for j in range(0, mp.shape[2]-1):
             for i in range(0, mp.shape[1]-1):
                 xyz1, xyz2, xyz3, xyz4 = mp[:,i,j], mp[:,i+1,j], mp[:,i+1,j+1], mp[:,i,j+1]
