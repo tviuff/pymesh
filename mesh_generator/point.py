@@ -7,7 +7,7 @@ from typing import TypeVar
 
 import numpy as np
 
-T = TypeVar("T")
+T = TypeVar("T") # BUG: Use new Python 3.12 syntax
 
 class Point[T]:
     """Creates and handles point coordinates
@@ -16,7 +16,9 @@ class Point[T]:
     def __init__(self, x:float|int, y:float|int, z:float|int):
         for arg in (x, y, z):
             if not isinstance(arg, (float, int)):
-                raise TypeError(f"{self.__class__.__name__}.__init__() only takes arguments of type 'float' or 'int'.")
+                raise TypeError(
+                    f"{self.__class__.__name__}.__init__() only takes arguments of type 'float' or 'int'."
+                )
         self.x, self.y, self.z = float(x), float(y), float(z)
         self.xyz = np.array([self.x, self.y, self.z])
 
@@ -40,7 +42,7 @@ class Point[T]:
         return math.sqrt(dx**2 + dy**2 + dz**2)
 
     @classmethod
-    def set_point_relative_to(cls, point:T=None, dx:float=0.0, dy:float=0.0, dz:float=0.0) -> T:
+    def set_relative_to(cls, point:T=None, dx:float=0.0, dy:float=0.0, dz:float=0.0) -> T:
         """Creates a new point using relative position arguments (dx, dy, dz)
         to existing Point instance
         """

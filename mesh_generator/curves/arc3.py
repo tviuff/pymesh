@@ -1,48 +1,16 @@
-"""Module including curve and line classes
+"""Module including linee class
 """
 
-import math
-import numpy as np
+from .curve import Curve
+from ..point import Point
+from ..mesh import DistributionMethod
 
-from .points import Point
-from .mesh import CurveMesher
-
-class Line(CurveMesher):
-    """Line generated from two points in space.
-    point_start is the starting point and point_end is the ending point.
-    """
-
-    def __init__(self, point_start: Point, point_end: Point):
-        assert(isinstance(point_start, Point) and isinstance(point_end, Point)), \
-            "Line arguments must be instances of the Point class."
-        assert(point_start != point_end), "Line points must be unique."
-        self.point_start = point_start
-        self.point_end = point_end
-
-    def __eq__(self, other):
-        return self.point_start == other.point_start and self.point_end == other.point_end
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}({self.point_start}, {self.point_end})"
-
-    def generate_mesh_points(self, num_points:int=10, option:str=None):
-        """Generates 'num_point' mesh points along curve using a selected option.
-        The options can be read by using the class method '.print_mesh_dist_option_list()'.
-        """
-        num_points = super()._validate_mesh_num_points(num_points)
-        mesh_dist_func = super().get_mesh_distribution_function(option)
-        xyz = np.zeros((num_points, 3))
-        for i, u in enumerate(np.linspace(0, 1, num_points, endpoint=True)):
-            xyz[i, :] = self.point_start.xyz \
-                + (self.point_end.xyz - self.point_start.xyz) * mesh_dist_func(u)
-        return xyz
-
-class Arc3(CurveMesher):
+class Arc3(Curve):
     """Circular arc generated from 3 points in space
     From https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
     """
     __tolerance = 0.0001
-    def __init__(self, point_start, point_end, point_centre):
+    def __init__(self, point_start:Point, point_end, point_centre:Point):
         raise NotImplementedError("Arc3 not yet implemented.")
         if not (
             isinstance(point_start, Point)
