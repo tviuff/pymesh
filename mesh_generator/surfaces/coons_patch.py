@@ -8,13 +8,13 @@ from ..curves import Curve
 from ..mesh import DistributionMethod, Linear
 from ..point import Point
 
+DEFAULT_NUM_POINT = 10
+DEFAULT_DIST_METHOD = Linear
+
 class CoonsPatch(Surface):
     """Coons patch class taking a selection of four curves
     and creates mesh points for generating panels.
     """
-
-    DEFAULT_NUM_POINT = 10
-    DEFAULT_DIST_METHOD = Linear
 
     __curve_selection:tuple[Curve]
     __dist_u0:DistributionMethod = DEFAULT_DIST_METHOD

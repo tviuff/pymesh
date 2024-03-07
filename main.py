@@ -1,6 +1,12 @@
 """Main module for trying out code ideas
 """
 
+# ! Implement testing procedures
+# ! Implement CoonsPatch.__init__ which checks if curves are valid.
+# ! Implement Density(DistMethod) class that uses Curve.get_length()
+# ? Should we use pydoc or mkdoc to generate code documentation??
+# BUG: Arc3 not implemented yet...
+
 from matplotlib import pyplot as plt
 
 from mesh_generator import Point, Line, CoonsPatch, Linear, CosineBoth, CosineEnd1, CosineEnd2
@@ -23,20 +29,13 @@ line4 = Line(point_br, point_tr)# p1w
 #    print(line)
 #print()
 
-#line1.print_mesh_dist_option_list()
-#print()
-#line1_mesh = line1.generate_mesh_points(num_points=0, option="linear")
-
-#print(line1_mesh)
-#print()
-
 #dist = Point.get_distance(point_bl, point_br)
 #print(dist)
 
 surface1 = CoonsPatch(line1, line2, line3, line4)
 surface1.set_dist_methods(dist_u1=CosineBoth)
 surface1.set_num_points(num_points_u=20, num_points_w=20)
-surface1_mesh = surface1.get_mesh_points()
+surface1_mp = surface1.get_mesh_points()
 
 plt.close("all")
 plt.style.use('dark_background')
@@ -44,7 +43,7 @@ fig = plt.figure()
 ax = fig.add_subplot(projection='3d')
 for i in range(0, 20):
     for j in range(0, 20):
-        ax.scatter(surface1_mesh[0,i,j], surface1_mesh[1,i,j], surface1_mesh[2,i,j], color='blue')
+        ax.scatter(surface1_mp[0,i,j], surface1_mp[1,i,j], surface1_mp[2,i,j], color='blue')
 ax.set_xlabel('x (m)')
 ax.set_ylabel('y (m)')
 ax.set_zlabel('z (m)')

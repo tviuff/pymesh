@@ -11,6 +11,7 @@ class Arc3(Curve):
     """
     __tolerance = 0.0001
     def __init__(self, point_start:Point, point_end, point_centre:Point):
+        super().__init__(point_start, point_end)
         raise NotImplementedError("Arc3 not yet implemented.")
         if not (
             isinstance(point_start, Point)

@@ -13,11 +13,8 @@ class Line(Curve):
     """
 
     def __init__(self, point_start: Point, point_end: Point):
-        assert(isinstance(point_start, Point) and isinstance(point_end, Point)), \
-            "Line arguments must be instances of the Point class."
+        super().__init__(point_start, point_end)
         assert(point_start != point_end), "Line points must be unique."
-        self.point_start = point_start
-        self.point_end = point_end
 
     def __eq__(self, other):
         return self.point_start == other.point_start and self.point_end == other.point_end

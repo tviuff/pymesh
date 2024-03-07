@@ -3,21 +3,24 @@
 
 import math
 import inspect
-from typing import TypeVar
+from typing import Self
 
 import numpy as np
 
-T = TypeVar("T") # BUG: Use new Python 3.12 syntax
+type IntOrFloat = int | float
+type listOrSet[T] = list[T] | set[T]# ! Remember this type hint method
 
-class Point[T]:
+
+class Point:
     """Creates and handles point coordinates
     """
 
-    def __init__(self, x:float|int, y:float|int, z:float|int):
+    def __init__(self, x:IntOrFloat, y:IntOrFloat, z:IntOrFloat):
         for arg in (x, y, z):
             if not isinstance(arg, (float, int)):
                 raise TypeError(
-                    f"{self.__class__.__name__}.__init__() only takes arguments of type 'float' or 'int'."
+                    f"{self.__class__.__name__}.__init__() "
+                    f"only takes arguments of type 'float' or 'int'."
                 )
         self.x, self.y, self.z = float(x), float(y), float(z)
         self.xyz = np.array([self.x, self.y, self.z])
@@ -29,7 +32,7 @@ class Point[T]:
         return f"{self.__class__.__name__}({self.x:.2f}, {self.y:.2f}, {self.z:.2f})"
 
     @classmethod
-    def get_distance(cls, point1:T, point2:T) -> float:
+    def get_distance(cls, point1:Self, point2:Self) -> float:
         """Returns the distance between to points.
         """
         if not (isinstance(point1, Point) and isinstance(point2, Point)):
@@ -42,7 +45,7 @@ class Point[T]:
         return math.sqrt(dx**2 + dy**2 + dz**2)
 
     @classmethod
-    def set_relative_to(cls, point:T=None, dx:float=0.0, dy:float=0.0, dz:float=0.0) -> T:
+    def set_relative_to(cls, point:Self=None, dx:float=0.0, dy:float=0.0, dz:float=0.0) -> Self:
         """Creates a new point using relative position arguments (dx, dy, dz)
         to existing Point instance
         """
