@@ -38,3 +38,21 @@ class Point[T]:
         dy = point1.y - point2.y
         dz = point1.z - point2.z
         return math.sqrt(dx**2 + dy**2 + dz**2)
+
+    @classmethod
+    def set_point_relative_to(cls, point:T=None, dx:float=0.0, dy:float=0.0, dz:float=0.0) -> T:
+        """Creates a new point using relative position arguments (dx, dy, dz)
+        to existing Point instance
+        """
+        if (point is None) and dx == 0.0 and dy == 0.0 and dz == 0.0:
+            raise ValueError("Input must include a relative distance.")
+        if not isinstance(point, Point):
+            raise TypeError("Input point must of type 'Point'.")
+        if not (isinstance(dx, (float, int)) \
+                or isinstance(dy, (float, int)) \
+                or isinstance(dz, (float, int))):
+            raise TypeError("Relative position input must be of type 'float' or 'int'.")
+        x = point.x + float(dx)
+        y = point.y + float(dy)
+        z = point.z + float(dz)
+        return Point(x, y, z)

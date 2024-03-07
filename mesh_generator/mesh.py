@@ -1,6 +1,8 @@
 """Module with project helper functions related to mesh generation
 """
 
+# MESH ALT2 !!!!
+
 import math
 from typing import Final
 
@@ -31,7 +33,6 @@ MESH_DISTRIBUTION_OPTIONS: Final = {
     },
 }
 
-
 class CurveMesher:
     """Mesher class used for generating mesh points along curves
     """
@@ -58,7 +59,7 @@ class CurveMesher:
             option = DEFAULT_OPTION
         return MESH_DISTRIBUTION_OPTIONS[option]["function"]
 
-    def print_mesh_dist_option_list(self) -> dict:
+    def print_mesh_dist_option_list(self):
         """Prints indented list of mesh distribution options with corresponding descriptions.
         """
         print("Mesh distribution options and their corresponding descriptions:")
@@ -77,6 +78,7 @@ class SurfaceMesher:
     def generate_panels(self):
         """Generates panels from surface mesh"""
         if self._mesh_points is None:
+            # BUG: raise error into a try-except block where mesh points will be generated.
             raise NotFoundError("Surface mesh points not yet generated.")
         panels = []
         mp = self._mesh_points

@@ -21,26 +21,26 @@ class CoonsPatch(SurfaceMesher):
         self.curve_u1 = curve_u1
         self.curve_0w = curve_0w
         self.curve_1w = curve_1w
-        self.point00 = self.curve_u0.start
-        self.point01 = self.curve_u1.start
-        self.point10 = self.curve_1w.start
-        self.point11 = self.curve_1w.end
+        self.point00 = self.curve_u0.point_start
+        self.point01 = self.curve_u1.point_start
+        self.point10 = self.curve_1w.point_start
+        self.point11 = self.curve_1w.point_end
 
     @classmethod
     def validate_curve_selection(cls, curve_selection:tuple):
         """Validates curve selection."""
         curve_u0, curve_u1, curve_0w, curve_1w = curve_selection
         try:
-            if not (curve_u0.start == curve_0w.start).all():
+            if not (curve_u0.point_start == curve_0w.point_start).all():
                 raise ValueError(
                     "Curves 'curve_u0' and 'curve_0w' does not have the same starting point.")
-            if not (curve_u1.end == curve_1w.end).all():
+            if not (curve_u1.point_end == curve_1w.point_end).all():
                 raise ValueError( 
                     "Curves 'curve_u1' and 'curve_1w' does not have the same ending point.")
-            if not (curve_u0.end == curve_1w.start).all():
+            if not (curve_u0.point_end == curve_1w.point_start).all():
                 raise ValueError(
                     "Curve 'curve_u0' does not end where curve 'curve_1w' starts.")
-            if not (curve_u1.start == curve_0w.end).all():
+            if not (curve_u1.point_start == curve_0w.point_end).all():
                 raise ValueError(
                     "Curve 'curve_0w' does not end where curve 'curve_u1' starts.")
         except ValueError as err:
