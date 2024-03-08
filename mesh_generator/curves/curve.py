@@ -3,7 +3,6 @@
 
 from typing import Protocol
 
-from ..mesh import DistributionMethod
 from ..point import Point
 
 class CurveInstance(Protocol):
