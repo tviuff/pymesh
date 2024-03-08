@@ -37,7 +37,7 @@ class CoonsPatch(Surface):
         if len(curve_selection) != 4:
             raise ValueError("Curve selection must consist of exactly four Curve instances.")
         self.__curve_selection = curve_selection
-        passed, err = self._validate_curve_selectino()
+        passed, err = self._validate_curve_selection()
         if not passed:
             raise err
         self.__point00 = curve_u0.point_start
@@ -45,16 +45,16 @@ class CoonsPatch(Surface):
         self.__point10 = curve_1w.point_start
         self.__point11 = curve_1w.point_end
 
-    def _validate_curve_selectino(self):
+    def _validate_curve_selection(self):
         """Validates direction and intersection points of curve selection."""
         curve_u0, curve_u1, curve_0w, curve_1w = self.__curve_selection
         try:
             if not (curve_u0.point_start == curve_0w.point_start).all():
                 raise ValueError(
-                    "Curves 'curve_u0' and 'curve_0w' does not have the same starting point.")
+                    "Curves 'curve_u0' and 'curve_0w' do not have the same starting point.")
             if not (curve_u1.point_end == curve_1w.point_end).all():
                 raise ValueError( 
-                    "Curves 'curve_u1' and 'curve_1w' does not have the same ending point.")
+                    "Curves 'curve_u1' and 'curve_1w' do not have the same ending point.")
             if not (curve_u0.point_end == curve_1w.point_start).all():
                 raise ValueError(
                     "Curve 'curve_u0' does not end where curve 'curve_1w' starts.")

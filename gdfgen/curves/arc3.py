@@ -16,7 +16,7 @@ class Arc3(Curve):
     point_centre:Point
     __tolerance = 0.0001
 
-    def __init__(self, point_start:Point, point_end, point_centre:Point):
+    def __init__(self, point_centre:Point, point_start:Point, point_end):
         super().__init__(point_start, point_end)
         self.point_centre, self.point_start, self.point_end = point_centre, point_start, point_end
         if not (isinstance(self.point_start, Point)
