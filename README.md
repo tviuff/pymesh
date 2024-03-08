@@ -1,6 +1,6 @@
 # GEOMETRIC DATA FILE (GDF)
 
-The package `mesh generator` is used for creating quadrilateral panel mesh for import and use in [WAMIT](https://www.wamit.com/).<br>
+The package `GDF` is used for creating quadrilateral panel mesh for import and use in [WAMIT](https://www.wamit.com/).<br>
 The current implementation only supports creation of Geometric Data File (GDF) as part of the low-order method in WAMIT.
 
 The package is based on Object-Oriented Programming (OOP) and gives the user the ability to use the following classes:
@@ -9,11 +9,9 @@ The package is based on Object-Oriented Programming (OOP) and gives the user the
     - `Point`
 - Curves:
     - `Line`
-    - `Arc3` *..to be implemented*
+    - `Arc3`
 - Surfaces:
-    - *..to be implemented*
-- Mesh:
-    - *..to be implemented*
+    - 'CoonsPatch'
 
 ## Functionality to be implemented
 
@@ -32,6 +30,7 @@ the protecol in the [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pd
 ### Modules to use
 
 - `unittests` for setting up test procedures
+- `constants` for creating project constants
 - `exceptions` for creating custom exceptions
 - `logger` for GDF file generation
 
