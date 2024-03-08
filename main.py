@@ -9,7 +9,7 @@
 
 from matplotlib import pyplot as plt
 
-from mesh_generator import Point, Line, Arc3, CoonsPatch, Linear, CosineBoth, CosineEnd1, CosineEnd2
+from gdfgen import Point, Line, Arc3, CoonsPatch, Linear, CosineBoth, CosineEnd1, CosineEnd2
 
 point_bl = Point(0, 0, 0)
 point_br = Point.set_relative_to(point_bl, dx=1.0)

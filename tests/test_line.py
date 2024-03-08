@@ -4,9 +4,9 @@ import unittest
 
 import numpy as np
 
-from mesh_generator.point import Point
-from mesh_generator.curves import Line
-from mesh_generator.mesh import Linear
+from gdfgen.point import Point
+from gdfgen.curves import Line
+from gdfgen.mesh import Linear
 
 class TestLine(unittest.TestCase):
 

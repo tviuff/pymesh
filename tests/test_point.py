@@ -2,7 +2,7 @@
 
 import unittest
 
-from mesh_generator.point import Point
+from gdfgen.point import Point
 
 class TestPoint(unittest.TestCase):
 
