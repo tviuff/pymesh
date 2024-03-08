@@ -5,11 +5,9 @@ import numpy as np
 
 from ..surfaces import Surface
 from ..curves import Curve
-from ..mesh import DistributionMethod, Linear
+from ..mesh import DistributionMethod
 from ..point import Point
-
-DEFAULT_NUM_POINT = 10
-DEFAULT_DIST_METHOD = Linear
+from ..constants import MeshConstants as MConst
 
 class CoonsPatch(Surface):
     """Coons patch class taking a selection of four curves
@@ -17,13 +15,13 @@ class CoonsPatch(Surface):
     """
 
     __curve_selection:tuple[Curve]
-    __dist_u0:DistributionMethod = DEFAULT_DIST_METHOD
-    __dist_u1:DistributionMethod = DEFAULT_DIST_METHOD
-    __dist_0w:DistributionMethod = DEFAULT_DIST_METHOD
-    __dist_1w:DistributionMethod = DEFAULT_DIST_METHOD
+    __dist_u0:DistributionMethod = MConst.DEFAULT_DIST_METHOD.value
+    __dist_u1:DistributionMethod = MConst.DEFAULT_DIST_METHOD.value
+    __dist_0w:DistributionMethod = MConst.DEFAULT_DIST_METHOD.value
+    __dist_1w:DistributionMethod = MConst.DEFAULT_DIST_METHOD.value
     __mesh_points = None
-    __num_points_u:int = DEFAULT_NUM_POINT
-    __num_points_w:int = DEFAULT_NUM_POINT
+    __num_points_u:int = MConst.DEFAULT_NUM_POINT.value
+    __num_points_w:int = MConst.DEFAULT_NUM_POINT.value
     __panels = None
     __point00:Point
     __point01:Point
@@ -31,16 +29,15 @@ class CoonsPatch(Surface):
     __point11:Point
 
     def __init__(self, curve_u0:Curve, curve_u1:Curve, curve_0w:Curve, curve_1w:Curve):
-        """Initializing curves and points in the normalized u - w space.
-        """
+        """Initializing Coons Patch curves."""
         curve_selection = (curve_u0, curve_u1, curve_0w, curve_1w)
         for curve in curve_selection:
             if not isinstance(curve, Curve):
-                raise TypeError("curve_selection can only contain elements of type 'Curve'.")
+                raise TypeError("Curve input must be of type 'Curve'.")
         if len(curve_selection) != 4:
             raise ValueError("Curve selection must consist of exactly four Curve instances.")
         self.__curve_selection = curve_selection
-        passed, err = self.__validate_curve_selection()
+        passed, err = self._validate_curve_selectino()
         if not passed:
             raise err
         self.__point00 = curve_u0.point_start
@@ -48,8 +45,8 @@ class CoonsPatch(Surface):
         self.__point10 = curve_1w.point_start
         self.__point11 = curve_1w.point_end
 
-    def __validate_curve_selection(self):
-        """Validates curve selection."""
+    def _validate_curve_selectino(self):
+        """Validates direction and intersection points of curve selection."""
         curve_u0, curve_u1, curve_0w, curve_1w = self.__curve_selection
         try:
             if not (curve_u0.point_start == curve_0w.point_start).all():
@@ -69,49 +66,52 @@ class CoonsPatch(Surface):
         return True, None
 
     def set_dist_methods(self,
-            dist_u0:DistributionMethod=DEFAULT_DIST_METHOD,
-            dist_u1:DistributionMethod=DEFAULT_DIST_METHOD,
-            dist_0w:DistributionMethod=DEFAULT_DIST_METHOD,
-            dist_1w:DistributionMethod=DEFAULT_DIST_METHOD,
+            dist_u0:DistributionMethod=MConst.DEFAULT_DIST_METHOD.value,
+            dist_u1:DistributionMethod=MConst.DEFAULT_DIST_METHOD.value,
+            dist_0w:DistributionMethod=MConst.DEFAULT_DIST_METHOD.value,
+            dist_1w:DistributionMethod=MConst.DEFAULT_DIST_METHOD.value,
         ):
-        """Sets distribution methods. Default is 'linear'"""
+        """Specifies curve path distribution methods, default is 'linear'."""
         self.__dist_u0 = dist_u0
         self.__dist_u1 = dist_u1
         self.__dist_0w = dist_0w
         self.__dist_1w = dist_1w
 
-    def get_dist_methods(self):
-        """Returns distribution methods"""
+    def _get_dist_methods(self):
+        """Returns curve path point distribution methods."""
         return self.__dist_u0, self.__dist_u1, self.__dist_0w, self.__dist_1w
 
-    def set_num_points(self, num_points_u:int=DEFAULT_NUM_POINT, num_points_w:int=DEFAULT_NUM_POINT):
-        """Specify number of points along u and w dimensions"""
+    def set_num_points(self,
+            num_points_u:int=MConst.DEFAULT_NUM_POINT.value,
+            num_points_w:int=MConst.DEFAULT_NUM_POINT.value
+        ):
+        """Specify number of points along normalized u and w dimensions."""
         self.__num_points_u = num_points_u
         self.__num_points_w = num_points_w
 
-    def get_num_points(self):
-        """Returns number of points along u and w dimensions"""
+    def _get_num_points(self):
+        """Returns number of points along u and w dimensions."""
         return self.__num_points_u, self.__num_points_w
 
-    def set_mesh_points(self):
-        """Generates surface mesh points in the non-parametric space.
-        See also: https://youtu.be/TM0GM6xhAoI?t=2090 for more information.
-        """
-        num_points_u, num_points_w = self.get_num_points()
-        dist_u0, dist_u1, dist_0w, dist_1w = self.get_dist_methods()
-        curve_u0, curve_u1, curve_0w, curve_1w = self.__curve_selection
-        fn_u0 = curve_u0.get_path_fn()
-        fn_u1 = curve_u1.get_path_fn()
-        fn_0w = curve_0w.get_path_fn()
-        fn_1w = curve_1w.get_path_fn()
-        pu0 = fn_u0(num_points_u, dist_u0)
-        pu1 = fn_u1(num_points_u, dist_u1)
-        p0w = fn_0w(num_points_w, dist_0w)
-        p1w = fn_1w(num_points_w, dist_1w)
+    def _get_curve_path_points(self):
+        """Returns path points for each of the four input curves."""
+        curve_paths = []
+        num_points_u, num_points_w = self._get_num_points()
+        num_points = (num_points_u, num_points_u, num_points_w, num_points_w)
+        for curve, num, dist in zip(self.__curve_selection, num_points, self._get_dist_methods()):
+            path_fn = curve.get_path_fn()
+            curve_paths.append(path_fn(num, dist))
+        pu0, pu1, p0w, p1w = tuple(curve_paths)
+        return pu0, pu1, p0w, p1w
+
+    def _set_mesh_points(self):
+        """Generates surface mesh points in the physical x - y - z space."""
+        pu0, pu1, p0w, p1w = self._get_curve_path_points()
         p00 = self.__point00.xyz
         p11 = self.__point11.xyz
         p01 = self.__point01.xyz
         p10 = self.__point10.xyz
+        num_points_u, num_points_w = self._get_num_points()
         mp = np.zeros((3, num_points_u, num_points_w))
         for i, u in enumerate(np.linspace(0, 1, num=num_points_u, endpoint=True)):
             for j, w in enumerate(np.linspace(0, 1, num=num_points_w, endpoint=True)):
@@ -122,16 +122,17 @@ class CoonsPatch(Surface):
                     mp[k,i,j] = p1[k] + p2[k] - p3[k]
         self.__mesh_points = mp
 
-    def get_mesh_points(self):
+    @property
+    def mesh_points(self):
+        """Returns surface mesh points."""
         if self.__mesh_points is None:
-            self.set_mesh_points()
+            self._set_mesh_points()
         return self.__mesh_points
 
-    def set_panels(self):
-        if self.__mesh_points is None:
-            _ = self.get_mesh_points()
+    def _set_panels(self):
+        """Generates Geometric Data File (GDF) panels."""
         panels = []
-        mp = self.__mesh_points
+        mp = self.mesh_points
         for j in range(0, mp.shape[2]-1):
             for i in range(0, mp.shape[1]-1):
                 xyz1, xyz2, xyz3, xyz4 = mp[:,i,j], mp[:,i+1,j], mp[:,i+1,j+1], mp[:,i,j+1]
@@ -141,7 +142,9 @@ class CoonsPatch(Surface):
                                xyz4[0], xyz4[1], xyz4[2]])
         self.__panels = panels
 
-    def get_panels(self):
+    @property
+    def panels(self):
+        """Returns Geometric Data File (GDF) panels."""
         if self.__panels is None:
-            self.set_panels()
+            self._set_panels()
         return self.__panels

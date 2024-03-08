@@ -14,7 +14,10 @@ class Line(Curve):
 
     def __init__(self, point_start: Point, point_end: Point):
         super().__init__(point_start, point_end)
-        assert(point_start != point_end), "Line points must be unique."
+        if not (isinstance(point_start, Point) and isinstance(point_end, Point)):
+            raise TypeError(f"{self.__class__.__name__} class only takes point input of type 'Point'.")
+        if point_start == point_end:
+            raise ValueError(f"{self.__class__.__name__} input points must be unique.")
 
     def __eq__(self, other):
         return self.point_start == other.point_start and self.point_end == other.point_end

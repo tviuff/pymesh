@@ -1,5 +1,8 @@
-"""Module including linee class
+"""Module includes the Arc3 class
 """
+
+import math
+import numpy as np
 
 from .curve import Curve
 from ..point import Point
@@ -9,39 +12,23 @@ class Arc3(Curve):
     """Circular arc generated from 3 points in space
     From https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
     """
+
+    point_centre:Point
     __tolerance = 0.0001
+
     def __init__(self, point_start:Point, point_end, point_centre:Point):
         super().__init__(point_start, point_end)
-        raise NotImplementedError("Arc3 not yet implemented.")
-        if not (
-            isinstance(point_start, Point)
-            and isinstance(point_end, Point)
-            and isinstance(point_centre, Point)
-        ):
-            raise TypeError()
-        if (
-            (point_start == point_end)
-            or (point_start == point_centre)
-            or (point_end == point_centre)
-        ):
-            raise ValueError()
         self.point_centre, self.point_start, self.point_end = point_centre, point_start, point_end
-        self.__vector0 = point_start.xyz - point_centre.xyz
-        self.__vector1 = point_end.xyz - point_centre.xyz
-        self.__radius0 = np.sqrt(np.sum(self.__vector0**2))
-        self.__radius1 = np.sqrt(np.sum(self.__vector1**2))
-        self.__vector0_unit_vector = self.__vector0/self.__radius0
-        self.__vector1_unit_vector = self.__vector1/self.__radius1
-        assert (abs(self.__radius1 - self.__radius0) <= self.__tolerance), f'Radius not consistent. |point_start-point_centre| not equal to |point_end-point_centre|!'
-        self.radius = self.__radius0
-        self.__cross = np.cross(self.__vector0, self.__vector1)
-        self.__plane_unit_normal = self.__cross / np.sqrt(np.sum(self.__cross**2))
-        if ((self.__cross == 0).all() and (self.__vector0_unit_vector == -self.__vector1_unit_vector).all()):
-            self.angle = math.pi
-        elif ((self.__cross == 0).all() and (self.__vector0_unit_vector == self.__vector1_unit_vector).all()):
-            self.angle = 0.
-        else:
-            self.angle = np.arccos(np.dot(self.__vector0, self.__vector1) / ( self.__radius0 * self.__radius1 ))
+        if not (isinstance(self.point_start, Point)
+                and isinstance(self.point_end, Point)
+                and isinstance(self.point_centre, Point)
+                ):
+            raise TypeError(f"{self.__class__.__name__} class only takes point inputs of type 'Point'.")
+        if ((point_start == point_end)
+                or (point_start == point_centre)
+                or (point_end == point_centre)
+                ):
+            raise ValueError(f"{self.__class__.__name__} input points must be unique.")
 
     def __eq__(self, other):
         return self.point_centre == other.point_centre \
@@ -49,18 +36,36 @@ class Arc3(Curve):
                 and self.point_end == other.point_end
 
     def __repr__(self):
-        return f'{self.__class__.__name__}({self.point_centre}, {self.point_start}, {self.point_end})'
+        return f"{self.__class__.__name__}({self.point_centre}, {self.point_start}, {self.point_end})"
 
-    def get_path_fn(num_points:int, dist_method:DistributionMethod):
-        assert (num_points > 1), f'N {num_points} is not larger than 1!'
+    def _get_path_fn_params(self) -> tuple:
+        """Returns tuple of path function parameters: (vector_start, plane_unit_normal and angle)"""
+        vector_start = self.point_start.xyz - self.point_centre.xyz
+        radius_start = np.sqrt(np.sum(vector_start**2))
+        unit_vector_start = vector_start/radius_start
+        vector_end = self.point_end.xyz - self.point_centre.xyz
+        radius_end = np.sqrt(np.sum(vector_end**2))
+        unit_vector_end = vector_end/radius_end
+        cross_prod = np.cross(vector_start, vector_end)
+        plane_unit_normal = cross_prod / np.sqrt(np.sum(cross_prod**2))
+        # ! Not sure if below is working..
+        if ((cross_prod == 0).all() and (unit_vector_start == -unit_vector_end).all()):
+            angle = math.pi
+        elif ((cross_prod == 0).all() and (unit_vector_start == unit_vector_end).all()):
+            angle = 0.
+        else:
+            angle = np.arccos(np.dot(vector_start, vector_end) / ( radius_start * radius_end ))
+        return vector_start, plane_unit_normal, angle
 
-    def get_points(self, N:int=10, method='linear'):
-        assert (N > 1), f'N {N} is not larger than 1!'
-        assert (method in ['linear', 'cosine', 'cos01', 'cos10']), f'method {method} not recognized!'
-        plane_unit_normal, angle = self.__plane_unit_normal, self.angle
-        xyz = np.zeros((N, 3))
-        for i, u in enumerate(np.linspace(0, 1, N, endpoint=True)):
-            v, k, a = self.__vector0, plane_unit_normal, angle
-            uu = math.cos(math.pi*(1-u))/2+.5 if method == 'cosine' else math.cos(math.pi*u/2) if 'cos01' else 1-math.cos(math.pi*u/2) if 'cos10' else u
-            xyz[i,:] = self.point_centre.xyz + v*math.cos(a*uu) + np.cross(k, v)*math.sin(a*uu) + k*np.cross(k, v)*(1-math.cos(a*uu))
-        return xyz
+    def get_path_fn(self):
+        def path_fn(num_points:int, dist_method:DistributionMethod):
+            dist_fn = dist_method.get_fn()
+            path_xyz = np.zeros((num_points, 3))
+            v, k, a = self._get_path_fn_params()
+            for i, u in enumerate(np.linspace(0, 1, num_points, endpoint=True)):
+                path_xyz[i,:] = self.point_centre.xyz \
+                        + v * math.cos(a * dist_fn(u)) \
+                        + np.cross(k, v) * math.sin(a * dist_fn(u)) \
+                        + k * np.cross(k, v) * (1 - math.cos(a * dist_fn(u)))
+            return path_xyz
+        return path_fn

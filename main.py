@@ -1,15 +1,15 @@
 """Main module for trying out code ideas
 """
 
-# ! Implement testing procedures
-# ! Implement CoonsPatch.__init__ which checks if curves are valid.
-# ! Implement Density(DistMethod) class that uses Curve.get_length()
+# ! Implement testing procedures - preferably using 'pytest'
+# ? Should we implement a CoonsPatch.__init__ which checks if curves are valid
+# ? Should we implement a Density(DistMethod) class that uses Curve.get_length() <- might not work..
 # ? Should we use pydoc or mkdoc to generate code documentation??
 # BUG: Arc3 not implemented yet...
 
 from matplotlib import pyplot as plt
 
-from mesh_generator import Point, Line, CoonsPatch, Linear, CosineBoth, CosineEnd1, CosineEnd2
+from mesh_generator import Point, Line, Arc3, CoonsPatch, Linear, CosineBoth, CosineEnd1, CosineEnd2
 
 point_bl = Point(0, 0, 0)
 point_br = Point.set_relative_to(point_bl, dx=1.0)
@@ -21,7 +21,8 @@ point_tl = Point(0, 1, 0)
 #print()
 
 line1 = Line(point_bl, point_br)# pu0
-line2 = Line(point_tl, point_tr)# pu1
+#line2 = Line(point_tl, point_tr)# pu1
+line2 = Arc3(point_tl, point_tr, Point(0.5, 0.0, 0.0))# pu1
 line3 = Line(point_bl, point_tl)# p0w
 line4 = Line(point_br, point_tr)# p1w
 
@@ -35,7 +36,7 @@ line4 = Line(point_br, point_tr)# p1w
 surface1 = CoonsPatch(line1, line2, line3, line4)
 surface1.set_dist_methods(dist_u1=CosineBoth)
 surface1.set_num_points(num_points_u=20, num_points_w=20)
-surface1_mp = surface1.get_mesh_points()
+surface1_mp = surface1.mesh_points
 
 plt.close("all")
 plt.style.use('dark_background')

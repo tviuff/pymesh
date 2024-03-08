@@ -15,10 +15,8 @@ class CurveInstance(Protocol):
         """Returns curve path algorithm"""
 
 class Curve(CurveInstance):
-    """Curve class"""
+    """Curve parent class for later inheritance"""
 
-    def __init__(self, point_start:Point, point_end:Point):
-        if not (isinstance(point_start, Point) and isinstance(point_end, Point)):
-            raise TypeError("Curve class only takes point input of type 'Point'.")
+    def __init__(self, point_start:Point, point_end:Point) -> None:
         self.point_start = point_start
         self.point_end = point_end

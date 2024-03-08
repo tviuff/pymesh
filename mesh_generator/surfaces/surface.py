@@ -6,13 +6,20 @@ from typing import Protocol
 class Surface(Protocol):
     """Abstract surface class
     """
+
     __mesh_points = None
     __panels = None
-    def set_mesh_points(self):
+
+    def _set_mesh_points():
         """Generates surface mesh points and set it to attribute"""
-    def get_mesh_points(self):
+
+    @property
+    def mesh_points():
         """Returns mesh_points from surface mesh"""
-    def set_panels(self):
+
+    def _set_panels():
         """Generates panels from surface mesh and set it to attribute"""
-    def get_panels(self):
+
+    @property
+    def panels():
         """Returns panels from surface mesh"""
