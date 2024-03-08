@@ -1,4 +1,4 @@
-# MESH GENERATOR
+# GEOMETRIC DATA FILE (GDF)
 
 The package `mesh generator` is used for creating quadrilateral panel mesh for import and use in [WAMIT](https://www.wamit.com/).<br>
 The current implementation only supports creation of Geometric Data File (GDF) as part of the low-order method in WAMIT.
