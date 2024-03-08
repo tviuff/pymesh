@@ -4,9 +4,9 @@
 import math
 import numpy as np
 
-from .curve import Curve
 from gdfgen.point import Point
 from gdfgen.mesh import DistributionMethod
+from .curve import Curve
 
 class Arc3(Curve):
     """Circular arc generated from 3 points in space
