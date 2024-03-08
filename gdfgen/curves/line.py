@@ -4,8 +4,8 @@
 import numpy as np
 
 from .curve import Curve
-from ..point import Point
-from ..mesh import DistributionMethod
+from gdfgen.point import Point
+from gdfgen.mesh import DistributionMethod
 
 class Line(Curve):
     """Line generated from two points in space.

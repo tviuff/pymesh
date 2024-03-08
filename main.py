@@ -34,7 +34,7 @@ line4 = Line(point_br, point_tr)# p1w
 #print(dist)
 
 surface1 = CoonsPatch(line1, line2, line3, line4)
-surface1.set_dist_methods(dist_u1=CosineBoth)
+#surface1.set_dist_methods(dist_u1=CosineBoth)
 surface1.set_num_points(num_points_u=20, num_points_w=20)
 surface1_mp = surface1.mesh_points
 

@@ -3,7 +3,7 @@
 
 from typing import Protocol
 
-from ..point import Point
+from gdfgen.point import Point
 
 class CurveInstance(Protocol):
     """Abstract curve class"""

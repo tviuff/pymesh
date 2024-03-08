@@ -3,11 +3,11 @@
 
 import numpy as np
 
-from ..surfaces import Surface
-from ..curves import Curve
-from ..mesh import DistributionMethod
-from ..point import Point
-from ..constants import MeshConstants as MConst
+from gdfgen.surfaces import Surface
+from gdfgen.curves import Curve
+from gdfgen.mesh import DistributionMethod
+from gdfgen.point import Point
+from gdfgen.constants import MeshConstants as MConst
 
 class CoonsPatch(Surface):
     """Coons patch class taking a selection of four curves
