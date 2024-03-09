@@ -5,7 +5,9 @@ import time
 
 from matplotlib import pyplot as plt
 
-from gdfgen import Point, Line, Arc3, CoonsPatch, Linear, CosineBoth, CosineEnd1, CosineEnd2
+from gdfgen import Point, Line, Arc3, CoonsPatch, \
+    DistributionMethodLinear, DistributionMethodCosineBoth, \
+    DistributionMethodCosineEnd1, DistributionMethodCosineEnd2
 
 def main():
     """Function executed if file is executed and not imported"""
