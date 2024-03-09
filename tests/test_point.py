@@ -1,21 +1,15 @@
 """Module for testing the Point class functionality"""
 
-import unittest
+import pytest
 
 from gdfgen.point import Point
 
-class TestPoint(unittest.TestCase):
+class TestPoint:
 
-    def setUp(self):
-        point1 = Point(0, 0, 0)
-        point2 = Point(3, 4, 0)
-        self.distance = Point.get_distance(point1, point2)
+    def test_get_distance(self):
+        distance = Point.get_distance(Point(0, 0, 0), Point(3, 4, 0))
+        assert distance == 5.0
 
-    def tearDown(self):
-        pass
-
-    def test_point(self):
-        self.assertEqual(self.distance, 5.0)
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_set_relative_to(self):
+        point = Point.set_relative_to(Point(0, 0, 0), 1, 2, 3)
+        assert point == Point(1, 2, 3)

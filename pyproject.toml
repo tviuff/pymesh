@@ -1,7 +1,6 @@
 [tool.poetry]
-name = "mesh-generator"
-version = "0.1.0"
-description = "Simple mesh generator for creating panel GDF files for input to programs such as WAMIT."
+package-mode = false
+description = "Simple GDF mesh panel generator for input to programs such as WAMIT."
 authors = ["Thomas Viuff <tviuff@gmail.com>"]
 license = "MIT"
 readme = "README.md"
@@ -10,6 +9,7 @@ readme = "README.md"
 python = "^3.12"
 numpy = "^1.26.4"
 matplotlib = "^3.8.3"
+pytest = "^8.0.2"
 
 [build-system]
 requires = ["poetry-core"]
