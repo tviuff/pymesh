@@ -17,11 +17,15 @@ class TestLine:
         ("one", gdf.Point(0, 0, 0), TypeError)
     ]
 
+    # ! Add more test cases
     get_path_fn_testdata = [
-        (gdf.Point(0, 0, 0), gdf.Point(3, 0, 0), 4, gdf.DistributionMethodLinear, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0],[3.0, 0.0, 0.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.DistributionMethodLinear, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(0, 0, 2), 3, gdf.DistributionMethodLinear, np.array([[0.0, 0.0, 0.0],[0.0, 0.0, 1.0],[0.0, 0.0, 2.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(1, 0, 0), 3, gdf.DistributionMethodCosineBoth, np.array([[0.0, 0.0, 0.0],[0.5, 0.0, 0.0],[1.0, 0.0, 0.0]]))
+        # point1, point2, num_points, dist_method, expectation
+        (gdf.Point(0, 0, 0), gdf.Point(3, 0, 0), 4, gdf.mesh.Linear, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0],[3.0, 0.0, 0.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.mesh.Linear, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(0, 0, 2), 3, gdf.mesh.Linear, np.array([[0.0, 0.0, 0.0],[0.0, 0.0, 1.0],[0.0, 0.0, 2.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(2, 0, 0), 3, gdf.mesh.CosineBoth, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.mesh.CosineBoth, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(0, 0, 2), 3, gdf.mesh.CosineBoth, np.array([[0.0, 0.0, 0.0],[0.0, 0.0, 1.0],[0.0, 0.0, 2.0]]))
     ]
 
     def test_no_input(self):

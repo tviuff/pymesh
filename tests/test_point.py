@@ -58,25 +58,25 @@ class TestPoint:
     def test_init_raises_exception_on_wrong_input_type(self, x, y, z, exception, expected):
         if exception is not None:
             with pytest.raises(exception):
-                p = gdf.Point(x, y, z)
+                result = gdf.Point(x, y, z)
         else:
-            p = gdf.Point(x, y, z)
-            assert p == expected
+            result = gdf.Point(x, y, z)
+            assert result == expected
 
     @pytest.mark.parametrize("point1, point2, exception, expected", get_distance_testdata)
     def test_get_distance(self, point1, point2, exception, expected):
         if exception is not None:
             with pytest.raises(exception):
-                distance = gdf.Point.get_distance(point1, point2)
+                result = gdf.Point.get_distance(point1, point2)
         else:
-            distance = gdf.Point.get_distance(point1, point2)
-            assert distance == expected
+            result = gdf.Point.get_distance(point1, point2)
+            assert result == expected
 
     @pytest.mark.parametrize("point1, dx, dy, dz, exception, expected", set_relative_to_testdata)
     def test_set_relative_to(self, point1, dx, dy, dz, exception, expected):
         if exception is not None:
             with pytest.raises(exception):
-                point = gdf.Point.set_relative_to(point1, dx, dy, dz)
+                result = gdf.Point.set_relative_to(point1, dx, dy, dz)
         else:
-            point = gdf.Point.set_relative_to(point1, dx, dy, dz)
-            assert point == expected
+            result = gdf.Point.set_relative_to(point1, dx, dy, dz)
+            assert result == expected

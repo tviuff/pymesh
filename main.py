@@ -5,9 +5,7 @@ import time
 
 from matplotlib import pyplot as plt
 
-from gdfgen import Point, Line, Arc3, CoonsPatch, \
-    DistributionMethodLinear, DistributionMethodCosineBoth, \
-    DistributionMethodCosineEnd1, DistributionMethodCosineEnd2
+import gdfgen as gdf
 
 def main():
     """Function executed if file is executed and not imported"""
@@ -52,17 +50,17 @@ def plot_points(surface_sellection:tuple, azim=None, elev=None):
 def example_rectangle_xy():
     """Rectangular surface example"""
 
-    point_bl = Point(0, 0, 0)
-    point_br = Point.set_relative_to(point_bl, dx=1.0)
-    point_tr = Point(1, 1, 0)
-    point_tl = Point(0, 1, 0)
+    point_bl = gdf.Point(0, 0, 0)
+    point_br = gdf.Point.set_relative_to(point_bl, dx=1.0)
+    point_tr = gdf.Point(1, 1, 0)
+    point_tl = gdf.Point(0, 1, 0)
 
-    line1 = Line(point_bl, point_br)
-    line2 = Line(point_tl, point_tr)
-    line3 = Line(point_bl, point_tl)
-    line4 = Line(point_br, point_tr)
+    line1 = gdf.Line(point_bl, point_br)
+    line2 = gdf.Line(point_tl, point_tr)
+    line3 = gdf.Line(point_bl, point_tl)
+    line4 = gdf.Line(point_br, point_tr)
 
-    surface1 = CoonsPatch(line1, line2, line3, line4)
+    surface1 = gdf.CoonsPatch(line1, line2, line3, line4)
     surface1.set_num_points(num_points_u=10, num_points_w=10)
 
     surface_selection = (surface1,)
@@ -72,32 +70,32 @@ def example_rectangle_xy():
 def example_vertical_cylinder():
     """Vertical cylinder surface example"""
 
-    point_ctr = Point(0, 0, 0)
-    point_bl = Point(-1, -1, 0)
-    point_br = Point.set_relative_to(point_bl, dx=2.0)
-    point_tl = Point(-1, 1, 0)
-    point_tr = Point(+1, 1, 0)
+    point_ctr = gdf.Point(0, 0, 0)
+    point_bl = gdf.Point(-1, -1, 0)
+    point_br = gdf.Point.set_relative_to(point_bl, dx=2.0)
+    point_tl = gdf.Point(-1, 1, 0)
+    point_tr = gdf.Point(+1, 1, 0)
 
-    line1 = Line(point_bl, point_br)
-    line2 = Line(point_tl, point_tr)
-    line3 = Line(point_bl, point_tl)
-    line4 = Line(point_br, point_tr)
-    surface1 = CoonsPatch(line1, line2, line3, line4)
+    line1 = gdf.Line(point_bl, point_br)
+    line2 = gdf.Line(point_tl, point_tr)
+    line3 = gdf.Line(point_bl, point_tl)
+    line4 = gdf.Line(point_br, point_tr)
+    surface1 = gdf.CoonsPatch(line1, line2, line3, line4)
 
-    point_bl_ext = Point.set_relative_to(point_bl, dx=-1.0, dy=-1.0)
-    point_br_ext = Point.set_relative_to(point_br, dx=+1.0, dy=-1.0)
-    point_tl_ext = Point.set_relative_to(point_tl, dx=-1.0, dy=+1.0)
-    point_tr_ext = Point.set_relative_to(point_tr, dx=+1.0, dy=+1.0)
+    point_bl_ext = gdf.Point.set_relative_to(point_bl, dx=-1.0, dy=-1.0)
+    point_br_ext = gdf.Point.set_relative_to(point_br, dx=+1.0, dy=-1.0)
+    point_tl_ext = gdf.Point.set_relative_to(point_tl, dx=-1.0, dy=+1.0)
+    point_tr_ext = gdf.Point.set_relative_to(point_tr, dx=+1.0, dy=+1.0)
 
-    line5 = Line(point_bl_ext, point_bl)
-    line6 = Line(point_br_ext, point_br)
-    line7 = Arc3(point_ctr, point_bl_ext, point_br_ext)
-    surface2 = CoonsPatch(line7, line1, line5, line6)
+    line5 = gdf.Line(point_bl_ext, point_bl)
+    line6 = gdf.Line(point_br_ext, point_br)
+    line7 = gdf.Arc3(point_ctr, point_bl_ext, point_br_ext)
+    surface2 = gdf.CoonsPatch(line7, line1, line5, line6)
 
-    line8 = Line(point_tl, point_tl_ext)
-    line9 = Line(point_tr, point_tr_ext)
-    line10 = Arc3(point_ctr, point_tl_ext, point_tr_ext)
-    surface3 = CoonsPatch(line2, line10, line8, line9)
+    line8 = gdf.Line(point_tl, point_tl_ext)
+    line9 = gdf.Line(point_tr, point_tr_ext)
+    line10 = gdf.Arc3(point_ctr, point_tl_ext, point_tr_ext)
+    surface3 = gdf.CoonsPatch(line2, line10, line8, line9)
 
     surface_selection = (surface1, surface2, surface3)
 

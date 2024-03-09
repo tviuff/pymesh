@@ -3,10 +3,10 @@
 
 from enum import Enum
 
-from .mesh import DistributionMethod, DistributionMethodLinear
+from gdfgen import mesh
 
 class MeshConstants(Enum):
     """Contains mesh constants"""
 
     DEFAULT_NUM_POINT = 10
-    DEFAULT_DIST_METHOD:DistributionMethod = DistributionMethodLinear
+    DEFAULT_DIST_METHOD:mesh.DistributionMethod = mesh.Linear
