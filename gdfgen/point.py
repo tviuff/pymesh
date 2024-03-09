@@ -16,12 +16,7 @@ class Point:
     """
 
     def __init__(self, x:IntOrFloat, y:IntOrFloat, z:IntOrFloat):
-        for arg in (x, y, z):
-            if not isinstance(arg, (float, int)):
-                raise TypeError(
-                    f"{self.__class__.__name__}.__init__() "
-                    f"only takes arguments of type 'float' or 'int'."
-                )
+        self._validate_coordinate_input(x, y, z)
         self.x, self.y, self.z = float(x), float(y), float(z)
         self.xyz = np.array([self.x, self.y, self.z])
 
@@ -30,6 +25,14 @@ class Point:
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.x:.2f}, {self.y:.2f}, {self.z:.2f})"
+
+    def _validate_coordinate_input(self, *args) -> None:
+        for arg in args:
+            if not isinstance(arg, (float, int)):
+                raise TypeError(
+                    f"{self.__class__.__name__}.__init__() "
+                    f"only takes arguments of type 'float' or 'int'."
+                )
 
     @classmethod
     def get_distance(cls, point1:Self, point2:Self) -> float:
@@ -45,7 +48,11 @@ class Point:
         return math.sqrt(dx**2 + dy**2 + dz**2)
 
     @classmethod
-    def set_relative_to(cls, point:Self=None, dx:float=0.0, dy:float=0.0, dz:float=0.0) -> Self:
+    def set_relative_to(cls,
+            point:Self=None,
+            dx:IntOrFloat=0.0,
+            dy:IntOrFloat=0.0,
+            dz:IntOrFloat=0.0) -> Self:
         """Creates a new point using relative position arguments (dx, dy, dz)
         to existing Point instance
         """
@@ -54,8 +61,8 @@ class Point:
         if not isinstance(point, Point):
             raise TypeError("Input point must of type 'Point'.")
         if not (isinstance(dx, (float, int)) \
-                or isinstance(dy, (float, int)) \
-                or isinstance(dz, (float, int))):
+                and isinstance(dy, (float, int)) \
+                and isinstance(dz, (float, int))):
             raise TypeError("Relative position input must be of type 'float' or 'int'.")
         x = point.x + float(dx)
         y = point.y + float(dy)

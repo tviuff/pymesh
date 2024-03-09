@@ -1,6 +1,8 @@
 """Main module for trying out code ideas
 """
 
+import time
+
 from matplotlib import pyplot as plt
 
 from gdfgen import Point, Line, Arc3, CoonsPatch, Linear, CosineBoth, CosineEnd1, CosineEnd2
@@ -16,6 +18,17 @@ def main():
     surface_selection, azim, elev = example_vertical_cylinder()
     plot_points(surface_selection, azim, elev)
 
+def time_it(func):
+    """Wrapper function used to time function execution time"""
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"{func.__name__} took {round((end - start) * 1000)} mil sec")
+        return result
+    return wrapper
+
+@time_it
 def plot_points(surface_sellection:tuple, azim=None, elev=None):
     """Plots mesh xyz points of surfaces in surface_selection"""
 
