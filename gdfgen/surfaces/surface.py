@@ -1,25 +1,18 @@
 """Module including surface and coons patch classes
 """
 
-from typing import Protocol
+from abc import ABC, abstractmethod
 
-class Surface(Protocol):
-    """Abstract surface class
+class Surface(ABC):
+    """Surface class protocol
     """
 
-    __mesh_points = None
-    __panels = None
-
-    def _set_mesh_points():
-        """Generates surface mesh points and set it to attribute"""
-
     @property
-    def mesh_points():
+    @abstractmethod
+    def mesh_points(self):
         """Returns mesh_points from surface mesh"""
 
-    def _set_panels():
-        """Generates panels from surface mesh and set it to attribute"""
-
     @property
-    def panels():
+    @abstractmethod
+    def panels(self):
         """Returns panels from surface mesh"""

@@ -7,14 +7,12 @@ from matplotlib import pyplot as plt
 
 import gdfgen as gdf
 
+# ? Modify CoonsPatch.set_dist_methods(u_dists=[u0, u1], w_dists=[0w, 1w]) ?
+
 def main():
     """Function executed if file is executed and not imported"""
 
-    # ! Modify CoonsPatch._validate_curve_selection() to check if curves share points
-    # ! and set self.curve_u0, self.curve_u1, etc.
-    # ! Flip mesh direction by multiplying with 1 - dist_fn(u)
-    # ! Modify CoonsPatch.set_dist_methods(u_dists=[u0, u1], w_dists=[0w, 1w])
-
+    # surface_selection, azim, elev = example_rectangle_xy()
     surface_selection, azim, elev = example_vertical_cylinder()
     plot_points(surface_selection, azim, elev)
 
@@ -24,11 +22,10 @@ def time_it(func):
         start = time.time()
         result = func(*args, **kwargs)
         end = time.time()
-        print(f"{func.__name__} took {round((end - start) * 1000)} mil sec")
+        print(f"{func.__name__} took {round((end - start) * 1000)} mil sec.")
         return result
     return wrapper
 
-@time_it
 def plot_points(surface_sellection:tuple, azim=None, elev=None):
     """Plots mesh xyz points of surfaces in surface_selection"""
 
@@ -47,26 +44,28 @@ def plot_points(surface_sellection:tuple, azim=None, elev=None):
     ax.view_init(azim=azim, elev=elev)
     plt.show()
 
+@time_it
 def example_rectangle_xy():
     """Rectangular surface example"""
 
-    point_bl = gdf.Point(0, 0, 0)
-    point_br = gdf.Point.set_relative_to(point_bl, dx=1.0)
-    point_tr = gdf.Point(1, 1, 0)
-    point_tl = gdf.Point(0, 1, 0)
+    point1 = gdf.Point(0, 0, 0)
+    point2 = gdf.Point.set_relative_to(point1, dx=1.0)
+    point3 = gdf.Point(1, 1, 0)
+    point4 = gdf.Point(0, 1, 0)
 
-    line1 = gdf.Line(point_bl, point_br)
-    line2 = gdf.Line(point_tl, point_tr)
-    line3 = gdf.Line(point_bl, point_tl)
-    line4 = gdf.Line(point_br, point_tr)
+    line1 = gdf.Line(point1, point2)
+    line2 = gdf.Line(point2, point3)
+    line3 = gdf.Line(point3, point4)
+    line4 = gdf.Line(point4, point1)
 
-    surface1 = gdf.CoonsPatch(line1, line2, line3, line4)
+    surface1 = gdf.CoonsPatch(line1, line3, line2, line4)
     surface1.set_num_points(num_points_u=10, num_points_w=10)
 
     surface_selection = (surface1,)
 
     return surface_selection, 270, 90
 
+@time_it
 def example_vertical_cylinder():
     """Vertical cylinder surface example"""
 
@@ -80,7 +79,7 @@ def example_vertical_cylinder():
     line2 = gdf.Line(point_tl, point_tr)
     line3 = gdf.Line(point_bl, point_tl)
     line4 = gdf.Line(point_br, point_tr)
-    surface1 = gdf.CoonsPatch(line1, line2, line3, line4)
+    surface1 = gdf.CoonsPatch(line1, line2, line3, line4)# centre rectangle
 
     point_bl_ext = gdf.Point.set_relative_to(point_bl, dx=-1.0, dy=-1.0)
     point_br_ext = gdf.Point.set_relative_to(point_br, dx=+1.0, dy=-1.0)
@@ -90,15 +89,19 @@ def example_vertical_cylinder():
     line5 = gdf.Line(point_bl_ext, point_bl)
     line6 = gdf.Line(point_br_ext, point_br)
     line7 = gdf.Arc3(point_ctr, point_bl_ext, point_br_ext)
-    surface2 = gdf.CoonsPatch(line7, line1, line5, line6)
+    surface2 = gdf.CoonsPatch(line7, line1, line5, line6)# bottom semi-circle
 
     line8 = gdf.Line(point_tl, point_tl_ext)
     line9 = gdf.Line(point_tr, point_tr_ext)
     line10 = gdf.Arc3(point_ctr, point_tl_ext, point_tr_ext)
-    surface3 = gdf.CoonsPatch(line2, line10, line8, line9)
+    surface3 = gdf.CoonsPatch(line2, line10, line8, line9)# top semi-circle
 
-    surface_selection = (surface1, surface2, surface3)
+    line12 = gdf.Arc3(point_ctr, point_tl_ext, point_bl_ext)
+    surface4 = gdf.CoonsPatch(line3, line8, line12, line5)
 
+    #surface_selection = (surface2, )
+    surface_selection = (surface1, surface2, surface3, surface4)
+    
     return surface_selection, 270, 90
 
 if __name__ == "__main__":

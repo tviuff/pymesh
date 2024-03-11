@@ -5,71 +5,81 @@ import numpy as np
 
 from gdfgen.surfaces import Surface
 from gdfgen.curves import Curve
-from gdfgen.mesh import DistributionMethod
-from gdfgen.point import Point
+from gdfgen.mesh import DistMethod
 from gdfgen.constants import MeshConstants as MConst
+from gdfgen.exceptions import CurveIntersectionError
 
 class CoonsPatch(Surface):
     """Coons patch class taking a selection of four curves
     and creates mesh points for generating panels.
     """
 
-    __curve_selection:tuple[Curve]
-    __dist_u0:DistributionMethod = MConst.DEFAULT_DIST_METHOD.value
-    __dist_u1:DistributionMethod = MConst.DEFAULT_DIST_METHOD.value
-    __dist_0w:DistributionMethod = MConst.DEFAULT_DIST_METHOD.value
-    __dist_1w:DistributionMethod = MConst.DEFAULT_DIST_METHOD.value
-    __mesh_points = None
+    # ! Flips order by rearranging curve point_start and point_end attributes..
+    # ! ...another option is to multiply with '1 - dist_fn(u)'
+
+    curve_selection:tuple[Curve] = None
+    flipped_curves:tuple[bool] = None
+    __dist_u0:DistMethod = MConst.DEFAULT_DIST_METHOD.value
+    __dist_u1:DistMethod = MConst.DEFAULT_DIST_METHOD.value
+    __dist_0w:DistMethod = MConst.DEFAULT_DIST_METHOD.value
+    __dist_1w:DistMethod = MConst.DEFAULT_DIST_METHOD.value
     __num_points_u:int = MConst.DEFAULT_NUM_POINT.value
     __num_points_w:int = MConst.DEFAULT_NUM_POINT.value
-    __panels = None
-    __point00:Point
-    __point01:Point
-    __point10:Point
-    __point11:Point
 
     def __init__(self, curve_u0:Curve, curve_u1:Curve, curve_0w:Curve, curve_1w:Curve):
         """Initializing Coons Patch curves."""
-        curve_selection = (curve_u0, curve_u1, curve_0w, curve_1w)
+        self.__validate_selection_of_curve_types(curve_u0, curve_u1, curve_0w, curve_1w)
+        self.__validate_closed_curve_and_set_curve_selection(curve_u0, curve_u1, curve_0w, curve_1w)
+
+    def __validate_selection_of_curve_types(self, curve_u0, curve_u1, curve_0w, curve_1w) -> None:
+        """Validates selection with type 'Curve' items."""
+        curve_selection = curve_u0, curve_u1, curve_0w, curve_1w
         for curve in curve_selection:
             if not isinstance(curve, Curve):
                 raise TypeError("Curve input must be of type 'Curve'.")
-        if len(curve_selection) != 4:
-            raise ValueError("Curve selection must consist of exactly four Curve instances.")
-        self.__curve_selection = curve_selection
-        passed, err = self._validate_curve_selection()
-        if not passed:
-            raise err
-        self.__point00 = curve_u0.point_start
-        self.__point01 = curve_u1.point_start
-        self.__point10 = curve_1w.point_start
-        self.__point11 = curve_1w.point_end
 
-    def _validate_curve_selection(self):
-        """Validates direction and intersection points of curve selection."""
-        curve_u0, curve_u1, curve_0w, curve_1w = self.__curve_selection
-        try:
-            if not (curve_u0.point_start == curve_0w.point_start).all():
-                raise ValueError(
-                    "Curves 'curve_u0' and 'curve_0w' do not have the same starting point.")
-            if not (curve_u1.point_end == curve_1w.point_end).all():
-                raise ValueError( 
-                    "Curves 'curve_u1' and 'curve_1w' do not have the same ending point.")
-            if not (curve_u0.point_end == curve_1w.point_start).all():
-                raise ValueError(
-                    "Curve 'curve_u0' does not end where curve 'curve_1w' starts.")
-            if not (curve_u1.point_start == curve_0w.point_end).all():
-                raise ValueError(
-                    "Curve 'curve_0w' does not end where curve 'curve_u1' starts.")
-        except ValueError as err:
-            return False, err
-        return True, None
+    def __validate_closed_curve_and_set_curve_selection(self,
+            curve_u0, curve_u1, curve_0w, curve_1w
+            ) -> None:
+        """Validates selection with shared intersection points.
+        Enforces the direction of the first curve in the original curve sellection."""
+        initial_selection = [curve_u0, curve_u1, curve_0w, curve_1w]
+        curve_selection = [initial_selection.pop(0)]
+        ref_point = curve_selection[-1].point_end
+        flipped_curves = [False]
+        index = 0
+        while len(curve_selection) <= 4 and len(initial_selection) >= 1 and index <= 2:
+            next_curve_points = (initial_selection[index].point_start, initial_selection[index].point_end)
+            if ref_point in next_curve_points:
+                if ref_point == next_curve_points[0]:
+                    flipped_curves.append(False)
+                    ref_point = next_curve_points[1]
+                else:
+                    # Flip direction of curve to match points
+                    flipped_curves.append(True)
+                    ref_point = next_curve_points[0]
+                curve_selection.append(initial_selection.pop(index))
+                index = 0
+                continue
+            index += 1
+        if ref_point != curve_selection[0].point_start or index > 2:
+            raise CurveIntersectionError("Selected curves does not share intersection points")
+        cflip, cselect = self.__set_coons_patch_curve_order(flipped_curves, curve_selection)
+        self.flipped_curves = tuple(cflip)
+        self.curve_selection = tuple(cselect)
+    
+    def __set_coons_patch_curve_order(self, cflip, cselect) -> tuple[list]:
+        cselect = [cselect[0], cselect[2], cselect[3], cselect[1]]
+        cflip = [cflip[0], cflip[2], cflip[3], cflip[1]]
+        for index in (1, 2):
+            cflip[index] = not cflip[index]
+        return cflip, cselect
 
     def set_dist_methods(self,
-            dist_u0:DistributionMethod=MConst.DEFAULT_DIST_METHOD.value,
-            dist_u1:DistributionMethod=MConst.DEFAULT_DIST_METHOD.value,
-            dist_0w:DistributionMethod=MConst.DEFAULT_DIST_METHOD.value,
-            dist_1w:DistributionMethod=MConst.DEFAULT_DIST_METHOD.value,
+            dist_u0:DistMethod=MConst.DEFAULT_DIST_METHOD.value,
+            dist_u1:DistMethod=MConst.DEFAULT_DIST_METHOD.value,
+            dist_0w:DistMethod=MConst.DEFAULT_DIST_METHOD.value,
+            dist_1w:DistMethod=MConst.DEFAULT_DIST_METHOD.value,
         ):
         """Specifies curve path distribution methods, default is 'linear'."""
         self.__dist_u0 = dist_u0
@@ -98,39 +108,36 @@ class CoonsPatch(Surface):
         curve_paths = []
         num_points_u, num_points_w = self._get_num_points()
         num_points = (num_points_u, num_points_u, num_points_w, num_points_w)
-        for curve, num, dist in zip(self.__curve_selection, num_points, self._get_dist_methods()):
-            path_fn = curve.get_path_fn()
-            curve_paths.append(path_fn(num, dist))
+        flipped_curves = self.flipped_curves
+        dists = self._get_dist_methods()
+        for curve, num, dist, flip in zip(self.curve_selection, num_points, dists, flipped_curves):
+            path_fn = curve.get_path_fn(num_points=num, dist_method=dist, flip_dir=flip)
+            curve_paths.append(path_fn())
         pu0, pu1, p0w, p1w = tuple(curve_paths)
         return pu0, pu1, p0w, p1w
 
-    def _set_mesh_points(self):
-        """Generates surface mesh points in the physical x - y - z space."""
+    @property
+    def mesh_points(self):
+        """Returns surface mesh points."""
         pu0, pu1, p0w, p1w = self._get_curve_path_points()
-        p00 = self.__point00.xyz
-        p11 = self.__point11.xyz
-        p01 = self.__point01.xyz
-        p10 = self.__point10.xyz
+        p00 = pu0[ 0, :]
+        p11 = pu1[-1, :]
+        p01 = p0w[-1, :]
+        p10 = p1w[ 0, :]
         num_points_u, num_points_w = self._get_num_points()
-        mp = np.zeros((3, num_points_u, num_points_w))
+        mesh_points = np.zeros((3, num_points_u, num_points_w))
         for i, u in enumerate(np.linspace(0, 1, num=num_points_u, endpoint=True)):
             for j, w in enumerate(np.linspace(0, 1, num=num_points_w, endpoint=True)):
                 p1 = (1-u)*p0w[j,:] + u*p1w[j,:]
                 p2 = (1-w)*pu0[i,:] + w*pu1[i,:]
                 p3 = (1-u)*(1-w)*p00 + u*(1-w)*p10 + (1-u)*w*p01 + u*w*p11
                 for k in range(0, 3):
-                    mp[k,i,j] = p1[k] + p2[k] - p3[k]
-        self.__mesh_points = mp
+                    mesh_points[k,i,j] = p1[k] + p2[k] - p3[k]
+        return mesh_points
 
     @property
-    def mesh_points(self):
-        """Returns surface mesh points."""
-        if self.__mesh_points is None:
-            self._set_mesh_points()
-        return self.__mesh_points
-
-    def _set_panels(self):
-        """Generates Geometric Data File (GDF) panels."""
+    def panels(self):
+        """Returns quadrilateral panels."""
         panels = []
         mp = self.mesh_points
         for j in range(0, mp.shape[2]-1):
@@ -140,11 +147,4 @@ class CoonsPatch(Surface):
                                xyz2[0], xyz2[1], xyz2[2], 
                                xyz3[0], xyz3[1], xyz3[2], 
                                xyz4[0], xyz4[1], xyz4[2]])
-        self.__panels = panels
-
-    @property
-    def panels(self):
-        """Returns Geometric Data File (GDF) panels."""
-        if self.__panels is None:
-            self._set_panels()
-        return self.__panels
+        return panels

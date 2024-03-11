@@ -7,6 +7,8 @@ import gdfgen as gdf
 
 class TestLine:
 
+    # ! Include flipped_direction option in tests
+
     init_testdata = [
         #point1, point2, exception
         (gdf.Point(0, 0, 0), 1, TypeError),
@@ -19,13 +21,13 @@ class TestLine:
 
     # ! Add more test cases
     get_path_fn_testdata = [
-        # point1, point2, num_points, dist_method, expectation
-        (gdf.Point(0, 0, 0), gdf.Point(3, 0, 0), 4, gdf.mesh.Linear, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0],[3.0, 0.0, 0.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.mesh.Linear, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(0, 0, 2), 3, gdf.mesh.Linear, np.array([[0.0, 0.0, 0.0],[0.0, 0.0, 1.0],[0.0, 0.0, 2.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(2, 0, 0), 3, gdf.mesh.CosineBoth, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.mesh.CosineBoth, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(0, 0, 2), 3, gdf.mesh.CosineBoth, np.array([[0.0, 0.0, 0.0],[0.0, 0.0, 1.0],[0.0, 0.0, 2.0]]))
+        # point1, point2, num_points, dist_method, flip_dir, expectation
+        (gdf.Point(0, 0, 0), gdf.Point(3, 0, 0), 4, gdf.mesh.DistLinear, False, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0],[3.0, 0.0, 0.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.mesh.DistLinear, False, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(0, 0, 2), 3, gdf.mesh.DistLinear, False, np.array([[0.0, 0.0, 0.0],[0.0, 0.0, 1.0],[0.0, 0.0, 2.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(2, 0, 0), 3, gdf.mesh.DistCosineBoth, False, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.mesh.DistCosineBoth, False, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(0, 0, 2), 3, gdf.mesh.DistCosineBoth, False, np.array([[0.0, 0.0, 0.0],[0.0, 0.0, 1.0],[0.0, 0.0, 2.0]]))
     ]
 
     def test_no_input(self):
@@ -37,8 +39,8 @@ class TestLine:
         with pytest.raises(exception):
             gdf.Line(point1, point2)
 
-    @pytest.mark.parametrize("point1, point2, num_points, dist_method, expected", get_path_fn_testdata)
-    def test_get_path_fn(self, point1, point2, num_points, dist_method, expected):
-        path_fn = gdf.Line(point1, point2).get_path_fn()
-        path_xyz = path_fn(num_points=num_points, dist_method=dist_method)
+    @pytest.mark.parametrize("point1, point2, num_points, dist_method, flip_dir, expected", get_path_fn_testdata)
+    def test_get_path_fn(self, point1, point2, num_points, dist_method, flip_dir, expected):
+        path_fn = gdf.Line(point1, point2).get_path_fn(num_points=num_points, dist_method=dist_method, flip_dir=flip_dir)
+        path_xyz = path_fn()
         assert (path_xyz == expected).all()

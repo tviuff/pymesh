@@ -1,22 +1,21 @@
 """Module including abstract curve class
 """
 
-from typing import Protocol
+from abc import ABC, abstractmethod
 
 from gdfgen.point import Point
+from gdfgen.mesh import DistMethod
 
-class CurveInstance(Protocol):
-    """Abstract curve class"""
+class Curve(ABC):
+    """Curve abstract base class"""
 
     point_start:Point
     point_end:Point
 
-    def get_path_fn():
-        """Returns curve path algorithm"""
-
-class Curve(CurveInstance):
-    """Curve parent class for later inheritance"""
-
     def __init__(self, point_start:Point, point_end:Point) -> None:
         self.point_start = point_start
         self.point_end = point_end
+
+    @abstractmethod
+    def get_path_fn(self, num_points:int, dist_method:DistMethod, flip_dir:bool=False):
+        """Returns curve path algorithm"""

@@ -4,7 +4,7 @@
 import numpy as np
 
 from gdfgen.point import Point
-from gdfgen.mesh import DistributionMethod
+from gdfgen.mesh import DistMethod
 from .curve import Curve
 
 class Line(Curve):
@@ -25,9 +25,9 @@ class Line(Curve):
     def __repr__(self):
         return f"{self.__class__.__name__}({self.point_start}, {self.point_end})"
 
-    def get_path_fn(self):
-        def path_fn(num_points:int, dist_method:DistributionMethod):
-            dist_fn = dist_method.get_fn()
+    def get_path_fn(self, num_points:int, dist_method:DistMethod, flip_dir:bool=False):
+        def path_fn():
+            dist_fn = dist_method().get_fn(flip_dir)
             path_xyz = np.zeros((num_points, 3))
             for i, u in enumerate(np.linspace(0, 1, num_points, endpoint=True)):
                 path_xyz[i, :] = self.point_start.xyz \

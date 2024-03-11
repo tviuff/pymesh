@@ -4,34 +4,63 @@
 import math
 from typing import Protocol
 
-class DistributionMethodInstance(Protocol):
-    """Abstract path distribution class"""
-    def __str__() -> str:
-        """Returns string representation of instance"""
-    def get_fn():
-        """Returns method distribution function"""
+def flip_exp(exp, flip):
+    if not flip:
+        return exp
+    return 1 - exp
 
-class DistributionMethod(DistributionMethodInstance):
-    """Parent distribution class"""
+class DistMethod(Protocol):
+
+    def __str__(self) -> str:
+        ...
+
+    def get_fn(self, flip_dir:bool):
+        ...
+
+class DistLinear:
+    """Linear path distribution class"""
+
     def __str__(self) -> str:
         return self.__class__.__name__
 
-class Linear(DistributionMethod):
-    """Linear path distribution class"""
-    def get_fn():
-        return lambda x: x
+    def get_fn(self, flip_dir:bool):
+        def fn(u:float) -> float:
+            exp = u
+            return flip_exp(exp, flip_dir)
+        return fn
 
-class CosineBoth(DistributionMethod):
+class DistCosineBoth:
     """Cosine path distribution class"""
-    def get_fn():
-        return lambda u: math.cos((1 - u)*math.pi)/2 + 0.5
 
-class CosineEnd1(DistributionMethod):
-    """Cosine path distribution class"""
-    def get_fn():
-        return lambda u: 1 - math.cos(u*math.pi/2)
+    def __str__(self) -> str:
+        return self.__class__.__name__
 
-class CosineEnd2(DistributionMethod):
+    def get_fn(self, flip_dir:bool):
+        def fn(u:float) -> float:
+            exp = math.cos((1 - u)*math.pi)/2 + 0.5
+            return flip_exp(exp, flip_dir)
+        return fn
+
+class DistCosineEnd1:
     """Cosine path distribution class"""
-    def get_fn():
-        return lambda u: math.cos((u - 1)*math.pi/2)
+
+    def __str__(self) -> str:
+        return self.__class__.__name__
+
+    def get_fn(self, flip_dir:bool):
+        def fn(u:float) -> float:
+            exp = 1 - math.cos(u*math.pi/2)
+            return flip_exp(exp, flip_dir)
+        return fn
+
+class DistCosineEnd2:
+    """Cosine path distribution class"""
+
+    def __str__(self) -> str:
+        return self.__class__.__name__
+
+    def get_fn(self, flip_dir:bool):
+        def fn(u:float) -> float:
+            exp = math.cos((u - 1)*math.pi/2)
+            return flip_exp(exp, flip_dir)
+        return fn
