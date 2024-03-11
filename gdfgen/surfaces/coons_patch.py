@@ -49,7 +49,10 @@ class CoonsPatch(Surface):
         flipped_curves = [False]
         index = 0
         while len(curve_selection) <= 4 and len(initial_selection) >= 1 and index <= 2:
-            next_curve_points = (initial_selection[index].point_start, initial_selection[index].point_end)
+            next_curve_points = (
+                initial_selection[index].point_start,
+                initial_selection[index].point_end
+            )
             if ref_point in next_curve_points:
                 if ref_point == next_curve_points[0]:
                     flipped_curves.append(False)
@@ -67,7 +70,7 @@ class CoonsPatch(Surface):
         cflip, cselect = self.__set_coons_patch_curve_order(flipped_curves, curve_selection)
         self.flipped_curves = tuple(cflip)
         self.curve_selection = tuple(cselect)
-    
+
     def __set_coons_patch_curve_order(self, cflip, cselect) -> tuple[list]:
         cselect = [cselect[0], cselect[2], cselect[3], cselect[1]]
         cflip = [cflip[0], cflip[2], cflip[3], cflip[1]]
