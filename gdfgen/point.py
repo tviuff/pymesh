@@ -1,38 +1,46 @@
 """Module containing Point classes.
 """
 
-import math
 import inspect
+import math
 from typing import Self
 
 import numpy as np
+from numpy import ndarray
 
-type IntOrFloat = int | float
-type listOrSet[T] = list[T] | set[T]# ! Remember this type hint method
+class Coordinate:
+    """Coordinate descriptor class"""
 
+    def __set_name__(self, owner, name):
+        self._name = name
+
+    def __get__(self, instance, owner) -> float:
+        return instance.__dict__[self._name]
+
+    def __set__(self, instance, value):
+        if not isinstance(value, (int, float)):
+            raise TypeError(f"{self._name} must be of type 'int' or 'float'")
+        instance.__dict__[self._name] = float(value)
 
 class Point:
-    """Creates and handles point coordinates
-    """
+    """Creates and handles point coordinates"""
 
-    def __init__(self, x:IntOrFloat, y:IntOrFloat, z:IntOrFloat):
-        self._validate_coordinate_input(x, y, z)
-        self.x, self.y, self.z = float(x), float(y), float(z)
-        self.xyz = np.array([self.x, self.y, self.z])
+    x = Coordinate()
+    y = Coordinate()
+    z = Coordinate()
+
+    def __init__(self, x:int|float, y:int|float, z:int|float) -> None:
+        self.x, self.y, self.z = x, y, z
+
+    @property
+    def xyz(self) -> ndarray:
+        return np.array([self.x, self.y, self.z])
 
     def __eq__(self, other):
         return (self.xyz == other.xyz).all()
 
     def __repr__(self):
-        return f"{self.__class__.__name__}({self.x:.2f}, {self.y:.2f}, {self.z:.2f})"
-
-    def _validate_coordinate_input(self, *args) -> None:
-        for arg in args:
-            if not isinstance(arg, (float, int)):
-                raise TypeError(
-                    f"{self.__class__.__name__}.__init__() "
-                    f"only takes arguments of type 'float' or 'int'."
-                )
+        return f"{type(self).__name__}(x={self.x:.2f}, y={self.y:.2f}, z={self.z:.2f})"
 
     @classmethod
     def get_distance(cls, point1:Self, point2:Self) -> float:
@@ -50,20 +58,21 @@ class Point:
     @classmethod
     def set_relative_to(cls,
             point:Self=None,
-            dx:IntOrFloat=0.0,
-            dy:IntOrFloat=0.0,
-            dz:IntOrFloat=0.0) -> Self:
-        """Creates a new point using relative position arguments (dx, dy, dz)
-        to existing Point instance
-        """
-        if (point is None) and dx == 0.0 and dy == 0.0 and dz == 0.0:
-            raise ValueError("Input must include a relative distance.")
+            dx:int|float=0.0,
+            dy:int|float=0.0,
+            dz:int|float=0.0
+        ) -> Self:
+        """Creates a new point using relative position"""
+        if point is None:
+            raise ValueError("Input must include a point reference.")
         if not isinstance(point, Point):
-            raise TypeError("Input point must of type 'Point'.")
-        if not (isinstance(dx, (float, int)) \
-                and isinstance(dy, (float, int)) \
+            raise TypeError("Input point reference must be of type 'Point'.")
+        if not (isinstance(dx, (float, int))
+                and isinstance(dy, (float, int))
                 and isinstance(dz, (float, int))):
             raise TypeError("Relative position input must be of type 'float' or 'int'.")
+        if (dx == 0.0) and (dy == 0.0) and (dz == 0.0):
+            raise ValueError("Input must include a non-zero relative distance.")
         x = point.x + float(dx)
         y = point.y + float(dy)
         z = point.z + float(dz)

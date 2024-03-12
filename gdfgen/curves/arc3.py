@@ -13,22 +13,25 @@ class Arc3(Curve):
     From https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
     """
 
-    point_centre:Point
     __tolerance = 0.0001
 
     def __init__(self, point_centre:Point, point_start:Point, point_end):
-        self.point_centre = point_centre
         super().__init__(point_start, point_end)
-        if not (isinstance(self.point_start, Point)
-                and isinstance(self.point_end, Point)
-                and isinstance(self.point_centre, Point)
-                ):
-            raise TypeError(f"{self.__class__.__name__} class only takes point inputs of type 'Point'.")
+        self.point_centre = point_centre
         if ((point_start == point_end)
-                or (point_start == point_centre)
-                or (point_end == point_centre)
-                ):
-            raise ValueError(f"{self.__class__.__name__} input points must be unique.")
+            or (point_start == point_centre)
+            or (point_end == point_centre)):
+            raise ValueError(f"{type(self).__name__} input points must be unique.")
+
+    @property
+    def point_centre(self) -> Point:
+        return self._point_centre
+
+    @point_centre.setter
+    def point_centre(self, point:Point) -> None:
+        if not isinstance(point, Point):
+            raise TypeError("point_centre must be of type 'Point'")
+        self._point_centre = point
 
     def __eq__(self, other):
         return self.point_centre == other.point_centre \

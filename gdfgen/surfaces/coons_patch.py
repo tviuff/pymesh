@@ -14,17 +14,14 @@ class CoonsPatch(Surface):
     and creates mesh points for generating panels.
     """
 
-    # ! Flips order by rearranging curve point_start and point_end attributes..
-    # ! ...another option is to multiply with '1 - dist_fn(u)'
-
     curve_selection:tuple[Curve] = None
     flipped_curves:tuple[bool] = None
-    __dist_u0:DistMethod = MConst.DEFAULT_DIST_METHOD.value
-    __dist_u1:DistMethod = MConst.DEFAULT_DIST_METHOD.value
-    __dist_0w:DistMethod = MConst.DEFAULT_DIST_METHOD.value
-    __dist_1w:DistMethod = MConst.DEFAULT_DIST_METHOD.value
-    __num_points_u:int = MConst.DEFAULT_NUM_POINT.value
-    __num_points_w:int = MConst.DEFAULT_NUM_POINT.value
+    _dist_u0:DistMethod = MConst.DEFAULT_DIST_METHOD.value
+    _dist_u1:DistMethod = MConst.DEFAULT_DIST_METHOD.value
+    _dist_0w:DistMethod = MConst.DEFAULT_DIST_METHOD.value
+    _dist_1w:DistMethod = MConst.DEFAULT_DIST_METHOD.value
+    _num_points_u:int = MConst.DEFAULT_NUM_POINT.value
+    _num_points_w:int = MConst.DEFAULT_NUM_POINT.value
 
     def __init__(self, curve_u0:Curve, curve_u1:Curve, curve_0w:Curve, curve_1w:Curve):
         """Initializing Coons Patch curves."""
@@ -79,37 +76,41 @@ class CoonsPatch(Surface):
         return cflip, cselect
 
     def set_dist_methods(self,
-            dist_u0:DistMethod=MConst.DEFAULT_DIST_METHOD.value,
-            dist_u1:DistMethod=MConst.DEFAULT_DIST_METHOD.value,
-            dist_0w:DistMethod=MConst.DEFAULT_DIST_METHOD.value,
-            dist_1w:DistMethod=MConst.DEFAULT_DIST_METHOD.value,
+            dist_u0:DistMethod = MConst.DEFAULT_DIST_METHOD.value,
+            dist_u1:DistMethod = MConst.DEFAULT_DIST_METHOD.value,
+            dist_0w:DistMethod = MConst.DEFAULT_DIST_METHOD.value,
+            dist_1w:DistMethod = MConst.DEFAULT_DIST_METHOD.value,
         ):
         """Specifies curve path distribution methods, default is 'linear'."""
-        self.__dist_u0 = dist_u0
-        self.__dist_u1 = dist_u1
-        self.__dist_0w = dist_0w
-        self.__dist_1w = dist_1w
+        self._dist_u0 = dist_u0
+        self._dist_u1 = dist_u1
+        self._dist_0w = dist_0w
+        self._dist_1w = dist_1w
 
     def _get_dist_methods(self):
         """Returns curve path point distribution methods."""
-        return self.__dist_u0, self.__dist_u1, self.__dist_0w, self.__dist_1w
+        return self._dist_u0, self._dist_u1, self._dist_0w, self._dist_1w
+
+    def get_num_points(self):
+        """Returns number of points along u and w dimensions."""
+        return self._num_points_u, self._num_points_w
 
     def set_num_points(self,
-            num_points_u:int=MConst.DEFAULT_NUM_POINT.value,
-            num_points_w:int=MConst.DEFAULT_NUM_POINT.value
+            num_points_u:int = MConst.DEFAULT_NUM_POINT.value,
+            num_points_w:int = MConst.DEFAULT_NUM_POINT.value
         ):
         """Specify number of points along normalized u and w dimensions."""
-        self.__num_points_u = num_points_u
-        self.__num_points_w = num_points_w
-
-    def _get_num_points(self):
-        """Returns number of points along u and w dimensions."""
-        return self.__num_points_u, self.__num_points_w
+        if not isinstance(num_points_u, int):
+            raise TypeError("num_points_u must be of type 'int'")
+        if not isinstance(num_points_w, int):
+            raise TypeError("num_points_w must be of type 'int'")
+        self._num_points_u = num_points_u
+        self._num_points_w = num_points_w
 
     def _get_curve_path_points(self):
         """Returns path points for each of the four input curves."""
         curve_paths = []
-        num_points_u, num_points_w = self._get_num_points()
+        num_points_u, num_points_w = self.get_num_points()
         num_points = (num_points_u, num_points_u, num_points_w, num_points_w)
         flipped_curves = self.flipped_curves
         dists = self._get_dist_methods()
@@ -127,16 +128,16 @@ class CoonsPatch(Surface):
         p11 = pu1[-1, :]
         p01 = p0w[-1, :]
         p10 = p1w[ 0, :]
-        num_points_u, num_points_w = self._get_num_points()
-        mesh_points = np.zeros((3, num_points_u, num_points_w))
+        num_points_u, num_points_w = self.get_num_points()
+        mp = np.zeros((3, num_points_u, num_points_w))
         for i, u in enumerate(np.linspace(0, 1, num=num_points_u, endpoint=True)):
             for j, w in enumerate(np.linspace(0, 1, num=num_points_w, endpoint=True)):
                 p1 = (1-u)*p0w[j,:] + u*p1w[j,:]
                 p2 = (1-w)*pu0[i,:] + w*pu1[i,:]
                 p3 = (1-u)*(1-w)*p00 + u*(1-w)*p10 + (1-u)*w*p01 + u*w*p11
                 for k in range(0, 3):
-                    mesh_points[k,i,j] = p1[k] + p2[k] - p3[k]
-        return mesh_points
+                    mp[k,i,j] = p1[k] + p2[k] - p3[k]
+        return mp
 
     @property
     def panels(self):

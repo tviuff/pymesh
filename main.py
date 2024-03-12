@@ -94,7 +94,7 @@ def example_rectangle_xy():
 
     surface1 = gdf.CoonsPatch(line1, line3, line2, line4)
     surface1.set_num_points(num_points_u=10, num_points_w=10)
-
+    
     surface_selection = (surface1,)
 
     return surface_selection, 270, 90
@@ -126,6 +126,8 @@ def example_circle():
     line6 = gdf.Line(point_br_ext, point_br)
     line7 = gdf.Arc3(point_ctr, point_bl_ext, point_br_ext)
     surface2 = gdf.CoonsPatch(line7, line1, line5, line6)
+    surface2.set_num_points(8, 8)
+    # surface2.set_dist_methods(dist_0w=gdf.mesh.DistCosineEnd1, dist_1w=gdf.mesh.DistCosineEnd1)
 
     # Top semi-circle
     line8 = gdf.Line(point_tl, point_tl_ext)

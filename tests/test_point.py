@@ -45,7 +45,7 @@ class TestPoint:
         (gdf.Point(0, 0, 0), "one", 0, 0, TypeError, None),
         (gdf.Point(0, 0, 0), 0, "one", 0, TypeError, None),
         (gdf.Point(0, 0, 0), 0, 0, "one", TypeError, None),
-        (gdf.Point(0, 0, 0),  0,  0,  0, None, gdf.Point( 0,  0,  0)),
+        (gdf.Point(0, 0, 0),  0,  0,  0, ValueError, None),
         (gdf.Point(0, 0, 0),  1,  1,  1, None, gdf.Point( 1,  1,  1)),
         (gdf.Point(0, 0, 0), -1, -1, -1, None, gdf.Point(-1, -1, -1))
     ]
