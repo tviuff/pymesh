@@ -20,6 +20,4 @@ surface1 = CoonsPatch(line1, line3, line2, line4)
 surface1.num_points_u = 10
 surface1.num_points_w = 10
 
-surface_selection = (surface1,)
-
-plt.plot_panels(surface_selection, 270, 90, (-1, 1), (-1, 1), (-1, 1))
+plt.plot_panels(surface1, 270, 90, (-1, 1), (-1, 1), (-1, 1))

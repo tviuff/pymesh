@@ -8,3 +8,4 @@ from gdfgen.curves.arcva import ArcVA
 from gdfgen.curves.line import Line
 from gdfgen import mesh
 from gdfgen.surfaces.coons_patch import CoonsPatch
+from gdfgen.surfaces.linearly_swept_surface import LinearlySweptSurface

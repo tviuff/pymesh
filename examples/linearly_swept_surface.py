@@ -1,4 +1,4 @@
-"""code playground"""
+"""Linearly swept surface example"""
 
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', 'gdfgen')))
@@ -12,5 +12,6 @@ curve.flipped_dir = True
 surface = LinearlySweptSurface(curve, line)
 surface.num_points_curve = 30
 
-surface_selection = surface
-plt.plot_mesh_points(surface_selection, xlim=(-1, 1), ylim=(-1, 1), zlim=(-1, 1))
+surface_selection = (surface, )
+
+plt.plot_panels(surface_selection, xlim=(-1, 1), ylim=(-1, 1), zlim=(-1, 1))

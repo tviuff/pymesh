@@ -11,8 +11,9 @@ from gdfgen.constants import MeshConstants
 from .curve import Curve
 
 class Arc3P(Curve):
-    """Circular arc generated from 3 points in space
-    From https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
+    """Circular arc generated from 3 points in space.
+
+    Implementation based on: https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
     """
 
     def __init__(self, point_centre:Point, point_start:Point, point_end:Point, flipped_dir:bool=False):
