@@ -6,7 +6,8 @@ from abc import ABC, abstractmethod
 from numpy import ndarray
 
 from gdfgen.point import Point
-from gdfgen.mesh import DistMethod, DistLinear
+from gdfgen.mesh import DistMethod
+from gdfgen.constants import MeshConstants
 
 class Curve(ABC):
     """Curve abstract base class"""
@@ -37,8 +38,8 @@ class Curve(ABC):
 
     @abstractmethod
     def get_path_xyz(self,
-            num_points:int,
-            dist_method:DistMethod = DistLinear,
+            num_points:int = MeshConstants.DEFAULT_NUM_POINT.value,
+            dist_method:DistMethod = MeshConstants.DEFAULT_DIST_METHOD.value,
             flip_dir:bool = False
-            ) -> ndarray:
+        ) -> ndarray:
         """Returns curve path xyz points as a numpy array"""

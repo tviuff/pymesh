@@ -17,7 +17,8 @@ line3 = Line(point3, point4)
 line4 = Line(point4, point1)
 
 surface1 = CoonsPatch(line1, line3, line2, line4)
-surface1.set_num_points(num_points_u=10, num_points_w=10)
+surface1.num_points_u = 10
+surface1.num_points_w = 10
 
 surface_selection = (surface1,)
 

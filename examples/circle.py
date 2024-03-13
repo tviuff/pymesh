@@ -31,8 +31,10 @@ line5 = Line(point_bl_ext, point_bl)
 line6 = Line(point_br_ext, point_br)
 line7 = Arc3P(point_ctr, point_bl_ext, point_br_ext)
 surface2 = CoonsPatch(line7, line1, line5, line6)
-surface2.set_num_points(8, 8)
-surface2.set_dist_methods(dist_0w=mesh.DistLinear, dist_1w=mesh.DistLinear)
+surface2.num_points_u = 8
+surface2.num_points_w = 8
+surface2.dist_0w = mesh.DistLinear()
+surface2.dist_1w = mesh.DistLinear()
 
 # Top semi-circle and surface patch
 line8 = Line(point_tl, point_tl_ext)

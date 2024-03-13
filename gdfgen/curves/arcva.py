@@ -7,7 +7,8 @@ from numpy import ndarray
 
 from gdfgen import Point, Vector3D
 from gdfgen.curves import Curve
-from gdfgen.mesh import DistMethod, DistLinear
+from gdfgen.mesh import DistMethod
+from gdfgen.constants import MeshConstants
 
 class ArcVA(Curve):
     """Circular arc generated from a point, an angle (rad) and a vector axis of rotation
@@ -72,12 +73,12 @@ class ArcVA(Curve):
         return txt
 
     def get_path_xyz(self,
-            num_points:int,
-            dist_method:DistMethod=DistLinear,
+            num_points:int = MeshConstants.DEFAULT_NUM_POINT.value,
+            dist_method:DistMethod = MeshConstants.DEFAULT_DIST_METHOD.value,
             flip_dir:bool = False
         ) -> ndarray:
         path_xyz = np.zeros((num_points, 3))
-        dist_fn = dist_method().get_fn(flip_dir)
+        dist_fn = dist_method.get_fn(flip_dir)
         v = self.vector_start.unit_vector * self.vector_start.length
         k = self.vector_rot.unit_vector * self.vector_rot.length
         a = self.angle

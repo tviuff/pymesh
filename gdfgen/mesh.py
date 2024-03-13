@@ -2,26 +2,26 @@
 """
 
 import math
-from typing import Protocol
+from abc import ABC, abstractmethod
 
 def flip_exp(exp, flip):
+    """flips distribution direction from 0-1 to 1-0"""
     if not flip:
         return exp
     return 1 - exp
 
-class DistMethod(Protocol):
-
-    def __str__(self) -> str:
-        ...
-
-    def get_fn(self, flip_dir:bool):
-        ...
-
-class DistLinear:
-    """Linear path distribution class"""
+class DistMethod(ABC):
+    """Abstract path distribution class"""
 
     def __str__(self) -> str:
         return self.__class__.__name__
+
+    @abstractmethod
+    def get_fn(self, flip_dir:bool):
+        pass
+
+class DistLinear(DistMethod):
+    """Linear path distribution class"""
 
     def get_fn(self, flip_dir:bool):
         def fn(u:float) -> float:
@@ -29,11 +29,8 @@ class DistLinear:
             return flip_exp(exp, flip_dir)
         return fn
 
-class DistCosineBoth:
+class DistCosineBoth(DistMethod):
     """Cosine path distribution class"""
-
-    def __str__(self) -> str:
-        return self.__class__.__name__
 
     def get_fn(self, flip_dir:bool):
         def fn(u:float) -> float:
@@ -41,11 +38,8 @@ class DistCosineBoth:
             return flip_exp(exp, flip_dir)
         return fn
 
-class DistCosineEnd1:
+class DistCosineEnd1(DistMethod):
     """Cosine path distribution class"""
-
-    def __str__(self) -> str:
-        return self.__class__.__name__
 
     def get_fn(self, flip_dir:bool):
         def fn(u:float) -> float:
@@ -53,11 +47,8 @@ class DistCosineEnd1:
             return flip_exp(exp, flip_dir)
         return fn
 
-class DistCosineEnd2:
+class DistCosineEnd2(DistMethod):
     """Cosine path distribution class"""
-
-    def __str__(self) -> str:
-        return self.__class__.__name__
 
     def get_fn(self, flip_dir:bool):
         def fn(u:float) -> float:

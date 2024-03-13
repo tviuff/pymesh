@@ -22,12 +22,12 @@ class TestLine:
     # ! Add more test cases
     get_path_xyz_testdata = [
         # point1, point2, num_points, dist_method, flip_dir, expectation
-        (gdf.Point(0, 0, 0), gdf.Point(3, 0, 0), 4, gdf.mesh.DistLinear, False, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0],[3.0, 0.0, 0.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.mesh.DistLinear, False, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(0, 0, 2), 3, gdf.mesh.DistLinear, False, np.array([[0.0, 0.0, 0.0],[0.0, 0.0, 1.0],[0.0, 0.0, 2.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(2, 0, 0), 3, gdf.mesh.DistCosineBoth, False, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.mesh.DistCosineBoth, False, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(0, 0, 2), 3, gdf.mesh.DistCosineBoth, False, np.array([[0.0, 0.0, 0.0],[0.0, 0.0, 1.0],[0.0, 0.0, 2.0]]))
+        (gdf.Point(0, 0, 0), gdf.Point(3, 0, 0), 4, gdf.mesh.DistLinear(), False, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0],[3.0, 0.0, 0.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.mesh.DistLinear(), False, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(0, 0, 2), 3, gdf.mesh.DistLinear(), False, np.array([[0.0, 0.0, 0.0],[0.0, 0.0, 1.0],[0.0, 0.0, 2.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(2, 0, 0), 3, gdf.mesh.DistCosineBoth(), False, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.mesh.DistCosineBoth(), False, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(0, 0, 2), 3, gdf.mesh.DistCosineBoth(), False, np.array([[0.0, 0.0, 0.0],[0.0, 0.0, 1.0],[0.0, 0.0, 2.0]]))
     ]
 
     def test_no_input(self):

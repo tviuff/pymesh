@@ -6,7 +6,8 @@ import numpy as np
 from numpy import ndarray
 
 from gdfgen.point import Point
-from gdfgen.mesh import DistMethod, DistLinear
+from gdfgen.mesh import DistMethod
+from gdfgen.constants import MeshConstants
 from .curve import Curve
 
 class Arc3P(Curve):
@@ -87,12 +88,12 @@ class Arc3P(Curve):
         return f"{type(self).__name__}({self.point_centre}, {self.point_start}, {self.point_end})"
 
     def get_path_xyz(self,
-            num_points:int,
-            dist_method:DistMethod=DistLinear,
+            num_points:int = MeshConstants.DEFAULT_NUM_POINT.value,
+            dist_method:DistMethod = MeshConstants.DEFAULT_DIST_METHOD.value,
             flip_dir:bool = False
         ) -> ndarray:
         path_xyz = np.zeros((num_points, 3))
-        dist_fn = dist_method().get_fn(flip_dir)
+        dist_fn = dist_method.get_fn(flip_dir)
         v, k, a = self.vector_start, self.plane_unit_normal, self.angle
         for i, u in enumerate(np.linspace(0, 1, num_points, endpoint=True)):
             path_xyz[i,:] = self.point_centre.xyz \
