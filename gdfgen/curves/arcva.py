@@ -1,13 +1,13 @@
-"""Module includes the Arc3 class
+"""Module includes the ArcVA class
 """
 
 import math
 import numpy as np
 from numpy import ndarray
 
-from gdfgen import Vector3D, Point
-from gdfgen.mesh import DistMethod, DistLinear
+from gdfgen import Point, Vector3D
 from gdfgen.curves import Curve
+from gdfgen.mesh import DistMethod, DistLinear
 
 class ArcVA(Curve):
     """Circular arc generated from a point, an angle (rad) and a vector axis of rotation
@@ -67,8 +67,8 @@ class ArcVA(Curve):
                 and self.angle == other.angle
 
     def __repr__(self):
-        txt = f"{type(self).__name__}(point={self.point}, " \
-                f"unit_vector={self.unit_vector}, angle={self.angle})"
+        txt = f"{type(self).__name__}(vector_start={self.vector_start}, " \
+                f"vector_rot={self.vector_rot}, angle={self.angle})"
         return txt
 
     def get_path_xyz(self,
