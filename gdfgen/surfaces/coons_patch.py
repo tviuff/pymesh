@@ -115,8 +115,8 @@ class CoonsPatch(Surface):
         flipped_curves = self.flipped_curves
         dists = self._get_dist_methods()
         for curve, num, dist, flip in zip(self.curve_selection, num_points, dists, flipped_curves):
-            path_fn = curve.get_path_fn(num_points=num, dist_method=dist, flip_dir=flip)
-            curve_paths.append(path_fn())
+            path_xyz = curve.get_path_xyz(num_points=num, dist_method=dist, flip_dir=flip)
+            curve_paths.append(path_xyz)
         pu0, pu1, p0w, p1w = tuple(curve_paths)
         return pu0, pu1, p0w, p1w
 

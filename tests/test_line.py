@@ -20,7 +20,7 @@ class TestLine:
     ]
 
     # ! Add more test cases
-    get_path_fn_testdata = [
+    get_path_xyz_testdata = [
         # point1, point2, num_points, dist_method, flip_dir, expectation
         (gdf.Point(0, 0, 0), gdf.Point(3, 0, 0), 4, gdf.mesh.DistLinear, False, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0],[3.0, 0.0, 0.0]])),
         (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.mesh.DistLinear, False, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
@@ -39,8 +39,7 @@ class TestLine:
         with pytest.raises(exception):
             gdf.Line(point1, point2)
 
-    @pytest.mark.parametrize("point1, point2, num_points, dist_method, flip_dir, expected", get_path_fn_testdata)
+    @pytest.mark.parametrize("point1, point2, num_points, dist_method, flip_dir, expected", get_path_xyz_testdata)
     def test_get_path_fn(self, point1, point2, num_points, dist_method, flip_dir, expected):
-        path_fn = gdf.Line(point1, point2).get_path_fn(num_points=num_points, dist_method=dist_method, flip_dir=flip_dir)
-        path_xyz = path_fn()
+        path_xyz = gdf.Line(point1, point2).get_path_xyz(num_points=num_points, dist_method=dist_method, flip_dir=flip_dir)
         assert (path_xyz == expected).all()

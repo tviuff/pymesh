@@ -1,6 +1,7 @@
 """Main module for trying out code ideas
 """
 
+import math
 import time
 
 from matplotlib import pyplot as plt
@@ -15,10 +16,14 @@ def main():
     """Function executed if file is executed and not imported"""
 
     # surface_selection, azim, elev = example_rectangle_xy()
-    surface_selection, azim, elev = example_circle()
-    
     # plot_points(surface_selection, azim, elev)
+
+    surface_selection, azim, elev = example_circle()
     plot_panels(surface_selection, azim, elev, 3)
+
+    # example_arc3p()
+
+    # example_arcva()
 
 def time_it(func):
     """Wrapper function used to time function execution time"""
@@ -100,6 +105,55 @@ def example_rectangle_xy():
     return surface_selection, 270, 90
 
 @time_it
+def example_arc3p():
+    """Arc3 circle"""
+
+    n = 2/3
+    curve1 = gdf.Arc3P(gdf.Point(0, 0, 0), gdf.Point(1, 0, 0), gdf.Point(1, 0.0001, 0))#, gdf.Point(math.cos(n*math.pi*2), math.sin(n*math.pi*2), 0))
+    xyz = curve1.get_path_xyz(num_points=5)
+    print(curve1.angle)
+    curve1.flipped_dir = True
+    xyz_flipped = curve1.get_path_xyz(num_points=10)
+    print(curve1.angle)
+    plt.close("all")
+    mpl_style.use('seaborn-v0_8')
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    ax.scatter(xyz[:, 0], xyz[:, 1], xyz[:, 2], color='blue')
+    ax.scatter(xyz_flipped[:, 0], xyz_flipped[:, 1], xyz_flipped[:, 2], color='red')
+    ax.set(xlim=(-1, 1), ylim=(-1, 1), zlim=(-1, 1))
+    ax.set_xlabel('x (m)')
+    ax.set_ylabel('y (m)')
+    ax.set_zlabel('z (m)')
+    ax.view_init(azim=270, elev=90)
+    plt.show()
+
+@time_it
+def example_arcva():
+    """ArcVA circle"""
+
+    curve1 = gdf.ArcVA(
+        vector_start = gdf.Vector3D(gdf.Point(0.5, 0, 0), gdf.Point(1, 0, 0)),
+        vector_rot = gdf.Vector3D(gdf.Point(0, 0, 0), gdf.Point(0, 1, 1)),
+        angle = 2*math.pi
+        )
+    xyz = curve1.get_path_xyz(num_points=20)
+    print(curve1.angle/math.pi*180)
+    print(curve1.point_start)
+    print(curve1.point_end)
+    plt.close("all")
+    mpl_style.use('seaborn-v0_8')
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    ax.scatter(xyz[:, 0], xyz[:, 1], xyz[:, 2], color='blue')
+    ax.set(xlim=(-1, 1), ylim=(-1, 1), zlim=(-1, 1))
+    ax.set_xlabel('x (m)')
+    ax.set_ylabel('y (m)')
+    ax.set_zlabel('z (m)')
+    ax.view_init(azim=270, elev=90)
+    plt.show()
+
+@time_it
 def example_circle():
     """Circle surface example"""
 
@@ -124,7 +178,7 @@ def example_circle():
     # Bottom semi-circle
     line5 = gdf.Line(point_bl_ext, point_bl)
     line6 = gdf.Line(point_br_ext, point_br)
-    line7 = gdf.Arc3(point_ctr, point_bl_ext, point_br_ext)
+    line7 = gdf.Arc3P(point_ctr, point_bl_ext, point_br_ext)
     surface2 = gdf.CoonsPatch(line7, line1, line5, line6)
     surface2.set_num_points(8, 8)
     # surface2.set_dist_methods(dist_0w=gdf.mesh.DistCosineEnd1, dist_1w=gdf.mesh.DistCosineEnd1)
@@ -132,15 +186,15 @@ def example_circle():
     # Top semi-circle
     line8 = gdf.Line(point_tl, point_tl_ext)
     line9 = gdf.Line(point_tr, point_tr_ext)
-    line10 = gdf.Arc3(point_ctr, point_tl_ext, point_tr_ext)
+    line10 = gdf.Arc3P(point_ctr, point_tl_ext, point_tr_ext)
     surface3 = gdf.CoonsPatch(line2, line10, line8, line9)
 
     # Left semi-circle
-    line12 = gdf.Arc3(point_ctr, point_tl_ext, point_bl_ext)
+    line12 = gdf.Arc3P(point_ctr, point_tl_ext, point_bl_ext)
     surface4 = gdf.CoonsPatch(line3, line8, line12, line5)
 
     # Right semi-circle
-    line13 = gdf.Arc3(point_ctr, point_tr_ext, point_br_ext)
+    line13 = gdf.Arc3P(point_ctr, point_tr_ext, point_br_ext)
     surface5 = gdf.CoonsPatch(line4, line6, line13, line9)
 
     surface_selection = (surface1, surface2, surface3, surface4, surface5)
