@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-import gdfgen as gdf
+import gdfpy as gdf
 
 class TestLine:
 

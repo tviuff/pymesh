@@ -4,7 +4,7 @@
 import numpy as np
 from numpy import ndarray
 
-from gdfgen.points import Point
+from gdfpy.points import Point
 
 class Vector3D:
     """3d vector generated from two points in space"""

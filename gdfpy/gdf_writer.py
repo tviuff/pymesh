@@ -3,7 +3,7 @@
 from pathlib import Path
 import os
 
-from gdfgen.surfaces import Surface
+from gdfpy.surfaces import Surface
 
 class GDFWriter():
     """Writes surface panels to filename with the extension '.gdf'

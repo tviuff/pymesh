@@ -4,11 +4,11 @@
 import numpy as np
 from numpy import ndarray
 
-from gdfgen import Line
-from gdfgen.constants import MeshConstants
-from gdfgen.points import Point
-from gdfgen.mesh import BoundaryDistribution, MeshNumber
-from gdfgen.surfaces import Surface
+from gdfpy import Line
+from gdfpy.constants import MeshConstants
+from gdfpy.points import Point
+from gdfpy.mesh import BoundaryDistribution, MeshNumber
+from gdfpy.surfaces import Surface
 
 class PlaneSurface(Surface):
     """Creates a plane surface based on three points in space

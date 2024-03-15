@@ -4,10 +4,10 @@
 import numpy as np
 from numpy import ndarray
 
-from gdfgen.constants import MeshConstants
-from gdfgen.curves import Curve
-from gdfgen.mesh import BoundaryDistribution, MeshNumber
-from gdfgen.surfaces import Surface
+from gdfpy.constants import MeshConstants
+from gdfpy.curves import Curve
+from gdfpy.mesh import BoundaryDistribution, MeshNumber
+from gdfpy.surfaces import Surface
 
 class SweptSurface(Surface):
     """Creates a surface based on a curve swept by another

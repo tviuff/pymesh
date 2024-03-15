@@ -3,7 +3,7 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', 'gdfgen')))
 
-from gdfgen import Point, Arc3P, GDFViewer
+from gdfpy import Point, Arc3P, GDFViewer
 
 curve1 = Arc3P(Point(0, 0, 0), Point(1, 0, 0), Point(1, 0.01, 0))
 curve1.flipped_dir = True

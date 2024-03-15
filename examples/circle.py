@@ -3,7 +3,7 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', 'gdfgen')))
 
-from gdfgen import mesh, Point, Line, Arc3P, CoonsPatch, GDFViewer
+from gdfpy import mesh, Point, Line, Arc3P, CoonsPatch, GDFViewer
 
 # Points forming an inner rectangle in the circle
 point_ctr = Point(0, 0, 0)

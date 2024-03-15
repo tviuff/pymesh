@@ -4,9 +4,9 @@
 import numpy as np
 from numpy import ndarray
 
-from gdfgen.points import Point
-from gdfgen.mesh import DistMethod
-from gdfgen.constants import MeshConstants
+from gdfpy.points import Point
+from gdfpy.mesh import DistMethod
+from gdfpy.constants import MeshConstants
 from .curve import Curve
 
 class Line(Curve):

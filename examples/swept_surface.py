@@ -3,7 +3,7 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', 'gdfgen')))
 
-from gdfgen import Point, Line, Arc3P, SweptSurface, GDFViewer
+from gdfpy import Point, Line, Arc3P, SweptSurface, GDFViewer
 
 line = Line(Point(0, 0, 0), Point(0, 0, 1))
 curve = Arc3P(Point(0, 0, 0), Point(1, 0, 0), Point(1, 0.0001, 0))

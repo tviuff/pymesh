@@ -3,7 +3,7 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', 'gdfgen')))
 
-from gdfgen import Point, PlaneSurface, GDFViewer
+from gdfpy import Point, PlaneSurface, GDFViewer
 
 point1 = Point(0, 0, 0)
 point2 = Point(1, 0, 0)

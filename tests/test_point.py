@@ -2,7 +2,7 @@
 
 import pytest
 
-import gdfgen as gdf
+import gdfpy as gdf
 
 class TestPoint:
 

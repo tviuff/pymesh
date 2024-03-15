@@ -4,11 +4,11 @@
 import numpy as np
 from numpy import ndarray
 
-from gdfgen.surfaces import Surface
-from gdfgen.curves import Curve
-from gdfgen.mesh import DistMethod, BoundaryDistribution, MeshNumber
-from gdfgen.constants import MeshConstants as MConst
-from gdfgen.exceptions import CurveIntersectionError
+from gdfpy.surfaces import Surface
+from gdfpy.curves import Curve
+from gdfpy.mesh import DistMethod, BoundaryDistribution, MeshNumber
+from gdfpy.constants import MeshConstants as MConst
+from gdfpy.exceptions import CurveIntersectionError
 
 class CoonsPatch(Surface):
     """Coons patch class taking a selection of four curves
