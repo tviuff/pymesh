@@ -10,8 +10,6 @@ from gdfgen.mesh import DistMethod, BoundaryDistribution, MeshNumber
 from gdfgen.constants import MeshConstants as MConst
 from gdfgen.exceptions import CurveIntersectionError
 
-# ! ERROR if num_points_u != num_points_w
-
 class CoonsPatch(Surface):
     """Coons patch class taking a selection of four curves
     and creates mesh points for generating panels.
@@ -80,11 +78,16 @@ class CoonsPatch(Surface):
         return self._flipped_curves
 
     def _set_coons_patch_curve_order(self, cflip, cselect) -> tuple[list]:
+        """Sets the order u0, u1, 0w, 1w where u0 = first item in cselect"""
         cselect = [cselect[0], cselect[2], cselect[3], cselect[1]]
         cflip = [cflip[0], cflip[2], cflip[3], cflip[1]]
         for index in (1, 2):
             cflip[index] = not cflip[index]
         return cflip, cselect
+
+    def _get_num_points(self) -> tuple[int]:
+        """Returns number of points along each curve path"""
+        return self.num_points_u, self.num_points_u, self.num_points_w, self.num_points_w
 
     def _get_dist_methods(self) -> tuple[DistMethod]:
         """Returns curve path point distribution methods."""
@@ -93,10 +96,11 @@ class CoonsPatch(Surface):
     def _get_curve_path_points(self) -> tuple[ndarray]:
         """Returns path points for each of the four input curves."""
         curve_paths = []
-        num_points = tuple(2*[self.num_points_u, self.num_points_w])
+        num_points = self._get_num_points()
+        curve_selection = self.curve_selection
         flipped_curves = self.flipped_curves
         dists = self._get_dist_methods()
-        for curve, num, dist, flip in zip(self.curve_selection, num_points, dists, flipped_curves):
+        for curve, num, dist, flip in zip(curve_selection, num_points, dists, flipped_curves):
             path_xyz = curve.get_path_xyz(num_points=num, dist_method=dist, flip_dir=flip)
             curve_paths.append(path_xyz)
         pu0, pu1, p0w, p1w = tuple(curve_paths)
@@ -107,14 +111,15 @@ class CoonsPatch(Surface):
         pu0, pu1, p0w, p1w = self._get_curve_path_points()
         p00 = pu0[ 0, :]
         p11 = pu1[-1, :]
-        p01 = p0w[-1, :]
+        p01 = p0w[-1, :]# pu1 and p0w has changed sizes
         p10 = p1w[ 0, :]
         mp = np.zeros((3, self.num_points_u, self.num_points_w))
         for i, u in enumerate(np.linspace(0, 1, num=self.num_points_u, endpoint=True)):
             for j, w in enumerate(np.linspace(0, 1, num=self.num_points_w, endpoint=True)):
-                p1 = (1-u)*p0w[j,:] + u*p1w[j,:]
-                p2 = (1-w)*pu0[i,:] + w*pu1[i,:]
+                p1 = (1-u)*p0w[j, :] + u*p1w[j, :]
+                p2 = (1-w)*pu0[i, :] + w*pu1[i, :]
                 p3 = (1-u)*(1-w)*p00 + u*(1-w)*p10 + (1-u)*w*p01 + u*w*p11
                 for k in range(0, 3):
-                    mp[k,i,j] = p1[k] + p2[k] - p3[k]
-        return mp
+                    mp[k, i, j] = p1[k] + p2[k] - p3[k]
+        self._mesh_points = mp
+        return self._mesh_points

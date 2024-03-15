@@ -11,3 +11,4 @@ from gdfgen.gdf_viewer import GDFViewer
 from gdfgen import mesh
 from gdfgen.surfaces.coons_patch import CoonsPatch
 from gdfgen.surfaces.linearly_swept_surface import LinearlySweptSurface
+from gdfgen.surfaces.plane_surface import PlaneSurface

@@ -27,18 +27,6 @@ class LinearlySweptSurface(Surface):
         self.dist_line = MeshConstants.DEFAULT_DIST_METHOD.value
         self.num_points_curve = MeshConstants.DEFAULT_NUM_POINT.value
         self.num_points_line = MeshConstants.DEFAULT_NUM_POINT.value
-        self._mesh_points = None
-        self.mesh_input_updated = False
-
-    @property
-    def mesh_input_updated(self) -> bool:
-        return self._mesh_input_updated
-
-    @mesh_input_updated.setter
-    def mesh_input_updated(self, value:bool) -> None:
-        if not isinstance(value, bool):
-            raise TypeError("mesh_input_updated must be of type 'bool'")
-        self._mesh_input_updated = value
 
     @property
     def curve(self)-> Curve:
@@ -48,7 +36,6 @@ class LinearlySweptSurface(Surface):
     def curve(self, curve:Curve) -> None:
         if not isinstance(curve, Curve):
             raise TypeError("curve must be of type 'Curve'.")
-        self.mesh_input_updated = True
         self._curve = curve
 
     @property
@@ -59,14 +46,10 @@ class LinearlySweptSurface(Surface):
     def line(self, value:Line) -> None:
         if not isinstance(value, Line):
             raise TypeError("line must be of type 'Line'.")
-        self.mesh_input_updated = True
         self._line = value
 
     @property
     def mesh_points(self) -> ndarray:
-        if (self._mesh_points is not None) and (not self.mesh_input_updated):
-            return self._mesh_points
-
         xyz_curve = self.curve.get_path_xyz(
             num_points = self.num_points_curve,
             dist_method = self.dist_curve
@@ -80,6 +63,5 @@ class LinearlySweptSurface(Surface):
             for j in range(0, self.num_points_line):
                 for k in range(0, 3):
                     mp[k, i, j] = xyz_curve[i, k] + xyz_line[j, k]
-
-        self.mesh_input_updated = False
-        return mp
+        self._mesh_points = mp
+        return self._mesh_points

@@ -3,8 +3,7 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', 'gdfgen')))
 
-from gdfgen import Point, Line, CoonsPatch
-from examples import plotting as plt
+from gdfgen import Point, Line, CoonsPatch, GDFViewer
 
 point1 = Point(0, 0, 0)
 point2 = Point.set_relative_to(point1, dx=1.0)
@@ -17,7 +16,15 @@ line3 = Line(point3, point4)
 line4 = Line(point4, point1)
 
 surface1 = CoonsPatch(line1, line3, line2, line4)
-surface1.num_points_u = 10
-surface1.num_points_w = 10
+for curve in surface1.curve_selection:
+    print(curve)
+surface1.num_points_u = 3
+surface1.num_points_w = 3
 
-plt.plot_panels(surface1, 270, 90, (-1, 1), (-1, 1), (-1, 1))
+viewer = GDFViewer(panel_normal_length=0.5)
+viewer.add_panels(surface1,
+    restricted_panels = [],
+    include_vertex_annotation = False,
+    include_normals = True
+    )
+viewer.show()

@@ -15,11 +15,32 @@ class GDFWriter():
     isy = False: The y = 0 plane is not a geometric plane of symmetry
     """
 
-    def __init__(self, ulen:float=1.0, grav:float=9.816, isx:bool=False, isy:bool=False) -> None:
+    def __init__(self,
+            ulen:float = 1.0,
+            grav:float = 9.816,
+            isx:bool = False,
+            isy:bool = False,
+            header:str = None
+        ) -> None:
+        if header is None:
+            header = "auto-generated gdf file using pdfgen"
+        self.header = header
         self.ulen = ulen
         self.grav = grav
         self.isx = isx
         self.isy = isy
+
+    @property
+    def header(self) -> str:
+        return self._header
+
+    @header.setter
+    def header(self, value:str) -> None:
+        if not isinstance(value, str):
+            raise TypeError("header must be of type 'str'")
+        if len(value) > 72:
+            raise ValueError("header text string is more than 72 characters")
+        self._header = value
 
     @property
     def ulen(self) -> float:
@@ -30,7 +51,7 @@ class GDFWriter():
         if not isinstance(value, float):
             raise TypeError("ulen must be of type 'float'")
         if value <= 0:
-            raise TypeError("ulen must be positive")
+            raise ValueError("ulen must be positive")
         self._ulen = value
 
     @property
@@ -42,7 +63,7 @@ class GDFWriter():
         if not isinstance(value, float):
             raise TypeError("grav must be of type 'float'")
         if value <= 0:
-            raise TypeError("grav must be positive")
+            raise ValueError("grav must be positive")
         self._grav = value
 
     @property
@@ -71,6 +92,7 @@ class GDFWriter():
         self.__validate_content(surfaces)
         surfaces = self.__organize_content(surfaces)
         with open(filename, "w+", encoding="utf-8") as file:
+            file.write(f"{self.header}\n")
             file.write(f"{self.ulen:f} {self.grav:f}\n")
             file.write(f"{self.isx:.0f} {self.isy:.0f}\n")
             npan = sum([len([panel for panel in surface.panels]) for surface in surfaces])
