@@ -74,9 +74,13 @@ class Arc3P(Curve):
         return angle
 
     def _validate_input(self) -> None:
-        diff_raddii = np.sqrt(np.sum(self.vector_start**2)) - np.sqrt(np.sum(self.vector_end**2))
-        if diff_raddii > self._tolerance:
-            raise ValueError("Input points resulted in different start and end radii")
+        diff_radii = np.sqrt(np.sum(self.vector_end**2)) - np.sqrt(np.sum(self.vector_start**2))
+        radius_start = np.sqrt(np.sum(self.vector_start**2))
+        if (diff_radii / radius_start) > self._tolerance:
+            raise ValueError(
+                f"Input points resulted in " \
+                f"(radius_end - radius_start)  > {self._tolerance} x radius_start"
+                )
         if (self.cross_product == 0).all():
             raise ValueError("Input points resulted in parallel plane vectors")
 

@@ -3,8 +3,7 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', 'gdfgen')))
 
-from gdfgen import mesh, Point, Line, Arc3P, CoonsPatch
-from examples import plotting as plt
+from gdfgen import mesh, Point, Line, Arc3P, CoonsPatch, GDFViewer
 
 # Points forming an inner rectangle in the circle
 point_ctr = Point(0, 0, 0)
@@ -52,4 +51,6 @@ surface5 = CoonsPatch(line4, line6, line13, line9)
 
 surface_selection = (surface1, surface2, surface3, surface4, surface5)
 
-plt.plot_panels(surface_selection, 270, 90, (-3, 3), (-3, 3), (-3, 3))
+viewer = GDFViewer()
+viewer.add_panels(surface_selection)
+viewer.show()

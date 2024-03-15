@@ -4,11 +4,6 @@
 import math
 from abc import ABC, abstractmethod
 
-def flip_exp(exp, flip):
-    """flips distribution direction from 0-1 to 1-0"""
-    if not flip:
-        return exp
-    return 1 - exp
 
 class DistMethod(ABC):
     """Abstract path distribution class"""
@@ -20,6 +15,14 @@ class DistMethod(ABC):
     def get_fn(self, flip_dir:bool):
         pass
 
+
+def flip_exp(exp, flip):
+    """flips distribution direction from 0-1 to 1-0"""
+    if not flip:
+        return exp
+    return 1 - exp
+
+
 class DistLinear(DistMethod):
     """Linear path distribution class"""
 
@@ -28,6 +31,7 @@ class DistLinear(DistMethod):
             exp = u
             return flip_exp(exp, flip_dir)
         return fn
+
 
 class DistCosineBoth(DistMethod):
     """Cosine path distribution class"""
@@ -38,6 +42,7 @@ class DistCosineBoth(DistMethod):
             return flip_exp(exp, flip_dir)
         return fn
 
+
 class DistCosineEnd1(DistMethod):
     """Cosine path distribution class"""
 
@@ -46,6 +51,7 @@ class DistCosineEnd1(DistMethod):
             exp = 1 - math.cos(u*math.pi/2)
             return flip_exp(exp, flip_dir)
         return fn
+
 
 class DistCosineEnd2(DistMethod):
     """Cosine path distribution class"""
@@ -70,6 +76,7 @@ class MeshNumber:
         if not isinstance(value, int):
             raise TypeError(f"{self._name} must be of type 'int'")
         instance.__dict__[self._name] = value
+
 
 class BoundaryDistribution:
     """Boundary dustribution descriptor class used for dist_u0 and others"""

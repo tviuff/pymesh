@@ -4,8 +4,7 @@ import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', 'gdfgen')))
 
 import math
-from gdfgen import Point, Vector3D, ArcVA
-from examples import plotting as plt
+from gdfgen import Point, Vector3D, ArcVA, GDFViewer
 
 curve1 = ArcVA(
     vector_start = Vector3D(Point(0.5, 0, 0), Point(1, 0, 0)),
@@ -14,4 +13,6 @@ curve1 = ArcVA(
     )
 xyz = curve1.get_path_xyz(num_points=20)
 
-plt.plot_curve_points(xyz, 270, 90, (-1, 1), (-1, 1), (-1, 1))
+viewer = GDFViewer()
+viewer.add_curve_points(xyz)
+viewer.show()
