@@ -63,5 +63,4 @@ class PlaneSurface(Surface):
             for j in range(0, self.num_points_02):
                 for k in range(0, 3):
                     mp[k, i, j] = xyz_line_01[i, k] + xyz_line_02[j, k]
-        self._mesh_points = mp
-        return self._mesh_points
+        return mp
