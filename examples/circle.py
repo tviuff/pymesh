@@ -1,7 +1,7 @@
 """Circle panel example"""
 
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'gdfgen')))
+sys.path.append(os.path.abspath(os.path.join('..', 'gdfpy')))
 
 from gdfpy import mesh, Point, Line, Arc3P, CoonsPatch, GDFViewer
 

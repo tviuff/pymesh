@@ -1,7 +1,7 @@
 """Swept surface example"""
 
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'gdfgen')))
+sys.path.append(os.path.abspath(os.path.join('..', 'gdfpy')))
 
 from gdfpy import Point, Line, Arc3P, SweptSurface, GDFViewer
 

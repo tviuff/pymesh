@@ -1,7 +1,7 @@
 """Rectangular surface example"""
 
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'gdfgen')))
+sys.path.append(os.path.abspath(os.path.join('..', 'gdfpy')))
 
 import math
 from gdfpy import Point, Vector3D, ArcVA, GDFViewer
