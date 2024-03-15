@@ -121,5 +121,4 @@ class CoonsPatch(Surface):
                 p3 = (1-u)*(1-w)*p00 + u*(1-w)*p10 + (1-u)*w*p01 + u*w*p11
                 for k in range(0, 3):
                     mp[k, i, j] = p1[k] + p2[k] - p3[k]
-        self._mesh_points = mp
-        return self._mesh_points
+        return mp

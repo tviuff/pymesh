@@ -62,5 +62,4 @@ class SweptSurface(Surface):
             for j in range(0, self.num_points_sweeper_curve):
                 for k in range(0, 3):
                     mp[k, i, j] = xyz_curve[i, k] + xyz_sweeper_curve[j, k]
-        self._mesh_points = mp
-        return self._mesh_points
+        return mp
