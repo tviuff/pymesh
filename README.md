@@ -3,6 +3,8 @@
 Geometry package that handles basic geometry and facilitates the creation of 3-dimensional surface panels.<br>
 Theses surface panels are converted into a low-order geometric data file (GDF) for import and use in [WAMIT](https://www.wamit.com/).
 
+## Building 3-dimesional surfaces
+
 `gdfpy` is based on object-oriented programming and the user will be interacting with the following classes<br>
 when building the geometry:
 
@@ -18,26 +20,13 @@ when building the geometry:
     - `PlaneSurface(Point, Point, Point)` creates a plane surface based on three points
     - `SweptSurface(Curve, Curve)` creates a surface by sweeping a curve along the path of another
 
-## Functionality to be implemented
+## Inspecting the final geometry
 
-### Code behaviour
+The `GDFViewer` is based on the `matplotlib` package and is used to conveniently plot and inspect the surface panels and their normals.
 
-The package should use OOP with classes for creating points, curves and surfaces in a 3-dimensional space The points are only as helpers for creation of lines and surfaces. Similarly, the lines are used solely for<br>
-generation of surfaces.<br>
+## Writing to a `.gdf` file
 
-The surfaces are used for generation of the final panel mesh and implements the [Coon's Patch](https://youtu.be/TM0GM6xhAoI?t=2090) algorithm.
-
-The mesh will be generated using a combination of `csv` and `logger` to generate the GDF file, following<br>
-the protecol in the [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pdf).
-
-> *More details about the code beaviour will follow soon.*
-
-### Modules to use
-
-- `unittests` for setting up test procedures
-- `constants` for creating project constants
-- `exceptions` for creating custom exceptions
-- `logger` for GDF file generation
+The `GDFWriter` takes care of converting the surfaces into a usable `.gdf` file.
 
 ## Resources
 
@@ -47,3 +36,5 @@ the protecol in the [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pd
     - [8 Python Coding Tips](https://www.youtube.com/watch?v=woIkysZytSs)
     - [The Ultimate Guide to Writing Classes](https://www.youtube.com/watch?v=lX9UQp2NwTk)
     - [Cohesion and Coupling](https://www.youtube.com/watch?v=eiDyK_ofPPM)
+
+> *More details about the code beaviour will follow soon.*
