@@ -50,8 +50,6 @@ class PlaneSurface(Surface):
 
     @property
     def mesh_points(self) -> ndarray:
-        if (self._mesh_points is not None) and (not self.mesh_input_updated):
-            return self._mesh_points
         xyz_line_01 = self.line_01.get_path_xyz(
             num_points = self.num_points_01,
             dist_method = self.dist_02
