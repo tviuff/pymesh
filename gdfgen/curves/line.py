@@ -4,7 +4,7 @@
 import numpy as np
 from numpy import ndarray
 
-from gdfgen.point import Point
+from gdfgen.points import Point
 from gdfgen.mesh import DistMethod
 from gdfgen.constants import MeshConstants
 from .curve import Curve

@@ -6,7 +6,7 @@ from numpy import ndarray
 
 from gdfgen import Line
 from gdfgen.constants import MeshConstants
-from gdfgen.point import Point
+from gdfgen.points import Point
 from gdfgen.mesh import BoundaryDistribution, MeshNumber
 from gdfgen.surfaces import Surface
 
