@@ -24,9 +24,9 @@ when building the geometry:
 
 The `GDFViewer` is based on the `matplotlib` package and is used to conveniently plot and inspect the surface panels and their normals.
 
-## Writing to a `.gdf` file
+## Writing to a *.gdf* file
 
-The `GDFWriter` takes care of converting the surfaces into a usable `.gdf` file.
+The `GDFWriter` takes care of converting the surfaces into a usable *.gdf* file.
 
 ## Resources
 
