@@ -1,17 +1,22 @@
-# GEOMETRIC DATA FILE (GDF)
+# GDFPY
 
-The package `GDF` is used for creating quadrilateral panel mesh for import and use in [WAMIT](https://www.wamit.com/).<br>
-The current implementation only supports creation of Geometric Data File (GDF) as part of the low-order method in WAMIT.
+Geometry package that handles basic geometry and facilitates the creation of 3-dimensional surface panels.<br>
+Theses surface panels are converted into a low-order geometric data file (GDF) for import and use in [WAMIT](https://www.wamit.com/).
 
-The package is based on Object-Oriented Programming (OOP) and gives the user the ability to use the following classes:
+`gdfpy` is based on object-oriented programming and the user will be interacting with the following classes<br>
+when building the geometry:
 
-- Points:
-    - `Point`
+- Points and vectors:
+    - `Point(x, y, z)` auxilliary point in 3-dimentional space for creating other points, vectors, curves and surfaces
+    - `Vector3D(Point, Point)` auxilliary 3-dimentional vector for creating surfaces
 - Curves:
-    - `Line`
-    - `Arc3`
+    - `Line(Point, Point)` creates a straight line between two points
+    - `Arc3P(Point, Point, Point)` creates a circular arc defined by a starting point, an ending point and a circle center point
+    - `ArcVA(Vector3D, Vector3D, angle)` creates a circular arc based on a vector swept around an axis defined by another vector
 - Surfaces:
-    - 'CoonsPatch'
+    - `CoonsPatch(Curve, Curve, Curve, Curve)` creates a 3-dimensional surface using four boundary curves
+    - `PlaneSurface(Point, Point, Point)` creates a plane surface based on three points
+    - `SweptSurface(Curve, Curve)` creates a surface by sweeping a curve along the path of another
 
 ## Functionality to be implemented
 
