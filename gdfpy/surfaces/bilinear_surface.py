@@ -55,10 +55,9 @@ class BilinearSurface(Surface):
         mp = np.zeros((3, self.num_points_01, self.num_points_02))
         for i, u in enumerate(range(0, self.num_points_01)):
             for j, w in enumerate(range(0, self.num_points_02)):
-                for k in range(0, 3):
-                    mp[:, i, j] = 0 \
-                        + (1-u) * (1-w) * self.point00.xyz \
-                        + u * (1-w) * self.point10.xyz \
-                        + (1-u) * w * self.point01.xyz \
-                        + u * w * self.point11.xyz
+                mp[:, i, j] = 0 \
+                    + (1-u) * (1-w) * self.point00.xyz \
+                    + u * (1-w) * self.point10.xyz \
+                    + (1-u) * w * self.point01.xyz \
+                    + u * w * self.point11.xyz
         return mp
