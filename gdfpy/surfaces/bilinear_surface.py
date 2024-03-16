@@ -56,9 +56,9 @@ class BilinearSurface(Surface):
         for i, u in enumerate(range(0, self.num_points_01)):
             for j, w in enumerate(range(0, self.num_points_02)):
                 for k in range(0, 3):
-                    mp[k, i, j] = 0 \
-                        + (1-u) * (1-w) * self.point00[i, k] \
-                        + u * (1-w) * self.point10[j, k] \
-                        + (1-u) * w * self.point01[j, k] \
-                        + u * w * self.point11[j, k]
+                    mp[:, i, j] = 0 \
+                        + (1-u) * (1-w) * self.point00.xyz \
+                        + u * (1-w) * self.point10.xyz \
+                        + (1-u) * w * self.point01.xyz \
+                        + u * w * self.point11.xyz
         return mp

@@ -12,3 +12,4 @@ from gdfpy import mesh
 from gdfpy.surfaces.coons_patch import CoonsPatch
 from gdfpy.surfaces.plane_surface import PlaneSurface
 from gdfpy.surfaces.swept_surface import SweptSurface
+from gdfpy.surfaces.bilinear_surface import BilinearSurface

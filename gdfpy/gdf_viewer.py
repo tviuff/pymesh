@@ -69,7 +69,7 @@ class GDFViewer():
             for item in selection:
                 if not isinstance(item, Surface):
                     raise TypeError(
-                        f"selection {type(selection).__name__} must contain items of type 'Surface'"
+                        f"selection {type(selection).__name__} must only contain items of type 'Surface'"
                     )
 
     def __organize_surface_selection(self, selection) -> tuple[Surface]:
