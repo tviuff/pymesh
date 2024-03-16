@@ -4,7 +4,6 @@
 import numpy as np
 from numpy import ndarray
 
-from gdfpy import Line
 from gdfpy.constants import MeshConstants
 from gdfpy.points import Point
 from gdfpy.mesh import BoundaryDistribution, MeshNumber
