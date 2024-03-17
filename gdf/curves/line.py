@@ -5,7 +5,7 @@ import numpy as np
 from numpy import ndarray
 
 from gdf.points import Point
-from gdf.mesh import DistMethod
+from gdf.mesh.distribution_methods import DistMethod
 from gdf.constants import MeshConstants
 from .curve import Curve
 

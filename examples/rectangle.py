@@ -3,7 +3,7 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
 
-from import Point, Line, CoonsPatch, GDFViewer
+from gdf import Point, Line, CoonsPatch, DistExponential, GDFViewer
 
 point1 = Point(0, 0, 0)
 point2 = Point.set_relative_to(point1, dx=1.0)

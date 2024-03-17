@@ -7,7 +7,7 @@ from numpy import ndarray
 from gdf.curves import Line
 from gdf.constants import MeshConstants
 from gdf.points import Point
-from gdf.mesh import BoundaryDistribution, MeshNumber
+from gdf.mesh.descriptors import BoundaryDistribution, MeshNumber
 from gdf.surfaces import Surface
 
 class PlaneSurface(Surface):

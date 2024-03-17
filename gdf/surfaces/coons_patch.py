@@ -6,7 +6,8 @@ from numpy import ndarray
 
 from gdf.surfaces import Surface
 from gdf.curves import Curve
-from gdf.mesh import DistMethod, BoundaryDistribution, MeshNumber
+from gdf.mesh.distribution_methods import DistMethod
+from gdf.mesh.descriptors import BoundaryDistribution, MeshNumber
 from gdf.constants import MeshConstants as MConst
 from gdf.exceptions import CurveIntersectionError
 

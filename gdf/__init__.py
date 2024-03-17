@@ -8,7 +8,8 @@ from gdf.curves.arcpva import ArcPVA
 from gdf.curves.line import Line
 from gdf.gdf_writer import GDFWriter
 from gdf.gdf_viewer import GDFViewer
-from gdf import mesh
+from gdf.mesh.distribution_methods import DistLinear, DistExponential
+from gdf.mesh.distribution_methods import DistCosineBoth, DistCosineEnd1, DistCosineEnd2
 from gdf.surfaces.coons_patch import CoonsPatch
 from gdf.surfaces.plane_surface import PlaneSurface
 from gdf.surfaces.swept_surface import SweptSurface

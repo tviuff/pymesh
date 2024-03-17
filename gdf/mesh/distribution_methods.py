@@ -1,8 +1,14 @@
-"""Module with curve distibution classes
-"""
+"""Module initializer (constructor)"""
 
 import math
 from abc import ABC, abstractmethod
+
+
+def flip_exp(exp, flip):
+    """flips distribution direction from 0-1 to 1-0"""
+    if not flip:
+        return exp
+    return 1 - exp
 
 
 class DistMethod(ABC):
@@ -14,13 +20,6 @@ class DistMethod(ABC):
     @abstractmethod
     def get_fn(self, flip_dir:bool):
         pass
-
-
-def flip_exp(exp, flip):
-    """flips distribution direction from 0-1 to 1-0"""
-    if not flip:
-        return exp
-    return 1 - exp
 
 
 class DistLinear(DistMethod):
@@ -63,31 +62,24 @@ class DistCosineEnd2(DistMethod):
         return fn
 
 
-class MeshNumber:
-    """Mesh number descriptor class used for num_points"""
+class DistExponential(DistMethod):
+    """Exponential path distribution class"""
 
-    def __set_name__(self, owner, name):
-        self._name = name
+    def __init__(self, ratio:int|float=1):
+        self.ratio = ratio
 
-    def __get__(self, instance, owner) -> int:
-        return instance.__dict__[self._name]
+    @property
+    def ratio(self) -> float:
+        return self._ratio
 
-    def __set__(self, instance, value:int):
-        if not isinstance(value, int):
-            raise TypeError(f"{self._name} must be of type 'int'")
-        instance.__dict__[self._name] = value
+    @ratio.setter
+    def ratio(self, value) -> None:
+        if not isinstance(value, (int, float)):
+            raise TypeError("ratio must be of type 'int' or 'float'")
+        self._ratio = float(value)
 
-
-class BoundaryDistribution:
-    """Boundary dustribution descriptor class used for dist_u0 and others"""
-
-    def __set_name__(self, owner, name):
-        self._name = name
-
-    def __get__(self, instance, owner) -> DistMethod:
-        return instance.__dict__[self._name]
-
-    def __set__(self, instance, value:DistMethod):
-        if not isinstance(value, DistMethod):
-            raise TypeError(f"{self._name} must be and instance of a subclass of 'DistMethod'")
-        instance.__dict__[self._name] = value
+    def get_fn(self, flip_dir:bool):
+        def fn(u:float) -> float:
+            exp = (math.exp(self.ratio*u) - 1) / (math.exp(self.ratio*1) - 1)
+            return flip_exp(exp, flip_dir)
+        return fn

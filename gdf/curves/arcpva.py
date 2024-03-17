@@ -7,7 +7,7 @@ from numpy import ndarray
 
 from gdf import Point, Vector3D
 from gdf.curves import Curve
-from gdf.mesh import DistMethod
+from gdf.mesh.distribution_methods import DistMethod
 from gdf.constants import MeshConstants
 
 class ArcPVA(Curve):
