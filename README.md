@@ -1,11 +1,11 @@
-# GDFPY
+# GDF
 
 Geometry package that handles basic geometry and facilitates the creation of 3-dimensional surface panels.<br>
 Theses surface panels are converted into a low-order geometric data file (GDF) for import and use in [WAMIT](https://www.wamit.com/).
 
 ## Building 3-dimesional surfaces
 
-`gdfpy` is based on object-oriented programming and the user will be interacting with the following classes<br>
+`gdf` is based on object-oriented programming and the user will be interacting with the following classes<br>
 when building the geometry:
 
 - Points and vectors:
