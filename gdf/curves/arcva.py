@@ -5,10 +5,10 @@ import math
 import numpy as np
 from numpy import ndarray
 
-from gdfpy import Point, Vector3D
-from gdfpy.curves import Curve
-from gdfpy.mesh import DistMethod
-from gdfpy.constants import MeshConstants
+from gdf import Point, Vector3D
+from gdf.curves import Curve
+from gdf.mesh import DistMethod
+from gdf.constants import MeshConstants
 
 class ArcVA(Curve):
     """Circular arc generated from a point, an angle (rad) and a vector axis of rotation

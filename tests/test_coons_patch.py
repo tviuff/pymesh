@@ -2,8 +2,8 @@
 
 import pytest
 
-import gdfpy as gdf
-from gdfpy.exceptions import CurveIntersectionError
+import gdf
+from gdf.exceptions import CurveIntersectionError
 
 # ! Include flipped_curves in tests
 

@@ -1,9 +1,9 @@
 """Rectangular surface example"""
 
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'gdfpy')))
+sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
 
-from gdfpy import Point, PlaneSurface, GDFViewer
+from gdf import Point, PlaneSurface, GDFViewer
 
 point1 = Point(0, 0, 0)
 point2 = Point(1, 0, 0)

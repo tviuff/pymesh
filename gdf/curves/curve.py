@@ -5,9 +5,9 @@ from abc import ABC, abstractmethod
 
 from numpy import ndarray
 
-from gdfpy.points import Point
-from gdfpy.mesh import DistMethod
-from gdfpy.constants import MeshConstants
+from gdf.points import Point
+from gdf.mesh import DistMethod
+from gdf.constants import MeshConstants
 
 class Curve(ABC):
     """Curve abstract base class"""

@@ -4,10 +4,10 @@
 import numpy as np
 from numpy import ndarray
 
-from gdfpy.constants import MeshConstants
-from gdfpy.points import Point
-from gdfpy.mesh import BoundaryDistribution, MeshNumber
-from gdfpy.surfaces import Surface
+from gdf.constants import MeshConstants
+from gdf.points import Point
+from gdf.mesh import BoundaryDistribution, MeshNumber
+from gdf.surfaces import Surface
 
 
 class SurfaceCornerPoint:

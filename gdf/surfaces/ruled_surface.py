@@ -4,10 +4,10 @@
 import numpy as np
 from numpy import ndarray
 
-from gdfpy.constants import MeshConstants
-from gdfpy.curves import Curve
-from gdfpy.mesh import BoundaryDistribution, MeshNumber
-from gdfpy.surfaces import Surface
+from gdf.constants import MeshConstants
+from gdf.curves import Curve
+from gdf.mesh import BoundaryDistribution, MeshNumber
+from gdf.surfaces import Surface
 
 # ! Not yet tested..
 

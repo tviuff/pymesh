@@ -1,9 +1,9 @@
 """Circle panel example"""
 
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'gdfpy')))
+sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
 
-from gdfpy import mesh, Point, Line, Arc3P, CoonsPatch, GDFViewer
+from gdf import mesh, Point, Line, Arc3P, CoonsPatch, GDFViewer
 
 # Points forming an inner rectangle in the circle
 point_ctr = Point(0, 0, 0)

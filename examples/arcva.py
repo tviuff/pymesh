@@ -1,10 +1,10 @@
 """Rectangular surface example"""
 
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'gdfpy')))
+sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
 
 import math
-from gdfpy import Point, Vector3D, ArcVA, GDFViewer
+from gdf import Point, Vector3D, ArcVA, GDFViewer
 
 curve1 = ArcVA(
     vector_start = Vector3D(Point(0.5, 0, 0), Point(1, 0, 0)),

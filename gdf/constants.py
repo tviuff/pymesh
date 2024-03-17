@@ -3,7 +3,7 @@
 
 from enum import Enum
 
-from gdfpy import mesh
+from gdf import mesh
 
 class MeshConstants(Enum):
     """Contains mesh constants"""
