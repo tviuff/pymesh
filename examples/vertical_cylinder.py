@@ -5,15 +5,15 @@ sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
 
 import math
 
-from gdf import Point, Vector3D, Line, ArcVA, SweptSurface, GDFViewer
+from gdf import Point, Vector3D, Line, ArcPVA, SweptSurface, GDFViewer
 from examples.circle import surface_selection
 
 point_ctr = Point(0, 0, 0)
 radius = math.sqrt(2**2 + 2**2)
 line = Line(point_ctr, Point.set_relative_to(point_ctr, 0, 0, 1))
-curve = ArcVA(
-    vector_start = Vector3D(Point(0, 0, 0), Point(radius, 0, 0)),
-    vector_rot = Vector3D(Point(0, 0, 0), Point(0, 0, 1)),
+curve = ArcPVA(
+    point = Point(radius, 0, 0),
+    axis = Vector3D(point_ctr, Point(0, 0, 1)),
     angle = 2*math.pi
     )
 surface_cylinder = SweptSurface(curve=curve, sweeper_curve=line)
