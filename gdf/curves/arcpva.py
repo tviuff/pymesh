@@ -63,6 +63,17 @@ class ArcPVA(Curve):
             raise TypeError("angle must of type 'float'")
         self._angle = value
 
+    @property
+    def radius(self) -> float:
+        a = self.vector_point.point_end.xyz - self.vector_point.point_start.xyz
+        b = self.axis.point_end.xyz - self.axis.point_start.xyz
+        r = a - np.dot(a, b)/np.dot(b, b)*b
+        return np.sqrt(np.sum(r**2))
+
+    @property
+    def length(self) -> float:
+        return self.radius * self.angle
+
     def __eq__(self, other):
         return self.vector_point == other.vector_point \
             and self.axis == other.axis \

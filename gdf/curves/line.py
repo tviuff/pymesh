@@ -13,7 +13,8 @@ class Line(Curve):
     """Line generated from two points in space"""
 
     def __init__(self, point_start: Point, point_end: Point):
-        super().__init__(point_start, point_end)
+        self.point_start = point_start
+        self.point_end = point_end
         self._validate_input()
 
     def _validate_input(self) -> None:
@@ -26,11 +27,39 @@ class Line(Curve):
     def __repr__(self):
         return f"{type(self).__name__}({self.point_start}, {self.point_end})"
 
+    @property
+    def point_start(self) -> Point:
+        return self._point_start
+
+    @point_start.setter
+    def point_start(self, point:Point) -> None:
+        if not isinstance(point, Point):
+            raise TypeError("point_start must be of type 'Point'")
+        self._point_start = point
+
+    @property
+    def point_end(self) -> Point:
+        return self._point_end
+
+    @point_end.setter
+    def point_end(self, point:Point) -> None:
+        if not isinstance(point, Point):
+            raise TypeError("point_end must be of type 'Point'")
+        self._point_end = point
+
+    @property
+    def length(self) -> float:
+        return np.sqrt(np.sum((self.point_end.xyz-self.point_start.xyz)**2))
+
     def get_path_xyz(self,
-            num_points:int = MeshConstants.DEFAULT_NUM_POINT.value,
-            dist_method:DistMethod = MeshConstants.DEFAULT_DIST_METHOD.value,
+            num_points:int = None,
+            dist_method:DistMethod = None,
             flip_dir:bool = False
         ) -> ndarray:
+        if num_points is None:
+            num_points = MeshConstants.DEFAULT_NUM_POINT.value
+        if dist_method is None:
+            dist_method = MeshConstants.DEFAULT_DIST_METHOD.value
         path_xyz = np.zeros((num_points, 3))
         dist_fn = dist_method.get_fn(flip_dir)
         for i, u in enumerate(np.linspace(0, 1, num_points, endpoint=True)):

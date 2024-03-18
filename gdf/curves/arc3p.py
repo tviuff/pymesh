@@ -16,10 +16,14 @@ class Arc3P(Curve):
     Implementation based on: https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
     """
 
-    def __init__(self, point_centre:Point, point_start:Point, point_end:Point, flipped_dir:bool=False):
-        super().__init__(point_start, point_end)
-        self.flipped_dir = flipped_dir
+    def __init__(self,
+            point_centre:Point, point_start:Point, point_end:Point,
+            flipped_dir:bool=False
+        ):
         self.point_centre = point_centre
+        self.point_start = point_start
+        self.point_end = point_end
+        self.flipped_dir = flipped_dir
         self._tolerance = 0.0001
         self._validate_input()
 
@@ -32,6 +36,26 @@ class Arc3P(Curve):
         if not isinstance(point, Point):
             raise TypeError("point_centre must be of type 'Point'")
         self._point_centre = point
+
+    @property
+    def point_start(self) -> Point:
+        return self._point_start
+
+    @point_start.setter
+    def point_start(self, point:Point) -> None:
+        if not isinstance(point, Point):
+            raise TypeError("point_start must be of type 'Point'")
+        self._point_start = point
+
+    @property
+    def point_end(self) -> Point:
+        return self._point_end
+
+    @point_end.setter
+    def point_end(self, point:Point) -> None:
+        if not isinstance(point, Point):
+            raise TypeError("point_end must be of type 'Point'")
+        self._point_end = point
 
     @property
     def vector_start(self) -> ndarray:
@@ -73,6 +97,10 @@ class Arc3P(Curve):
         angle = 2*math.pi - angle if self.flipped_dir else angle
         return angle
 
+    @property
+    def length(self) -> float:
+        return self.radius * self.angle
+
     def _validate_input(self) -> None:
         diff_radii = np.sqrt(np.sum(self.vector_end**2)) - np.sqrt(np.sum(self.vector_start**2))
         radius_start = np.sqrt(np.sum(self.vector_start**2))
@@ -93,10 +121,14 @@ class Arc3P(Curve):
         return f"{type(self).__name__}({self.point_centre}, {self.point_start}, {self.point_end})"
 
     def get_path_xyz(self,
-            num_points:int = MeshConstants.DEFAULT_NUM_POINT.value,
-            dist_method:DistMethod = MeshConstants.DEFAULT_DIST_METHOD.value,
+            num_points:int = None,
+            dist_method:DistMethod = None,
             flip_dir:bool = False
         ) -> ndarray:
+        if num_points is None:
+            num_points = MeshConstants.DEFAULT_NUM_POINT.value
+        if dist_method is None:
+            dist_method = MeshConstants.DEFAULT_DIST_METHOD.value
         path_xyz = np.zeros((num_points, 3))
         dist_fn = dist_method.get_fn(flip_dir)
         v, k, a = self.vector_start, self.plane_unit_normal, self.angle
