@@ -32,27 +32,7 @@ class DistLinear(DistMethod):
         return fn
 
 
-class DistCosineBoth(DistMethod):
-    """Cosine path distribution class"""
-
-    def get_fn(self, flip_dir:bool):
-        def fn(u:float) -> float:
-            exp = math.cos((1 - u)*math.pi)/2 + 0.5
-            return flip_exp(exp, flip_dir)
-        return fn
-
-
-class DistCosineEnd1(DistMethod):
-    """Cosine path distribution class"""
-
-    def get_fn(self, flip_dir:bool):
-        def fn(u:float) -> float:
-            exp = 1 - math.cos(u*math.pi/2)
-            return flip_exp(exp, flip_dir)
-        return fn
-
-
-class DistCosineEnd2(DistMethod):
+class DistCosine(DistMethod):
     """Cosine path distribution class"""
 
     def get_fn(self, flip_dir:bool):
@@ -62,7 +42,7 @@ class DistCosineEnd2(DistMethod):
         return fn
 
 
-class DistExponential(DistMethod):
+class DistExp(DistMethod):
     """Exponential path distribution class"""
 
     def __init__(self, ratio:int|float=1):
@@ -81,5 +61,28 @@ class DistExponential(DistMethod):
     def get_fn(self, flip_dir:bool):
         def fn(u:float) -> float:
             exp = (math.exp(self.ratio*u) - 1) / (math.exp(self.ratio*1) - 1)
+            return flip_exp(exp, flip_dir)
+        return fn
+
+
+class DistPower(DistMethod):
+    """Power path distribution class"""
+
+    def __init__(self, power:int|float=1):
+        self.power = power
+
+    @property
+    def power(self) -> float:
+        return self._power
+
+    @power.setter
+    def power(self, value) -> None:
+        if not isinstance(value, (int, float)):
+            raise TypeError("power must be of type 'int' or 'float'")
+        self._power = float(value)
+
+    def get_fn(self, flip_dir:bool):
+        def fn(u:float) -> float:
+            exp = u^self.power
             return flip_exp(exp, flip_dir)
         return fn
