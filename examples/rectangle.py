@@ -18,9 +18,9 @@ line4 = Line(point4, point1)
 surface1 = CoonsPatch(line1, line3, line2, line4)
 for curve in surface1.curve_selection:
     print(curve)
+surface1.flip_normal = True
 surface1.num_points_u = 5
 surface1.num_points_w = 7
-surface1.flip_normal = True
 
 surface_selection = CoonsPatch.get_all_surfaces()
 

@@ -42,8 +42,8 @@ class PlaneSurface(Surface):
         self.point0 = point0
         self.point1 = point1
         self.point2 = point2
-        self.dist01 = MeshConstants.DEFAULT_DIST_METHOD.value
-        self.dist02 = MeshConstants.DEFAULT_DIST_METHOD.value
+        self.dist01 = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.dist02 = MeshConstants.DEFAULT_DIST_METHOD.value()
         self.num_points_01 = MeshConstants.DEFAULT_NUM_POINT.value
         self.num_points_02 = MeshConstants.DEFAULT_NUM_POINT.value
 

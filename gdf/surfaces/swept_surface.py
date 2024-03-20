@@ -25,8 +25,8 @@ class SweptSurface(Surface):
         self._all_surfaces.append(self)
         self.curve = curve
         self.sweeper_curve = sweeper_curve
-        self.dist_curve = MeshConstants.DEFAULT_DIST_METHOD.value
-        self.dist_sweeper_curve = MeshConstants.DEFAULT_DIST_METHOD.value
+        self.dist_curve = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.dist_sweeper_curve = MeshConstants.DEFAULT_DIST_METHOD.value()
         self.num_points_curve = MeshConstants.DEFAULT_NUM_POINT.value
         self.num_points_sweeper_curve = MeshConstants.DEFAULT_NUM_POINT.value
 

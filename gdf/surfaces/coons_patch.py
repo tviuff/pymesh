@@ -25,10 +25,10 @@ class CoonsPatch(Surface):
     def __init__(self, curve_u0:Curve, curve_u1:Curve, curve_0w:Curve, curve_1w:Curve):
         self._all_surfaces.append(self)
         self.curve_selection = (curve_u0, curve_u1, curve_0w, curve_1w)
-        self.dist_u0 = MeshConstants.DEFAULT_DIST_METHOD.value
-        self.dist_u1 = MeshConstants.DEFAULT_DIST_METHOD.value
-        self.dist_0w = MeshConstants.DEFAULT_DIST_METHOD.value
-        self.dist_1w = MeshConstants.DEFAULT_DIST_METHOD.value
+        self.dist_u0 = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.dist_u1 = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.dist_0w = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.dist_1w = MeshConstants.DEFAULT_DIST_METHOD.value()
         self.num_points_u = MeshConstants.DEFAULT_NUM_POINT.value
         self.num_points_w = MeshConstants.DEFAULT_NUM_POINT.value
 
@@ -94,10 +94,14 @@ class CoonsPatch(Surface):
         flipu1 = self.flipped_curves[1]
         flip0w = self.flipped_curves[2]
         flip1w = self.flipped_curves[3]
-        du0 = self.dist_u0.get_fn(flip_dir=flipu0)
-        du1 = self.dist_u1.get_fn(flip_dir=flipu1)
-        d0w = self.dist_0w.get_fn(flip_dir=flip0w)
-        d1w = self.dist_1w.get_fn(flip_dir=flip1w)
+        self.dist_u0.flip_dir = flipu0
+        self.dist_u1.flip_dir = flipu1
+        self.dist_0w.flip_dir = flip0w
+        self.dist_1w.flip_dir = flip1w
+        du0 = self.dist_u0.get_fn()
+        du1 = self.dist_u1.get_fn()
+        d0w = self.dist_0w.get_fn()
+        d1w = self.dist_1w.get_fn()
         pu0 = self.curve_selection[0].get_path_fn()
         pu1 = self.curve_selection[1].get_path_fn()
         p0w = self.curve_selection[2].get_path_fn()

@@ -3,7 +3,7 @@
 
 import time
 
-from gdf import Point, Line, Arc3P, CoonsPatch, DistLinear
+from gdf import Point, Line, Arc3P, CoonsPatch, LinearDistribution
 
 def time_it(func):
     """Wrapper function used to time function execution time"""
@@ -48,8 +48,8 @@ def circle_in_xy_plane(
     surface2 = CoonsPatch(line7, line1, line5, line6)
     surface2.num_points_u = 5
     surface2.num_points_w = 5
-    surface2.dist_0w = DistLinear()
-    surface2.dist_1w = DistLinear()
+    surface2.dist_0w = LinearDistribution()
+    surface2.dist_1w = LinearDistribution()
     surface2.flip_normal = True
 
     # Top semi-circle and surface patch

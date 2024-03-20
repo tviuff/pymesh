@@ -1,7 +1,7 @@
 """Module with curve distibution classes
 """
 
-from gdf.mesh.distribution_methods import DistMethod
+from gdf.mesh.distribution_methods import DistributionMethod
 
 class MeshNumber:
     """Mesh number descriptor class used for num_points"""
@@ -23,10 +23,10 @@ class BoundaryDistribution:
     def __set_name__(self, owner, name):
         self._name = name
 
-    def __get__(self, instance, owner) -> DistMethod:
+    def __get__(self, instance, owner) -> DistributionMethod:
         return instance.__dict__[self._name]
 
-    def __set__(self, instance, value:DistMethod):
-        if not isinstance(value, DistMethod):
-            raise TypeError(f"{self._name} must be and instance of a subclass of 'DistMethod'")
+    def __set__(self, instance, value:DistributionMethod):
+        if not isinstance(value, DistributionMethod):
+            raise TypeError(f"{self._name} must be and instance of a subclass of 'DistributionMethod'")
         instance.__dict__[self._name] = value

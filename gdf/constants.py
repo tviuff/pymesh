@@ -3,10 +3,10 @@
 
 from enum import Enum
 
-from gdf.mesh.distribution_methods import DistLinear
+from gdf.mesh.distribution_methods import LinearDistribution
 
 class MeshConstants(Enum):
     """Contains mesh constants"""
 
     DEFAULT_NUM_POINT = 5
-    DEFAULT_DIST_METHOD = DistLinear() # use class instance!
+    DEFAULT_DIST_METHOD = LinearDistribution

@@ -45,8 +45,8 @@ class BilinearSurface(Surface):
         self.point10 = point10
         self.point01 = point01
         self.point11 = point11
-        self.dist_01 = MeshConstants.DEFAULT_DIST_METHOD.value
-        self.dist_02 = MeshConstants.DEFAULT_DIST_METHOD.value
+        self.dist_01 = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.dist_02 = MeshConstants.DEFAULT_DIST_METHOD.value()
         self.num_points_01 = MeshConstants.DEFAULT_NUM_POINT.value
         self.num_points_02 = MeshConstants.DEFAULT_NUM_POINT.value
 

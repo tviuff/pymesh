@@ -25,8 +25,8 @@ class RuledSurface(Surface):
         self._all_surfaces.append(self)
         self.curve1 = curve1
         self.curve2 = curve2
-        self.dist1 = MeshConstants.DEFAULT_DIST_METHOD.value
-        self.dist2 = MeshConstants.DEFAULT_DIST_METHOD.value
+        self.dist1 = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.dist2 = MeshConstants.DEFAULT_DIST_METHOD.value()
         self.num_points_1 = MeshConstants.DEFAULT_NUM_POINT.value
         self.num_points_2 = MeshConstants.DEFAULT_NUM_POINT.value
 
