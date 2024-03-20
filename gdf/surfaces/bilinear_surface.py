@@ -40,6 +40,7 @@ class BilinearSurface(Surface):
     num_points_02 = MeshNumber()
 
     def __init__(self, point00:Point, point10:Point, point01:Point, point11:Point):
+        self._all_surfaces.append(self)
         self.point00 = point00
         self.point10 = point10
         self.point01 = point01
@@ -51,12 +52,16 @@ class BilinearSurface(Surface):
 
     @property
     def mesh_points(self) -> ndarray:
-        mp = np.zeros((3, self.num_points_01, self.num_points_02))
-        for i, u in enumerate(range(0, self.num_points_01)):
-            for j, w in enumerate(range(0, self.num_points_02)):
+        np1 = self.num_points_01
+        np2 = self.num_points_02
+        dist1 = self.dist_01.get_fn()
+        dist2 = self.dist_02.get_fn()
+        mp = np.zeros((3, np1, np2))
+        for i, u in enumerate(np.linspace(0, 1, num=np1, endpoint=True)):
+            for j, w in enumerate(np.linspace(0, 1, num=np2, endpoint=True)):
                 mp[:, i, j] = 0 \
-                    + (1-u) * (1-w) * self.point00.xyz \
-                    + u * (1-w) * self.point10.xyz \
-                    + (1-u) * w * self.point01.xyz \
-                    + u * w * self.point11.xyz
+                    + (1-dist1(u)) * (1-dist2(w)) * self.point00.xyz \
+                    + dist1(u) * (1-dist2(w)) * self.point10.xyz \
+                    + (1-dist1(u)) * dist2(w) * self.point01.xyz \
+                    + dist1(u) * dist2(w) * self.point11.xyz
         return mp

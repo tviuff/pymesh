@@ -54,7 +54,7 @@ surface4.flip_normal = True
 line13 = Arc3P(point_ctr, point_tr_ext, point_br_ext)
 surface5 = CoonsPatch(line4, line6, line13, line9)
 
-surface_selection = (surface1, surface2, surface3, surface4, surface5)
+surface_selection = CoonsPatch.get_all_surfaces()
 
 if __name__ == "__main__":
     viewer = GDFViewer(panel_normal_length=0.5)

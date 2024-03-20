@@ -6,9 +6,8 @@ from numpy import ndarray
 
 from gdf.surfaces import Surface
 from gdf.curves import Curve
-from gdf.mesh.distribution_methods import DistMethod
 from gdf.mesh.descriptors import BoundaryDistribution, MeshNumber
-from gdf.constants import MeshConstants as MConst
+from gdf.constants import MeshConstants
 from gdf.exceptions import CurveIntersectionError
 
 class CoonsPatch(Surface):
@@ -24,13 +23,14 @@ class CoonsPatch(Surface):
     num_points_w = MeshNumber()
 
     def __init__(self, curve_u0:Curve, curve_u1:Curve, curve_0w:Curve, curve_1w:Curve):
+        self._all_surfaces.append(self)
         self.curve_selection = (curve_u0, curve_u1, curve_0w, curve_1w)
-        self.dist_u0 = MConst.DEFAULT_DIST_METHOD.value
-        self.dist_u1 = MConst.DEFAULT_DIST_METHOD.value
-        self.dist_0w = MConst.DEFAULT_DIST_METHOD.value
-        self.dist_1w = MConst.DEFAULT_DIST_METHOD.value
-        self.num_points_u = MConst.DEFAULT_NUM_POINT.value
-        self.num_points_w = MConst.DEFAULT_NUM_POINT.value
+        self.dist_u0 = MeshConstants.DEFAULT_DIST_METHOD.value
+        self.dist_u1 = MeshConstants.DEFAULT_DIST_METHOD.value
+        self.dist_0w = MeshConstants.DEFAULT_DIST_METHOD.value
+        self.dist_1w = MeshConstants.DEFAULT_DIST_METHOD.value
+        self.num_points_u = MeshConstants.DEFAULT_NUM_POINT.value
+        self.num_points_w = MeshConstants.DEFAULT_NUM_POINT.value
 
     @property
     def curve_selection(self)-> tuple[Curve]:
@@ -86,40 +86,31 @@ class CoonsPatch(Surface):
             cflip[index] = not cflip[index]
         return cflip, cselect
 
-    def _get_num_points(self) -> tuple[int]:
-        """Returns number of points along each curve path"""
-        return self.num_points_u, self.num_points_u, self.num_points_w, self.num_points_w
-
-    def _get_dist_methods(self) -> tuple[DistMethod]:
-        """Returns curve path point distribution methods."""
-        return self.dist_u0, self.dist_u1, self.dist_0w, self.dist_1w
-
-    def _get_curve_path_points(self) -> tuple[ndarray]:
-        """Returns path points for each of the four input curves."""
-        curve_paths = []
-        num_points = self._get_num_points()
-        curve_selection = self.curve_selection
-        flipped_curves = self.flipped_curves
-        dists = self._get_dist_methods()
-        for curve, num, dist, flip in zip(curve_selection, num_points, dists, flipped_curves):
-            path_xyz = curve.get_path_xyz(num_points=num, dist_method=dist, flip_dir=flip)
-            curve_paths.append(path_xyz)
-        pu0, pu1, p0w, p1w = tuple(curve_paths)
-        return pu0, pu1, p0w, p1w
-
     @property
     def mesh_points(self) -> ndarray:
-        pu0, pu1, p0w, p1w = self._get_curve_path_points()
-        p00 = pu0[ 0, :]
-        p11 = pu1[-1, :]
-        p01 = p0w[-1, :]# pu1 and p0w has changed sizes
-        p10 = p1w[ 0, :]
-        mp = np.zeros((3, self.num_points_u, self.num_points_w))
-        for i, u in enumerate(np.linspace(0, 1, num=self.num_points_u, endpoint=True)):
-            for j, w in enumerate(np.linspace(0, 1, num=self.num_points_w, endpoint=True)):
-                p1 = (1-u)*p0w[j, :] + u*p1w[j, :]
-                p2 = (1-w)*pu0[i, :] + w*pu1[i, :]
+        npu = self.num_points_u
+        npw = self.num_points_w
+        flipu0 = self.flipped_curves[0]
+        flipu1 = self.flipped_curves[1]
+        flip0w = self.flipped_curves[2]
+        flip1w = self.flipped_curves[3]
+        du0 = self.dist_u0.get_fn(flip_dir=flipu0)
+        du1 = self.dist_u1.get_fn(flip_dir=flipu1)
+        d0w = self.dist_0w.get_fn(flip_dir=flip0w)
+        d1w = self.dist_1w.get_fn(flip_dir=flip1w)
+        pu0 = self.curve_selection[0].get_path_fn()
+        pu1 = self.curve_selection[1].get_path_fn()
+        p0w = self.curve_selection[2].get_path_fn()
+        p1w = self.curve_selection[3].get_path_fn()
+        p00 = pu0(du0(0))
+        p11 = pu1(du1(1))
+        p01 = p0w(d0w(1))
+        p10 = p1w(d1w(0))
+        mp = np.zeros((3, npu, npw))
+        for i, u in enumerate(np.linspace(0, 1, num=npu, endpoint=True)):
+            for j, w in enumerate(np.linspace(0, 1, num=npw, endpoint=True)):
+                p1 = (1-u)*p0w(d0w(w)) + u*p1w(d1w(w))
+                p2 = (1-w)*pu0(du0(u)) + w*pu1(du1(u))
                 p3 = (1-u)*(1-w)*p00 + u*(1-w)*p10 + (1-u)*w*p01 + u*w*p11
-                for k in range(0, 3):
-                    mp[k, i, j] = p1[k] + p2[k] - p3[k]
+                mp[:, i, j] = p1 + p2 - p3
         return mp

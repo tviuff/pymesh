@@ -9,6 +9,8 @@ from gdf.curves import Curve
 from gdf.mesh.descriptors import BoundaryDistribution, MeshNumber
 from gdf.surfaces import Surface
 
+# ! see SweptSurface.generate_mesh_points()
+
 class SweptSurface(Surface):
     """Creates a surface based on a curve swept by another
     and creates mesh points for generating panels.
@@ -20,6 +22,7 @@ class SweptSurface(Surface):
     num_points_sweeper_curve = MeshNumber()
 
     def __init__(self, curve:Curve, sweeper_curve:Curve):
+        self._all_surfaces.append(self)
         self.curve = curve
         self.sweeper_curve = sweeper_curve
         self.dist_curve = MeshConstants.DEFAULT_DIST_METHOD.value
@@ -49,17 +52,14 @@ class SweptSurface(Surface):
 
     @property
     def mesh_points(self) -> ndarray:
-        xyz_curve = self.curve.get_path_xyz(
-            num_points = self.num_points_curve,
-            dist_method = self.dist_curve
-            )
-        xyz_sweeper_curve = self.sweeper_curve.get_path_xyz(
-            num_points = self.num_points_sweeper_curve,
-            dist_method = self.dist_sweeper_curve
-            )
-        mp = np.zeros((3, self.num_points_curve, self.num_points_sweeper_curve))
-        for i in range(0, self.num_points_curve):
-            for j in range(0, self.num_points_sweeper_curve):
-                for k in range(0, 3):
-                    mp[k, i, j] = xyz_curve[i, k] + xyz_sweeper_curve[j, k]
+        curve_fn = self.curve.get_path_fn()
+        curve_np = self.num_points_curve
+        curve_dm_fn = self.dist_curve.get_fn()
+        sweeper_fn = self.sweeper_curve.get_path_fn()
+        sweeper_np = self.num_points_sweeper_curve
+        sweeper_dm_fn = self.dist_sweeper_curve.get_fn()
+        mp = np.zeros((3, curve_np, sweeper_np))
+        for i, u in enumerate(np.linspace(0, 1, num=curve_np, endpoint=True)):
+            for j, w in enumerate(np.linspace(0, 1, num=sweeper_np, endpoint=True)):
+                mp[:, i, j] = curve_fn(curve_dm_fn(u)) + sweeper_fn(sweeper_dm_fn(w))
         return mp

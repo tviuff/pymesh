@@ -4,9 +4,14 @@
 from abc import ABC, abstractmethod
 
 class Surface(ABC):
-    """Surface class protocol"""
+    """Surface abstract class"""
 
     _flip_normal = False
+    _all_surfaces = []
+
+    @classmethod
+    def get_all_surfaces(cls) -> list:
+        return cls._all_surfaces
 
     @property
     @abstractmethod
@@ -24,8 +29,13 @@ class Surface(ABC):
         self._flip_normal = value
 
     @property
-    def panels(self):
-        """Returns quadrilateral panels."""
+    def panels(self) -> list[list[float]]:
+        """Returns list of quadrilateral panels.
+        
+        Each panel is defined as a list of 12 floating numbers,
+        representing the xyz coordinates of the four panel vertices:
+        panel = [x0, y0, z0, x1, y1, z1, x2, y2, z2, x3, y3, z3]
+        """
         panels = []
         mp = self.mesh_points
         for j in range(0, mp.shape[2]-1):

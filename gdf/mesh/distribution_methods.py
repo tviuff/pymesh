@@ -18,14 +18,16 @@ class DistMethod(ABC):
         return self.__class__.__name__
 
     @abstractmethod
-    def get_fn(self, flip_dir:bool):
-        pass
+    def get_fn(self, flip_dir:bool=False):
+        """Returns distribution function whoch takes a single float from 0 to 1
+        and returns a vlue between 0 and 1 according to the distribution type.
+        If flip_dir = True then the return value u becomes 1 - u."""
 
 
 class DistLinear(DistMethod):
     """Linear path distribution class"""
 
-    def get_fn(self, flip_dir:bool):
+    def get_fn(self, flip_dir:bool=False):
         def fn(u:float) -> float:
             exp = u
             return flip_exp(exp, flip_dir)
@@ -35,7 +37,7 @@ class DistLinear(DistMethod):
 class DistCosine(DistMethod):
     """Cosine path distribution class"""
 
-    def get_fn(self, flip_dir:bool):
+    def get_fn(self, flip_dir:bool=False):
         def fn(u:float) -> float:
             exp = math.cos((u - 1)*math.pi/2)
             return flip_exp(exp, flip_dir)
@@ -58,7 +60,7 @@ class DistExp(DistMethod):
             raise TypeError("ratio must be of type 'int' or 'float'")
         self._ratio = float(value)
 
-    def get_fn(self, flip_dir:bool):
+    def get_fn(self, flip_dir:bool=False):
         def fn(u:float) -> float:
             exp = (math.exp(self.ratio*u) - 1) / (math.exp(self.ratio*1) - 1)
             return flip_exp(exp, flip_dir)

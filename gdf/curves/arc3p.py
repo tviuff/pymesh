@@ -6,8 +6,6 @@ import numpy as np
 from numpy import ndarray
 
 from gdf.points import Point
-from gdf.mesh.distribution_methods import DistMethod
-from gdf.constants import MeshConstants
 from .curve import Curve
 
 class Arc3P(Curve):
@@ -67,7 +65,7 @@ class Arc3P(Curve):
 
     @property
     def radius(self) -> float:
-        """Returns the distance |point_start - point_centre|"""
+        """Returns the length |vector_start|"""
         return np.sqrt(np.sum(self.vector_start**2))
 
     @property
@@ -120,21 +118,19 @@ class Arc3P(Curve):
     def __repr__(self):
         return f"{type(self).__name__}({self.point_centre}, {self.point_start}, {self.point_end})"
 
-    def get_path_xyz(self,
-            num_points:int = None,
-            dist_method:DistMethod = None,
-            flip_dir:bool = False
-        ) -> ndarray:
-        if num_points is None:
-            num_points = MeshConstants.DEFAULT_NUM_POINT.value
-        if dist_method is None:
-            dist_method = MeshConstants.DEFAULT_DIST_METHOD.value
-        path_xyz = np.zeros((num_points, 3))
-        dist_fn = dist_method.get_fn(flip_dir)
-        v, k, a = self.vector_start, self.plane_unit_normal, self.angle
-        for i, u in enumerate(np.linspace(0, 1, num_points, endpoint=True)):
-            path_xyz[i,:] = self.point_centre.xyz \
-                    + v * math.cos(a * dist_fn(u)) \
-                    + np.cross(k, v) * math.sin(a * dist_fn(u)) \
-                    + k * np.dot(k, v) * (1 - math.cos(a * dist_fn(u)))
-        return path_xyz
+    def get_path_fn(self):
+        def fn(u:float) -> ndarray:
+            """Arc3P path function mapping input float from 0 to 1 to a physical point"""
+            if not isinstance(u, (int, float)):
+                raise TypeError("u must be of type 'int' or 'float'")
+            if isinstance(u, int):
+                u = float(u)
+            if u < 0 or u > 1:
+                raise ValueError("u must be a value between 0 and 1")
+            v, k, a = self.vector_start, self.plane_unit_normal, self.angle
+            xyz0 = self.point_centre.xyz
+            dxyz1 = v * math.cos(a * u)
+            dxyz2 = np.cross(k, v) * math.sin(a * u)
+            dxyz3 = k * np.dot(k, v) * (1 - math.cos(a * u))
+            return xyz0 + dxyz1 + dxyz2 + dxyz3
+        return fn

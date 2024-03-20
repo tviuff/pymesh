@@ -3,11 +3,7 @@
 
 from abc import ABC, abstractmethod
 
-from numpy import ndarray
-
 from gdf.points import Point
-from gdf.mesh.distribution_methods import DistMethod
-from gdf.constants import MeshConstants
 
 class Curve(ABC):
     """Curve abstract base class"""
@@ -28,6 +24,6 @@ class Curve(ABC):
         """Returns the curve path length"""
 
     @abstractmethod
-    def get_path_xyz(self,
-        num_points:int, dist_method:DistMethod, flip_dir:bool=False) -> ndarray:
-        """Returns curve path xyz points as a numpy array"""
+    def get_path_fn(self):
+        """Returns curve path function that takes a float between 0 and 1
+        and returns xyz coordinates as an ndarray with shape [1, 3]"""

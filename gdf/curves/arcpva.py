@@ -7,8 +7,6 @@ from numpy import ndarray
 
 from gdf import Point, Vector3D
 from gdf.curves import Curve
-from gdf.mesh.distribution_methods import DistMethod
-from gdf.constants import MeshConstants
 
 class ArcPVA(Curve):
     """Circular arc generated from a point, an axis of rotation and an angle (rad).
@@ -32,7 +30,8 @@ class ArcPVA(Curve):
 
     @property
     def point_end(self) -> Point:
-        xyz = self.get_path_xyz(num_points=2)[-1, :]
+        path_fn = self.get_path_fn()
+        xyz = path_fn(1)
         return Point(xyz[0], xyz[1], xyz[2])
 
     @property
@@ -84,24 +83,21 @@ class ArcPVA(Curve):
                 f"axis={self.axis}, angle={self.angle})"
         return txt
 
-    def get_path_xyz(self,
-            num_points:int = None,
-            dist_method:DistMethod = None,
-            flip_dir:bool = False
-        ) -> ndarray:
-        if num_points is None:
-            num_points = MeshConstants.DEFAULT_NUM_POINT.value
-        if dist_method is None:
-            dist_method = MeshConstants.DEFAULT_DIST_METHOD.value
-        path_xyz = np.zeros((num_points, 3))
-        dist_fn = dist_method.get_fn(flip_dir)
-        xyz0 = self.vector_point.point_start.xyz
-        v = self.vector_point.unit_vector * self.vector_point.length
-        k = self.axis.unit_vector * self.axis.length
-        a = self.angle
-        for i, u in enumerate(np.linspace(0, 1, num_points, endpoint=True)):
-            path_xyz[i,:] = xyz0 \
-                    + v * math.cos(a * dist_fn(u)) \
-                    + np.cross(k, v) * math.sin(a * dist_fn(u)) \
-                    + k * np.dot(k, v) * (1 - math.cos(a * dist_fn(u)))
-        return path_xyz
+    def get_path_fn(self):
+        def fn(u:float) -> ndarray:
+            """ArcPVA path function mapping input float from 0 to 1 to a physical point"""
+            if not isinstance(u, (int, float)):
+                raise TypeError("u must be of type 'int' or 'float'")
+            if isinstance(u, int):
+                u = float(u)
+            if u < 0 or u > 1:
+                raise ValueError("u must be a value between 0 and 1")
+            v = self.vector_point.unit_vector * self.vector_point.length
+            k = self.axis.unit_vector * self.axis.length
+            a = self.angle
+            xyz0 = self.vector_point.point_start.xyz
+            dxyz1 = v * math.cos(a * u)
+            dxyz2 = np.cross(k, v) * math.sin(a * u)
+            dxyz3 = k * np.dot(k, v) * (1 - math.cos(a * u))
+            return xyz0 + dxyz1 + dxyz2 + dxyz3
+        return fn

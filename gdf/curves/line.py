@@ -5,8 +5,6 @@ import numpy as np
 from numpy import ndarray
 
 from gdf.points import Point
-from gdf.mesh.distribution_methods import DistMethod
-from gdf.constants import MeshConstants
 from .curve import Curve
 
 class Line(Curve):
@@ -51,18 +49,16 @@ class Line(Curve):
     def length(self) -> float:
         return np.sqrt(np.sum((self.point_end.xyz-self.point_start.xyz)**2))
 
-    def get_path_xyz(self,
-            num_points:int = None,
-            dist_method:DistMethod = None,
-            flip_dir:bool = False
-        ) -> ndarray:
-        if num_points is None:
-            num_points = MeshConstants.DEFAULT_NUM_POINT.value
-        if dist_method is None:
-            dist_method = MeshConstants.DEFAULT_DIST_METHOD.value
-        path_xyz = np.zeros((num_points, 3))
-        dist_fn = dist_method.get_fn(flip_dir)
-        for i, u in enumerate(np.linspace(0, 1, num_points, endpoint=True)):
-            path_xyz[i, :] = self.point_start.xyz \
-                + (self.point_end.xyz - self.point_start.xyz) * dist_fn(u)
-        return path_xyz
+    def get_path_fn(self):
+        def fn(u:int|float) -> ndarray:
+            """Line path function mapping input float from 0 to 1 to a physical point"""
+            if not isinstance(u, (int, float)):
+                raise TypeError("u must be of type 'int' or 'float'")
+            if isinstance(u, int):
+                u = float(u)
+            if u < 0 or u > 1:
+                raise ValueError("u must be a value between 0 and 1")
+            xyz0 = self.point_start.xyz
+            dxyz = self.point_end.xyz - self.point_start.xyz
+            return xyz0 + dxyz * u
+        return fn

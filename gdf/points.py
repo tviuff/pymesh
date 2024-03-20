@@ -8,7 +8,7 @@ from typing import Self
 import numpy as np
 from numpy import ndarray
 
-class Coordinate:
+class CartesianCoordinate:
     """Coordinate descriptor class"""
 
     def __set_name__(self, owner, name):
@@ -25,9 +25,9 @@ class Coordinate:
 class Point:
     """Creates and handles point coordinates"""
 
-    x = Coordinate()
-    y = Coordinate()
-    z = Coordinate()
+    x = CartesianCoordinate()
+    y = CartesianCoordinate()
+    z = CartesianCoordinate()
 
     def __init__(self, x:int|float, y:int|float, z:int|float) -> None:
         self.x, self.y, self.z = x, y, z
@@ -44,9 +44,8 @@ class Point:
 
     @classmethod
     def get_distance(cls, point1:Self, point2:Self) -> float:
-        """Returns the distance between to points.
-        """
-        if not (isinstance(point1, Point) and isinstance(point2, Point)):
+        """Returns the shortest distance between to points"""
+        if not (isinstance(point1, cls) and isinstance(point2, cls)):
             cls_name = cls.__name__
             mth_name = inspect.stack()[0][3]
             raise TypeError(f"{cls_name}.{mth_name}() only takes arguments of type '{cls_name}'.")
@@ -57,23 +56,25 @@ class Point:
 
     @classmethod
     def set_relative_to(cls,
-            point:Self=None,
-            dx:int|float=0.0,
-            dy:int|float=0.0,
-            dz:int|float=0.0
+            point:Self = None,
+            dx:int|float = 0.0,
+            dy:int|float = 0.0,
+            dz:int|float = 0.0
         ) -> Self:
         """Creates a new point using relative position"""
         if point is None:
             raise ValueError("Input must include a point reference.")
-        if not isinstance(point, Point):
-            raise TypeError("Input point reference must be of type 'Point'.")
-        if not (isinstance(dx, (float, int))
-                and isinstance(dy, (float, int))
-                and isinstance(dz, (float, int))):
-            raise TypeError("Relative position input must be of type 'float' or 'int'.")
+        if not isinstance(point, cls):
+            raise TypeError(f"Input point reference must be of type '{cls.__name__}'.")
+        if not isinstance(dx, (float, int)):
+            raise TypeError("dx must be of type 'float' or 'int'.")
+        if not isinstance(dy, (float, int)):
+            raise TypeError("dy must be of type 'float' or 'int'.")
+        if not isinstance(dz, (float, int)):
+            raise TypeError("dz must be of type 'float' or 'int'.")
         if (dx == 0.0) and (dy == 0.0) and (dz == 0.0):
             raise ValueError("Input must include a non-zero relative distance.")
         x = point.x + float(dx)
         y = point.y + float(dy)
         z = point.z + float(dz)
-        return Point(x, y, z)
+        return cls(x, y, z)
