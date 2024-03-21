@@ -54,10 +54,10 @@ class RuledSurface(Surface):
     def mesh_points(self) -> ndarray:
         curve1 = self.curve1.get_path_fn()
         np1 = self.num_points_1
-        dist1 = self.dist1.get_fn()
+        dist1 = self.dist1.get_dist_fn()
         curve2 = self.curve2.get_path_fn()
         np2 = self.num_points_2
-        dist2 = self.dist2.get_fn()
+        dist2 = self.dist2.get_dist_fn()
         mp = np.zeros((3, np1, np2))
         for i, u in enumerate(np.linspace(0, 1, num=np1, endpoint=True)):
             for j, w in enumerate(np.linspace(0, 1, num=np2, endpoint=True)):

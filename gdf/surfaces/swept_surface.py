@@ -54,10 +54,10 @@ class SweptSurface(Surface):
     def mesh_points(self) -> ndarray:
         curve_fn = self.curve.get_path_fn()
         curve_np = self.num_points_curve
-        curve_dm_fn = self.dist_curve.get_fn()
+        curve_dm_fn = self.dist_curve.get_dist_fn()
         sweeper_fn = self.sweeper_curve.get_path_fn()
         sweeper_np = self.num_points_sweeper_curve
-        sweeper_dm_fn = self.dist_sweeper_curve.get_fn()
+        sweeper_dm_fn = self.dist_sweeper_curve.get_dist_fn()
         mp = np.zeros((3, curve_np, sweeper_np))
         for i, u in enumerate(np.linspace(0, 1, num=curve_np, endpoint=True)):
             for j, w in enumerate(np.linspace(0, 1, num=sweeper_np, endpoint=True)):

@@ -51,11 +51,11 @@ class PlaneSurface(Surface):
     def mesh_points(self) -> ndarray:
 
         def line1(u):
-            fn = self.dist01.get_fn()
+            fn = self.dist01.get_dist_fn()
             return self.point0.xyz + (self.point1.xyz - self.point0.xyz)*fn(u)
 
         def line2(u):
-            fn = self.dist02.get_fn()
+            fn = self.dist02.get_dist_fn()
             return self.point0.xyz + (self.point2.xyz - self.point0.xyz)*fn(u)
 
         np1 = self.num_points_01

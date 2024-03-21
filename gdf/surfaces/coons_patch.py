@@ -94,10 +94,10 @@ class CoonsPatch(Surface):
     def mesh_points(self) -> ndarray:
         npu = self.num_points_u
         npw = self.num_points_w
-        du0 = self.distribution_methods[0].get_fn()
-        du1 = self.distribution_methods[1].get_fn()
-        d0w = self.distribution_methods[2].get_fn()
-        d1w = self.distribution_methods[3].get_fn()
+        du0 = self.distribution_methods[0].get_dist_fn()
+        du1 = self.distribution_methods[1].get_dist_fn()
+        d0w = self.distribution_methods[2].get_dist_fn()
+        d1w = self.distribution_methods[3].get_dist_fn()
         path_fns = []
         for curve, flip in zip(self.curves, self.flipped_curves):
             path_fns.append(curve.get_path_fn(flip_direction=flip))

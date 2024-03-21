@@ -46,7 +46,7 @@ class DistributionMethod(ABC):
         self._flip_direction = value
 
     @abstractmethod
-    def get_fn(self, flip_direction:bool):
+    def get_dist_fn(self, flip_direction:bool):
         """Returns distribution function which takes a single float from 0 to 1
         and returns a float between 0 and 1 according to the distribution type.
         """
@@ -60,7 +60,7 @@ class LinearDistribution(DistributionMethod):
     def __init__(self, flip_direction:bool=False):
         super().__init__(flip_direction=flip_direction)
 
-    def get_fn(self):
+    def get_dist_fn(self):
         flip = True if self.flip_direction else False # breaks ref to self
         def fn(u:int|float, flip_direction:bool=flip) -> float:
             u = validate_fn_input(u=u, flip_direction=flip_direction)
@@ -77,7 +77,7 @@ class CosineDistribution(DistributionMethod):
     def __init__(self, flip_direction:bool=False):
         super().__init__(flip_direction=flip_direction)
 
-    def get_fn(self):
+    def get_dist_fn(self):
         flip = True if self.flip_direction else False # breaks ref to self
         def fn(u:int|float, flip_direction:bool=flip) -> float:
             u = validate_fn_input(u=u, flip_direction=flip_direction)
@@ -105,7 +105,7 @@ class ExponentialDistribution(DistributionMethod):
             raise TypeError("ratio must be of type 'int' or 'float'")
         self._ratio = float(value)
 
-    def get_fn(self):
+    def get_dist_fn(self):
         flip = True if self.flip_direction else False # breaks ref to self
         def fn(u:int|float, flip_direction:bool=flip) -> float:
             u = validate_fn_input(u=u, flip_direction=flip_direction)
@@ -133,7 +133,7 @@ class PowerDistribution(DistributionMethod):
             raise TypeError("power must be of type 'int' or 'float'")
         self._power = float(value)
 
-    def get_fn(self):
+    def get_dist_fn(self):
         flip = True if self.flip_direction else False # breaks ref to self
         def fn(u:int|float, flip_direction:bool=flip) -> float:
             u = validate_fn_input(u=u, flip_direction=flip_direction)
