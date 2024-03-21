@@ -86,9 +86,7 @@ class ArcPVA(Curve):
     def get_path_fn(self, flip_direction:bool=False):
         def fn(u:int|float, flip_direction:bool=flip_direction) -> ndarray:
             """ArcPVA path function mapping input float from 0 to 1 to a physical xyz point"""
-            validate_curve_path_fn_input(u=u, flip_direction=flip_direction)
-            if flip_direction:
-                u = 1.0 - u
+            u = validate_curve_path_fn_input(u=u, flip_direction=flip_direction)
             v = self.vector_point.unit_vector * self.vector_point.length
             k = self.axis.unit_vector * self.axis.length
             a = self.angle

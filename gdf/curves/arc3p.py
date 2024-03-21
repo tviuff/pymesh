@@ -121,9 +121,7 @@ class Arc3P(Curve):
     def get_path_fn(self, flip_direction:bool=False):
         def fn(u:int|float, flip_direction:bool=flip_direction) -> ndarray:
             """Arc3P path function mapping input float from 0 to 1 to a physical xyz point"""
-            validate_curve_path_fn_input(u=u, flip_direction=flip_direction)
-            if flip_direction:
-                u = (1 - u)
+            u = validate_curve_path_fn_input(u=u, flip_direction=flip_direction)
             v, k, a = self.vector_start, self.plane_unit_normal, self.angle
             xyz0 = self.point_centre.xyz
             dxyz1 = v * math.cos(a * u)

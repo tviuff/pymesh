@@ -3,10 +3,24 @@
 import math
 from abc import ABC, abstractmethod
 
+
+def validate_fn_input(u:int|float, flip_direction:bool) -> float:
+    """Validates type of inputs u and flip_direction"""
+    if not isinstance(flip_direction, bool):
+        raise TypeError("flip_direction mus be of type 'bool'")
+    if not isinstance(u, (int, float)):
+        raise TypeError("u must be of type 'int' or 'float'")
+    if isinstance(u, int):
+        u = float(u)
+    if u < 0 or u > 1:
+        raise ValueError("u must be a value between 0 and 1")
+    if flip_direction:
+        u = 1.0 - u
+    return u
+
+
 def flip_exp(exp, flip_direction:bool):
     """Flips 'exp' to '1.0 - exp' if flip_direction is True"""
-    if not isinstance(flip_direction, bool):
-        raise TypeError("flip_direction must be of type 'bool'")
     if not flip_direction:
         return exp
     return 1.0 - exp
@@ -39,7 +53,9 @@ class DistributionMethod(ABC):
 
 
 class LinearDistribution(DistributionMethod):
-    """Linear path distribution class"""
+    """Linear path distribution class
+    expression: fn(u) = u
+    """
 
     def __init__(self, flip_direction:bool=False):
         super().__init__(flip_direction=flip_direction)
@@ -47,16 +63,16 @@ class LinearDistribution(DistributionMethod):
     def get_fn(self):
         flip = True if self.flip_direction else False # breaks ref to self
         def fn(u:int|float, flip_direction:bool=flip) -> float:
-            if not isinstance(u, (int, float)):
-                raise TypeError("u must be of type 'int' or 'float'")
-            if not isinstance(flip_direction, bool):
-                raise TypeError("flip_direction mus be of type 'bool'")
-            return u
+            u = validate_fn_input(u=u, flip_direction=flip_direction)
+            exp = u
+            return flip_exp(exp, flip_direction)
         return fn
 
 
 class CosineDistribution(DistributionMethod):
-    """Cosine path distribution class"""
+    """Cosine path distribution class
+    expression: fn(u) = cos[(u-1)*pi/2]
+    """
 
     def __init__(self, flip_direction:bool=False):
         super().__init__(flip_direction=flip_direction)
@@ -64,19 +80,16 @@ class CosineDistribution(DistributionMethod):
     def get_fn(self):
         flip = True if self.flip_direction else False # breaks ref to self
         def fn(u:int|float, flip_direction:bool=flip) -> float:
-            if not isinstance(u, (int, float)):
-                raise TypeError("u must be of type 'int' or 'float'")
-            if not isinstance(flip_direction, bool):
-                raise TypeError("flip_direction mus be of type 'bool'")
-            if flip_direction:
-                u = u + 1.0
+            u = validate_fn_input(u=u, flip_direction=flip_direction)
             exp = math.cos((u - 1.0)*math.pi/2)
             return flip_exp(exp, flip_direction)
         return fn
 
 
 class ExponentialDistribution(DistributionMethod):
-    """Exponential path distribution class"""
+    """Exponential path distribution class
+    expression: fn(u) = exp[ratio*u]
+    """
 
     def __init__(self, ratio:int|float=1.0, flip_direction:bool=False):
         super().__init__(flip_direction=flip_direction)
@@ -95,19 +108,16 @@ class ExponentialDistribution(DistributionMethod):
     def get_fn(self):
         flip = True if self.flip_direction else False # breaks ref to self
         def fn(u:int|float, flip_direction:bool=flip) -> float:
-            if not isinstance(u, (int, float)):
-                raise TypeError("u must be of type 'int' or 'float'")
-            if not isinstance(flip_direction, bool):
-                raise TypeError("flip_direction mus be of type 'bool'")
-            if flip_direction:
-                u = 1.0 - u
+            u = validate_fn_input(u=u, flip_direction=flip_direction)
             exp = (math.exp(self.ratio*u) - 1.0) / (math.exp(self.ratio*1.0) - 1.0)
             return flip_exp(exp, flip_direction)
         return fn
 
 
 class PowerDistribution(DistributionMethod):
-    """Power path distribution class"""
+    """Power path distribution class
+    expression: fn(u) = u**power
+    """
 
     def __init__(self, power:int|float=1.0, flip_direction:bool=False):
         super().__init__(flip_direction=flip_direction)
@@ -126,12 +136,7 @@ class PowerDistribution(DistributionMethod):
     def get_fn(self):
         flip = True if self.flip_direction else False # breaks ref to self
         def fn(u:int|float, flip_direction:bool=flip) -> float:
-            if not isinstance(u, (int, float)):
-                raise TypeError("u must be of type 'int' or 'float'")
-            if not isinstance(flip_direction, bool):
-                raise TypeError("flip_direction mus be of type 'bool'")
-            if flip_direction:
-                u = 1.0 - u
+            u = validate_fn_input(u=u, flip_direction=flip_direction)
             exp = u**self.power
             return flip_exp(exp, flip_direction)
         return fn
