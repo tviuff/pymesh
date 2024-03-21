@@ -93,7 +93,7 @@ auto-generated .gdf file using the gdf package
 
 ## Example files
 
-The `examples` folder contain various use examples of the `gdf` package.
+The `examples` folder contain various code use examples of the `gdf` package.
 
 ## Resources
 
