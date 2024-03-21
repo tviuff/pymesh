@@ -23,6 +23,8 @@ Geometry package that handles basic geometry and facilitates the creation of 3-d
 ```Python
 # examples/rectangle.py
 
+from gdf import Point, Line, CoonsPatch, CosineDistribution, GDFViewer
+
 point1 = Point(0, 0, 0)
 point2 = Point(1, 0, 0)
 point3 = Point(1, 1, 0)
@@ -50,7 +52,7 @@ viewer.show() # plot the surface panels
 
 The `GDFViewer` is based on the `matplotlib` package and is used to conveniently plot and inspect the surface panels and their normals as shown in the image below.
 
-![Surface panels for a vertical cylinder](/img/example.png)
+![Visualization of rectangle surface panels using GDFViewer.](/images/rectangle.png)
 
 ## Writing to a *.gdf* file
 
