@@ -20,6 +20,7 @@ Geometry package that handles basic geometry and facilitates the creation of 3-d
 
 ## Building a simple geometry in Python
 
+    ```python
     # example.py
     point1 = Point(0, 0, 0)
     point2 = point1.create_relative_point(dx=1.0)
@@ -44,6 +45,7 @@ Geometry package that handles basic geometry and facilitates the creation of 3-d
     viewer = GDFViewer(panel_normal_length=0.5)
     viewer.add_panels(surface_selection, include_normals=True)
     viewer.show()
+    ```
 
 ## Inspecting the final geometry
 
