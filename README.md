@@ -23,7 +23,7 @@ Geometry package that handles basic geometry and facilitates the creation of 3-d
 ```Python
 # examples/rectangle.py
 
-from gdf import Point, Line, CoonsPatch, CosineDistribution, GDFViewer
+from gdf import Point, Line, CoonsPatch, ExponentialDistribution, GDFViewer
 
 point1 = Point(0, 0, 0)
 point2 = Point(1, 0, 0)
@@ -38,8 +38,8 @@ line4 = Line(point4, point1)
 surface = CoonsPatch([line1, line3, line2, line4])
 surface.flip_normal = True # flips surface panel normals
 surface.num_points_u = 5 # specifies number of points along the u dimension
-surface.num_points_w = 7 # specifies number of points along the w dimension
-surface.dist_u = CosineDistribution(flip_direction=True) # distribution method along the u dimension
+surface.num_points_w = 5 # specifies number of points along the w dimension
+surface.dist_u = ExponentialDistribution() # distribution method along the u dimension
 
 surface_selection = CoonsPatch.get_all_surfaces()
 
