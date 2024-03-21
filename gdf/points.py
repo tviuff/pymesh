@@ -42,16 +42,13 @@ class Point:
     def __repr__(self):
         return f"{type(self).__name__}(x={self.x:.2f}, y={self.y:.2f}, z={self.z:.2f})"
 
-    @staticmethod
-    def get_distance(point1:Self, point2:Self) -> float:
-        """Returns the shortest distance between to points"""
-        if not isinstance(point1, Point):
-            raise TypeError(f"point1 must be of type '{Point.__name__}'.")
-        if not isinstance(point2, Point):
-            raise TypeError(f"point2 must be of type '{Point.__name__}'.")
-        dx = point1.x - point2.x
-        dy = point1.y - point2.y
-        dz = point1.z - point2.z
+    def get_distance(self, point:Self) -> float:
+        """Returns the shortest distance between point instance and another point"""
+        if not isinstance(point, Point):
+            raise TypeError(f"point must be of type '{Point.__name__}'.")
+        dx = self.x - point.x
+        dy = self.y - point.y
+        dz = self.z - point.z
         return math.sqrt(dx**2 + dy**2 + dz**2)
 
     def create_relative_point(self, dx:int|float=0.,dy:int|float=0.,dz:int|float=0.) -> Self:

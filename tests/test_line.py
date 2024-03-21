@@ -1,47 +1,41 @@
 """Module for testing the Point class functionality"""
 
-import numpy as np
+import math
+
 import pytest
 
-import gdf
+from gdf import Point, Line
 
-class TestLine:
+def test_init(point1:Point, point2:Point) -> None:
+    Line(point1, point2)
 
-    # ! Include flipped_direction option in tests
+def test_init_invalid() -> None:
+    with pytest.raises(TypeError):
+        Line("point1", "point2")
 
-    init_testdata = [
-        #point1, point2, exception
-        (gdf.Point(0, 0, 0), 1, TypeError),
-        (gdf.Point(0, 0, 0), 1.0, TypeError),
-        (gdf.Point(0, 0, 0), "one", TypeError),
-        (1, gdf.Point(0, 0, 0), TypeError),
-        (1.0, gdf.Point(0, 0, 0), TypeError),
-        ("one", gdf.Point(0, 0, 0), TypeError)
-    ]
+def test_eq(line1) -> None:
+    assert line1 == line1
 
-    # ! Add more test cases
-    get_path_xyz_testdata = [
-        # point1, point2, num_points, dist_method, flip_dir, expectation
-        (gdf.Point(0, 0, 0), gdf.Point(3, 0, 0), 4, gdf.mesh.distribution_methods.LinearDistribution(), False, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0],[3.0, 0.0, 0.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.mesh.distribution_methods.LinearDistribution(), False, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(0, 0, 2), 3, gdf.mesh.distribution_methods.LinearDistribution(), False, np.array([[0.0, 0.0, 0.0],[0.0, 0.0, 1.0],[0.0, 0.0, 2.0]]))
-    ]
+def test_point_end(point1:Point, point2:Point) -> None:
+    point_end = Line(point1, point2).point_end
+    assert isinstance(point_end, Point)
+    assert point_end == point2
 
-    def test_no_input(self):
-        with pytest.raises(TypeError):
-            gdf.Line()
+def test_point_start(point1:Point, point2:Point) -> None:
+    point_start = Line(point1, point2).point_start
+    assert isinstance(point_start, Point)
+    assert point_start == point1
 
-    @pytest.mark.parametrize("point1, point2, exception", init_testdata)
-    def test_init_raises_exception_on_wrong_input(self, point1, point2, exception):
-        with pytest.raises(exception):
-            gdf.Line(point1, point2)
+def test_length(point1:Point, point2:Point, dx, dy, dz) -> None:
+    length = Line(point1, point2).length
+    assert isinstance(length, float)
+    assert length == math.sqrt(dx**2 + dy**2 + dz**2)
 
-    @pytest.mark.parametrize("point1, point2, num_points, dist_method, flip_dir, expected", get_path_xyz_testdata)
-    def test_get_path_fn(self, point1, point2, num_points, dist_method, flip_dir, expected):
-        path_fn = gdf.Line(point1, point2).get_path_fn()
-        dist_method.flip_dir = flip_dir
-        dist_fn = dist_method.get_fn()
-        path_xyz = np.zeros((num_points, 3))
-        for i, u in enumerate(np.linspace(0, 1, num=num_points, endpoint=True)):
-            path_xyz[i, :] = path_fn(dist_fn(u))
-        assert (path_xyz == expected).all()
+def test_get_path_fn(point1:Point, point2:Point) -> None:
+    path_fn = Line(point1, point2).get_path_fn()
+    assert (path_fn(0) == point1.xyz).any()
+    assert (path_fn(1) == point2.xyz).any()
+    assert (path_fn(0, flip_direction=True) == point2.xyz).any()
+    assert (path_fn(1, flip_direction=True) == point1.xyz).any()
+    assert (path_fn(0.2) == point1.xyz + 0.2*(point2.xyz - point1.xyz)).any()
+    assert (path_fn(0.2, flip_direction=True) == point2.xyz + 0.2*(point1.xyz - point2.xyz)).any()

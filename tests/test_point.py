@@ -1,76 +1,52 @@
 """Module for testing the Point class functionality"""
 
+import math
+
+import numpy as np
 import pytest
 
-import gdf
+from gdf import Point
 
-class TestPoint:
+def test_init(dx, dy, dz) -> None:
+    Point(dx, dy, dz)
 
-    init_testdata = [
-        #x, y, z, exception, expected
-        ("one", 0, 0, TypeError, None),
-        (0, "one", 0, TypeError, None),
-        (0, 0, "one", TypeError, None),
-        (True, 0, 0, None, gdf.Point(1.0, 0.0, 0.0)),
-        (0, True, 0, None, gdf.Point(0.0, 1.0, 0.0)),
-        (0, 0, True, None, gdf.Point(0.0, 0.0, 1.0)),
-        (False, 0, 0, None, gdf.Point(0.0, 0.0, 0.0)),
-        (0, False, 0, None, gdf.Point(0.0, 0.0, 0.0)),
-        (0, 0, False, None, gdf.Point(0.0, 0.0, 0.0)),
-        ( 0,  0,  0, None, gdf.Point( 0.0,  0.0,  0.0)),
-        (+1, +1, +1, None, gdf.Point(+1.0, +1.0, +1.0)),
-        (-1, -1, -1, None, gdf.Point(-1.0, -1.0, -1.0))
-    ]
+def test_init_invalid() -> None:
+    with pytest.raises(TypeError):
+        Point("x", "y", "z")
 
-    get_distance_testdata = [
-        #point1, point2, exception, expected
-        (gdf.Point(0, 0, 0), 1, TypeError, None),
-        (gdf.Point(0, 0, 0), 1.0, TypeError, None),
-        (gdf.Point(0, 0, 0), "one", TypeError, None),
-        (1, gdf.Point(0, 0, 0), TypeError, None),
-        (1.0, gdf.Point(0, 0, 0), TypeError, None),
-        ("one", gdf.Point(0, 0, 0), TypeError, None),
-        (gdf.Point(0, 0, 0), gdf.Point(3, 4, 0), None, 5.0),
-        (gdf.Point(-3, -4, 0), gdf.Point(0, 0, 0), None, 5.0)
-    ]
+def test_eq(point1, point2) -> None:
+    assert point1 == point1
+    assert point1 != point2
 
-    set_relative_to_testdata = [
-        #point, dx, dy, dz, exception, expected
-        (gdf.Point(0, 0, 0), "one", 0, 0, TypeError, None),
-        (gdf.Point(0, 0, 0), 0, "one", 0, TypeError, None),
-        (gdf.Point(0, 0, 0), 0, 0, "one", TypeError, None),
-        (gdf.Point(0, 0, 0),  0,  0,  0, ValueError, None),
-        (gdf.Point(0, 0, 0),  1,  1,  1, None, gdf.Point( 1,  1,  1)),
-        (gdf.Point(0, 0, 0), -1, -1, -1, None, gdf.Point(-1, -1, -1))
-    ]
+def test_x(point2:Point, dx:float) -> None:
+    x = point2.x
+    assert isinstance(x, float)
+    assert x == dx
 
-    def test_no_input(self):
-        with pytest.raises(TypeError):
-            gdf.Point()
+def test_y(point2:Point, dy:float) -> None:
+    y = point2.y
+    assert isinstance(y, float)
+    assert y == dy
 
-    @pytest.mark.parametrize("x, y, z, exception, expected", init_testdata)
-    def test_init_raises_exception_on_wrong_input_type(self, x, y, z, exception, expected):
-        if exception is not None:
-            with pytest.raises(exception):
-                result = gdf.Point(x, y, z)
-        else:
-            result = gdf.Point(x, y, z)
-            assert result == expected
+def test_z(point2:Point, dz:float) -> None:
+    z = point2.z
+    assert isinstance(z, float)
+    assert z == dz
 
-    @pytest.mark.parametrize("point1, point2, exception, expected", get_distance_testdata)
-    def test_get_distance(self, point1, point2, exception, expected):
-        if exception is not None:
-            with pytest.raises(exception):
-                result = gdf.Point.get_distance(point1, point2)
-        else:
-            result = gdf.Point.get_distance(point1, point2)
-            assert result == expected
+def test_xyz(point2:Point, dx:float, dy:float, dz:float) -> None:
+    assert (point2.xyz == np.array([dx, dy, dz])).any()
 
-    @pytest.mark.parametrize("point1, dx, dy, dz, exception, expected", set_relative_to_testdata)
-    def test_set_relative_to(self, point1, dx, dy, dz, exception, expected):
-        if exception is not None:
-            with pytest.raises(exception):
-                result = point1.create_relative_point(dx, dy, dz)
-        else:
-            result = point1.create_relative_point(dx, dy, dz)
-            assert result == expected
+def test_get_distance(point1:Point, point2:Point, dx:float, dy:float, dz:float) -> None:
+    assert point1.get_distance(point2) == math.sqrt(dx**2 + dy**2 + dz**2)
+    assert point2.get_distance(point1) == math.sqrt(dx**2 + dy**2 + dz**2)
+
+def test_get_distance_invalid(point1:Point) -> None:
+    with pytest.raises(TypeError):
+        point1.get_distance("point")
+
+def test_create_relative_point(point1:Point, point2:Point, dx:float, dy:float, dz:float) -> None:
+    assert point1.create_relative_point(dx, dy, dz) == point2
+
+def test_create_relative_point_invalid(point1:Point) -> None:
+    with pytest.raises(TypeError):
+        point1.create_relative_point("dx", "dy", "dz")

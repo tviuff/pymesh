@@ -18,6 +18,16 @@ class ArcPVA(Curve):
         self.axis = axis
         self.angle = angle
 
+    def __eq__(self, other):
+        return self.vector_point == other.vector_point \
+            and self.axis == other.axis \
+                and self.angle == other.angle
+
+    def __repr__(self):
+        txt = f"{type(self).__name__}(point={self.point_start}, " \
+                f"axis={self.axis}, angle={self.angle})"
+        return txt
+
     @property
     def point_start(self) -> Point:
         return self._point_start
@@ -72,16 +82,6 @@ class ArcPVA(Curve):
     @property
     def length(self) -> float:
         return self.radius * self.angle
-
-    def __eq__(self, other):
-        return self.vector_point == other.vector_point \
-            and self.axis == other.axis \
-                and self.angle == other.angle
-
-    def __repr__(self):
-        txt = f"{type(self).__name__}(point={self.point_start}, " \
-                f"axis={self.axis}, angle={self.angle})"
-        return txt
 
     def get_path_fn(self, flip_direction:bool=False):
         def fn(u:int|float, flip_direction:bool=flip_direction) -> ndarray:
