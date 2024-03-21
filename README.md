@@ -52,7 +52,7 @@ viewer.show() # plot the surface panels
 
 The `GDFViewer` is based on the `matplotlib` package and is used to conveniently plot and inspect the surface panels and their normals as shown in the image below.
 
-![Visualization of rectangle surface panels using GDFViewer.](/images/rectangle.png)
+![](/images/rectangle.png "Visualization of rectangle surface panels using GDFViewer")
 
 ## Writing to a *.gdf* file
 
