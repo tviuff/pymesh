@@ -22,6 +22,7 @@ Geometry package that handles basic geometry and facilitates the creation of 3-d
 
 ```Python
 # examples/rectangle.py
+
 point1 = Point(0, 0, 0)
 point2 = Point(1, 0, 0)
 point3 = Point(1, 1, 0)
