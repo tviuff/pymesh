@@ -5,7 +5,8 @@ sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
 
 # examples/rectangle.py
 
-from gdf import Point, Line, CoonsPatch, ExponentialDistribution, GDFViewer
+from pathlib import Path
+from gdf import Point, Line, CoonsPatch, ExponentialDistribution, GDFViewer, GDFWriter
 
 point1 = Point(0, 0, 0)
 point2 = Point(1, 0, 0)
@@ -28,3 +29,6 @@ surface_selection = CoonsPatch.get_all_surfaces()
 viewer = GDFViewer(panel_normal_length=0.5) # specify panel normal length for visualization
 viewer.add_panels(surface_selection, include_normals=True) # include panel normals
 viewer.show() # plot the surface panels
+
+writer = GDFWriter()
+writer.write(surface_selection, filename=Path("output", "rectangle.gdf"))
