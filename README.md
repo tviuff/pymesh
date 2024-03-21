@@ -93,7 +93,12 @@ auto-generated .gdf file using the gdf package
 
 ## Example files
 
-The `examples` folder contain various code use examples of the `gdf` package.
+The `examples` folder contain various code use examples of the `gdf` package. Noteworthy example files are:
+
+- [Ruled Surface Example](/examples/ruled_surface.py)
+- [Swept Surface Example](/examples/swept_surface.py)
+- [Bilinear Surface Example](/examples/bilinear_surface.py)
+- [Vertical Cylinder Example](/examples/vertical_cylinder.py)
 
 ## Resources
 
