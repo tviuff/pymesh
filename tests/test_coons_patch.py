@@ -58,23 +58,23 @@ class TestCoonsPatch:
     def test_init_raises_exception_on_wrong_input_type(self, curve1, curve2, curve3, curve4, exception, expected):
         if exception is not None:
             with pytest.raises(exception):
-                gdf.CoonsPatch(curve1, curve2, curve3, curve4)
+                gdf.CoonsPatch([curve1, curve2, curve3, curve4])
         else:
-            assert expected == gdf.CoonsPatch(curve1, curve2, curve3, curve4)
+            assert expected == gdf.CoonsPatch([curve1, curve2, curve3, curve4])
 
     def test_init_clean_loop(self, lines_clean_loop):
         curve_selection, expected = lines_clean_loop
         curve1, curve2, curve3, curve4 = curve_selection
-        surface = gdf.CoonsPatch(curve1, curve2, curve3, curve4)
-        assert surface.curve_selection == expected
+        surface = gdf.CoonsPatch([curve1, curve2, curve3, curve4])
+        assert surface.curves == expected
 
     def test_init_jumbled_curves(self, lines_jumbled):
         curve_selection, expected = lines_jumbled
         curve1, curve2, curve3, curve4 = curve_selection
-        surface = gdf.CoonsPatch(curve1, curve2, curve3, curve4)
-        assert surface.curve_selection == expected
+        surface = gdf.CoonsPatch([curve1, curve2, curve3, curve4])
+        assert surface.curves == expected
 
     def test_init_raises_exception_on_curves_not_connected(self, lines_not_connected):
         curve1, curve2, curve3, curve4 = lines_not_connected
         with pytest.raises(CurveIntersectionError):
-            gdf.CoonsPatch(curve1, curve2, curve3, curve4)
+            gdf.CoonsPatch([curve1, curve2, curve3, curve4])

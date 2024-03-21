@@ -49,15 +49,19 @@ class Line(Curve):
     def length(self) -> float:
         return np.sqrt(np.sum((self.point_end.xyz-self.point_start.xyz)**2))
 
-    def get_path_fn(self):
-        def fn(u:int|float) -> ndarray:
-            """Line path function mapping input float from 0 to 1 to a physical point"""
+    def get_path_fn(self, flip_direction:bool=False):
+        def fn(u:int|float, flip_direction:bool=flip_direction) -> ndarray:
+            """Line path function mapping input float from 0 to 1 to a physical xyz point"""
+            if not isinstance(flip_direction, bool):
+                raise TypeError("flip_direction must be of type 'bool'")
             if not isinstance(u, (int, float)):
                 raise TypeError("u must be of type 'int' or 'float'")
             if isinstance(u, int):
                 u = float(u)
             if u < 0 or u > 1:
                 raise ValueError("u must be a value between 0 and 1")
+            if flip_direction:
+                u = (1 - u)
             xyz0 = self.point_start.xyz
             dxyz = self.point_end.xyz - self.point_start.xyz
             return xyz0 + dxyz * u

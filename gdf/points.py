@@ -42,39 +42,26 @@ class Point:
     def __repr__(self):
         return f"{type(self).__name__}(x={self.x:.2f}, y={self.y:.2f}, z={self.z:.2f})"
 
-    @classmethod
-    def get_distance(cls, point1:Self, point2:Self) -> float:
+    @staticmethod
+    def get_distance(point1:Self, point2:Self) -> float:
         """Returns the shortest distance between to points"""
-        if not (isinstance(point1, cls) and isinstance(point2, cls)):
-            cls_name = cls.__name__
-            mth_name = inspect.stack()[0][3]
-            raise TypeError(f"{cls_name}.{mth_name}() only takes arguments of type '{cls_name}'.")
+        if not isinstance(point1, Point):
+            raise TypeError(f"point1 must be of type '{Point.__name__}'.")
+        if not isinstance(point2, Point):
+            raise TypeError(f"point2 must be of type '{Point.__name__}'.")
         dx = point1.x - point2.x
         dy = point1.y - point2.y
         dz = point1.z - point2.z
         return math.sqrt(dx**2 + dy**2 + dz**2)
 
-    @classmethod
-    def set_relative_to(cls,
-            point:Self = None,
-            dx:int|float = 0.0,
-            dy:int|float = 0.0,
-            dz:int|float = 0.0
-        ) -> Self:
-        """Creates a new point using relative position"""
-        if point is None:
-            raise ValueError("Input must include a point reference.")
-        if not isinstance(point, cls):
-            raise TypeError(f"Input point reference must be of type '{cls.__name__}'.")
-        if not isinstance(dx, (float, int)):
-            raise TypeError("dx must be of type 'float' or 'int'.")
-        if not isinstance(dy, (float, int)):
-            raise TypeError("dy must be of type 'float' or 'int'.")
-        if not isinstance(dz, (float, int)):
-            raise TypeError("dz must be of type 'float' or 'int'.")
+    def create_relative_point(self, dx:int|float=0.,dy:int|float=0.,dz:int|float=0.) -> Self:
+        """Creates a new point using relative positional arguments dx, dy, dz"""
+        for value in (dx, dy, dz):
+            if not isinstance(value, (float, int)):
+                raise TypeError("relative position must be of type 'float' or 'int'")
         if (dx == 0.0) and (dy == 0.0) and (dz == 0.0):
-            raise ValueError("Input must include a non-zero relative distance.")
-        x = point.x + float(dx)
-        y = point.y + float(dy)
-        z = point.z + float(dz)
-        return cls(x, y, z)
+            raise ValueError("a non-zero relative position must be given")
+        x = self.x + float(dx)
+        y = self.y + float(dy)
+        z = self.z + float(dz)
+        return Point(x, y, z)

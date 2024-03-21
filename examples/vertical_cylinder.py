@@ -10,7 +10,7 @@ from examples.circle import surface_selection
 
 point_ctr = Point(0, 0, 0)
 radius = math.sqrt(2**2 + 2**2)
-line = Line(point_ctr, Point.set_relative_to(point_ctr, 0, 0, 1))
+line = Line(point_ctr, point_ctr.create_relative_point(0, 0, 1))
 curve = ArcPVA(
     point = Point(radius, 0, 0),
     axis = Vector3D(point_ctr, Point(0, 0, 1)),

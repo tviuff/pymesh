@@ -24,6 +24,6 @@ class Curve(ABC):
         """Returns the curve path length"""
 
     @abstractmethod
-    def get_path_fn(self):
+    def get_path_fn(self, flip_direction:bool=False):
         """Returns curve path function that takes a float between 0 and 1
         and returns xyz coordinates as an ndarray with shape [1, 3]"""

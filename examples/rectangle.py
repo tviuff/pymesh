@@ -3,10 +3,10 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
 
-from gdf import Point, Line, CoonsPatch, GDFViewer
+from gdf import Point, Line, CoonsPatch, ExponentialDistribution, GDFViewer
 
 point1 = Point(0, 0, 0)
-point2 = Point.set_relative_to(point1, dx=1.0)
+point2 = point1.create_relative_point(dx=1.0)
 point3 = Point(1, 1, 0)
 point4 = Point(0, 1, 0)
 
@@ -15,12 +15,13 @@ line2 = Line(point2, point3)
 line3 = Line(point3, point4)
 line4 = Line(point4, point1)
 
-surface1 = CoonsPatch(line1, line3, line2, line4)
-for curve in surface1.curve_selection:
+surface1 = CoonsPatch([line1, line3, line2, line4])
+for curve in surface1.curves:
     print(curve)
 surface1.flip_normal = True
 surface1.num_points_u = 5
 surface1.num_points_w = 7
+surface1.dist_u = ExponentialDistribution(flip_direction=True)
 
 surface_selection = CoonsPatch.get_all_surfaces()
 

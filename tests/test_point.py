@@ -36,12 +36,6 @@ class TestPoint:
 
     set_relative_to_testdata = [
         #point, dx, dy, dz, exception, expected
-        (None, 0.0, 0.0, 0.0, ValueError, None),
-        (1, 0, 0, 0,TypeError, None),
-        (1.0, 0, 0, 0, TypeError, None),
-        ("one", 0, 0, 0, TypeError, None),
-        (True, 0, 0, 0, TypeError, None),
-        (False, 0, 0, 0, TypeError, None),
         (gdf.Point(0, 0, 0), "one", 0, 0, TypeError, None),
         (gdf.Point(0, 0, 0), 0, "one", 0, TypeError, None),
         (gdf.Point(0, 0, 0), 0, 0, "one", TypeError, None),
@@ -76,7 +70,7 @@ class TestPoint:
     def test_set_relative_to(self, point1, dx, dy, dz, exception, expected):
         if exception is not None:
             with pytest.raises(exception):
-                result = gdf.Point.set_relative_to(point1, dx, dy, dz)
+                result = point1.create_relative_point(dx, dy, dz)
         else:
-            result = gdf.Point.set_relative_to(point1, dx, dy, dz)
+            result = point1.create_relative_point(dx, dy, dz)
             assert result == expected

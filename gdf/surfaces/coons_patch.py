@@ -7,38 +7,46 @@ from numpy import ndarray
 from gdf.surfaces import Surface
 from gdf.curves import Curve
 from gdf.mesh.descriptors import BoundaryDistribution, MeshNumber
+from gdf.mesh.distribution_methods import DistributionMethod
 from gdf.constants import MeshConstants
 from gdf.exceptions import CurveIntersectionError
+
+# ! cleanup: .curves .dist_u .dist_w
+# ! .dists (shape = 4) instead of flipped_curves and apply flipping directly
 
 class CoonsPatch(Surface):
     """Coons patch class taking a selection of four curves
     and creates mesh points for generating panels.
     """
 
-    dist_u0 = BoundaryDistribution()
-    dist_u1 = BoundaryDistribution()
-    dist_0w = BoundaryDistribution()
-    dist_1w = BoundaryDistribution()
+    dist_u = BoundaryDistribution()
+    dist_w = BoundaryDistribution()
     num_points_u = MeshNumber()
     num_points_w = MeshNumber()
 
-    def __init__(self, curve_u0:Curve, curve_u1:Curve, curve_0w:Curve, curve_1w:Curve):
+    def __init__(self, curves:list[Curve]|tuple[Curve]):
         self._all_surfaces.append(self)
-        self.curve_selection = (curve_u0, curve_u1, curve_0w, curve_1w)
-        self.dist_u0 = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.dist_u1 = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.dist_0w = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.dist_1w = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.dist_u = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.dist_w = MeshConstants.DEFAULT_DIST_METHOD.value()
         self.num_points_u = MeshConstants.DEFAULT_NUM_POINT.value
         self.num_points_w = MeshConstants.DEFAULT_NUM_POINT.value
+        self.curves = curves # also sets flipped_curves
 
     @property
-    def curve_selection(self)-> tuple[Curve]:
-        return self._curve_selection
+    def distribution_methods(self)-> tuple[DistributionMethod]:
+        return tuple([self.dist_u, self.dist_u, self.dist_w, self.dist_w])
 
-    @curve_selection.setter
-    def curve_selection(self, curves) -> None:
-        pname = "curve_selection"
+    @property
+    def flipped_curves(self) -> tuple[bool]:
+        return self._flipped_curves
+
+    @property
+    def curves(self)-> tuple[Curve]:
+        return self._curves
+
+    @curves.setter
+    def curves(self, curves) -> None:
+        pname = "curves"
         if not isinstance(curves, (list, tuple)):
             raise TypeError(f"{pname} must receive a list or tuple input")
         if len(curves) != 4:
@@ -71,12 +79,8 @@ class CoonsPatch(Surface):
         if ref_point != curve_selection[0].point_start or index > 2:
             raise CurveIntersectionError("Selected curves does not share intersection points")
         cflip, cselect = self._set_coons_patch_curve_order(flipped_curves, curve_selection)
-        self._curve_selection = tuple(cselect)
         self._flipped_curves = tuple(cflip)
-
-    @property
-    def flipped_curves(self) -> tuple[bool]:
-        return self._flipped_curves
+        self._curves = tuple(cselect)
 
     def _set_coons_patch_curve_order(self, cflip, cselect) -> tuple[list]:
         """Sets the order u0, u1, 0w, 1w where u0 = first item in cselect"""
@@ -90,22 +94,17 @@ class CoonsPatch(Surface):
     def mesh_points(self) -> ndarray:
         npu = self.num_points_u
         npw = self.num_points_w
-        flipu0 = self.flipped_curves[0]
-        flipu1 = self.flipped_curves[1]
-        flip0w = self.flipped_curves[2]
-        flip1w = self.flipped_curves[3]
-        self.dist_u0.flip_dir = flipu0
-        self.dist_u1.flip_dir = flipu1
-        self.dist_0w.flip_dir = flip0w
-        self.dist_1w.flip_dir = flip1w
-        du0 = self.dist_u0.get_fn()
-        du1 = self.dist_u1.get_fn()
-        d0w = self.dist_0w.get_fn()
-        d1w = self.dist_1w.get_fn()
-        pu0 = self.curve_selection[0].get_path_fn()
-        pu1 = self.curve_selection[1].get_path_fn()
-        p0w = self.curve_selection[2].get_path_fn()
-        p1w = self.curve_selection[3].get_path_fn()
+        du0 = self.distribution_methods[0].get_fn()
+        du1 = self.distribution_methods[1].get_fn()
+        d0w = self.distribution_methods[2].get_fn()
+        d1w = self.distribution_methods[3].get_fn()
+        path_fns = []
+        for curve, flip in zip(self.curves, self.flipped_curves):
+            path_fns.append(curve.get_path_fn(flip_direction=flip))
+        pu0 = path_fns[0]
+        pu1 = path_fns[1]
+        p0w = path_fns[2]
+        p1w = path_fns[3]
         p00 = pu0(du0(0))
         p11 = pu1(du1(1))
         p01 = p0w(d0w(1))

@@ -22,9 +22,9 @@ class TestLine:
     # ! Add more test cases
     get_path_xyz_testdata = [
         # point1, point2, num_points, dist_method, flip_dir, expectation
-        (gdf.Point(0, 0, 0), gdf.Point(3, 0, 0), 4, gdf.mesh.distribution_methods.DistLinear(), False, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0],[3.0, 0.0, 0.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.mesh.distribution_methods.DistLinear(), False, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
-        (gdf.Point(0, 0, 0), gdf.Point(0, 0, 2), 3, gdf.mesh.distribution_methods.DistLinear(), False, np.array([[0.0, 0.0, 0.0],[0.0, 0.0, 1.0],[0.0, 0.0, 2.0]]))
+        (gdf.Point(0, 0, 0), gdf.Point(3, 0, 0), 4, gdf.mesh.distribution_methods.LinearDistribution(), False, np.array([[0.0, 0.0, 0.0],[1.0, 0.0, 0.0],[2.0, 0.0, 0.0],[3.0, 0.0, 0.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(0, 2, 0), 3, gdf.mesh.distribution_methods.LinearDistribution(), False, np.array([[0.0, 0.0, 0.0],[0.0, 1.0, 0.0],[0.0, 2.0, 0.0]])),
+        (gdf.Point(0, 0, 0), gdf.Point(0, 0, 2), 3, gdf.mesh.distribution_methods.LinearDistribution(), False, np.array([[0.0, 0.0, 0.0],[0.0, 0.0, 1.0],[0.0, 0.0, 2.0]]))
     ]
 
     def test_no_input(self):
@@ -39,7 +39,8 @@ class TestLine:
     @pytest.mark.parametrize("point1, point2, num_points, dist_method, flip_dir, expected", get_path_xyz_testdata)
     def test_get_path_fn(self, point1, point2, num_points, dist_method, flip_dir, expected):
         path_fn = gdf.Line(point1, point2).get_path_fn()
-        dist_fn = dist_method.get_fn(flip_dir=flip_dir)
+        dist_method.flip_dir = flip_dir
+        dist_fn = dist_method.get_fn()
         path_xyz = np.zeros((num_points, 3))
         for i, u in enumerate(np.linspace(0, 1, num=num_points, endpoint=True)):
             path_xyz[i, :] = path_fn(dist_fn(u))
