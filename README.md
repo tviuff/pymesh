@@ -69,7 +69,7 @@ writer.write(surface_selection, filename=Path("output", "rectangle.gdf"))
 Above code generates the following `output/rectangle.gdf` file:
 
 ```
-auto-generated gdf file using pdfgen
+auto-generated .gdf file using the gdf package
 1.000000 9.816000
 0 0
 16

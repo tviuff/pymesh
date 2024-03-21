@@ -23,7 +23,7 @@ class GDFWriter():
             header:str = None
         ) -> None:
         if header is None:
-            header = "auto-generated gdf file using pdfgen"
+            header = "auto-generated .gdf file using the gdf package"
         self.header = header
         self.ulen = ulen
         self.grav = grav
