@@ -18,6 +18,8 @@ Geometry package that handles basic geometry and facilitates the creation of 3-d
     - `PlaneSurface(Point, Point, Point)` creates a plane surface based on three points
     - `SweptSurface(Curve, Curve)` creates a surface by sweeping a curve along the path of another
 
+![Surface panels for a vertical cylinder](/img/example.png)
+
 ## Inspecting the final geometry
 
 The `GDFViewer` is based on the `matplotlib` package and is used to conveniently plot and inspect the surface panels and their normals.
@@ -28,7 +30,7 @@ The `GDFWriter` takes care of converting the surfaces into a usable *.gdf* file.
 
 ## Example files
 
-The folder `èxamples` contain various use examples of the `gdf` package.
+The `examples` folder contain various use examples of the `gdf` package.
 
 ## Resources
 

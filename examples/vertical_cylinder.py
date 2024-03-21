@@ -24,7 +24,7 @@ surface_selection = list(surface_selection)
 surface_selection.append(surface_cylinder)
 
 if __name__ == "__main__":
-    viewer = GDFViewer(panel_normal_length=0.25)
+    viewer = GDFViewer(panel_normal_length=0.5)
     viewer.add_panels(
         surfaces = surface_selection,
         include_normals = True
