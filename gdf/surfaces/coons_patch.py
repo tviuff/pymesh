@@ -59,7 +59,9 @@ class CoonsPatch(Surface):
         ref_point = curve_selection[-1].point_end
         flipped_curves = [False]
         index = 0
-        while len(curve_selection) <= 4 and len(initial_selection) >= 1 and index <= 2:
+        while len(curve_selection) <= 4 and \
+                len(initial_selection) >= 1 and \
+                index < len(initial_selection):
             next_curve_points = (
                 initial_selection[index].point_start,
                 initial_selection[index].point_end
@@ -76,7 +78,7 @@ class CoonsPatch(Surface):
                 index = 0
                 continue
             index += 1
-        if ref_point != curve_selection[0].point_start or index > 2:
+        if ref_point != curve_selection[0].point_start or index > len(initial_selection):
             raise CurveIntersectionError("Selected curves does not share intersection points")
         cflip, cselect = self._set_coons_patch_curve_order(flipped_curves, curve_selection)
         self._flipped_curves = tuple(cflip)

@@ -2,79 +2,49 @@
 
 import pytest
 
-import gdf
+from gdf import Point, Line, Arc3P, ArcPVA, CoonsPatch
 from gdf.exceptions import CurveIntersectionError
 
 # ! Include flipped_curves in tests
 
-class TestCoonsPatch:
+@pytest.fixture
+def valid_points() -> tuple[Point]:
+    p00 = Point(0, 0, 0)
+    p11 = Point(1, 1, 0)
+    p01 = Point(0, 1, 0)
+    p10 = Point(1, 0, 0)
+    return p00, p01, p10, p11
 
-    @pytest.fixture
-    def lines_clean_loop(self):
-        curve_selection = tuple([
-            gdf.Line(gdf.Point(0, 0, 0), gdf.Point(10, 0, 0)),
-            gdf.Line(gdf.Point(10, 0, 0), gdf.Point(10, 10, 0)),
-            gdf.Line(gdf.Point(10, 10, 0), gdf.Point(0, 10, 0)),
-            gdf.Line(gdf.Point(0, 10, 0), gdf.Point(0, 0, 0))
-        ])
-        expected = tuple([
-            gdf.Line(gdf.Point(0, 0, 0), gdf.Point(10, 0, 0)),
-            gdf.Line(gdf.Point(10, 10, 0), gdf.Point(0, 10, 0)),
-            gdf.Line(gdf.Point(0, 10, 0), gdf.Point(0, 0, 0)),
-            gdf.Line(gdf.Point(10, 0, 0), gdf.Point(10, 10, 0))
-        ])
-        return curve_selection, expected
+@pytest.fixture
+def valid_lines(valid_points) -> tuple[Line]:
+    p00, p01, p10, p11 = valid_points
+    line_u0 = Line(p00, p10)
+    line_u1 = Line(p11, p01)
+    line_0w = Line(p01, p00)
+    line_1w = Line(p11, p10)
+    return line_u0, line_u1, line_0w, line_1w
 
-    @pytest.fixture
-    def lines_jumbled(self):
-        line1 = gdf.Line(gdf.Point(0, 0, 0), gdf.Point(10, 0, 0))
-        line2 = gdf.Line(gdf.Point(10, 10, 0), gdf.Point(10, 0, 0))
-        line3 = gdf.Line(gdf.Point(10, 10, 0), gdf.Point(0, 10, 0))
-        line4 = gdf.Line(gdf.Point(0, 10, 0), gdf.Point(0, 0, 0))
-        curve_selection = tuple([line1, line4, line2, line3])
-        expected = tuple([line1, line3, line4, line2])
-        return curve_selection, expected
+@pytest.fixture
+def lines_not_connected(valid_points) -> tuple[Line]:
+    p00, p01, p10, p11 = valid_points
+    line_u0 = Line(p00, p10)
+    line_u1 = Line(p11, p01)
+    line_0w = Line(p01, p00)
+    line_1w = Line(p11, p10.create_relative_point(1, 0, 0))
+    return line_u0, line_u1, line_0w, line_1w
 
-    @pytest.fixture
-    def lines_not_connected(self):
-        line1 = gdf.Line(gdf.Point(0, 0, 0), gdf.Point(10, 0, 0))
-        line2 = gdf.Line(gdf.Point(10, 0, 0), gdf.Point(10, 10, 0))
-        line3 = gdf.Line(gdf.Point(10, 10, 0), gdf.Point(0, 10, 0))
-        line4 = gdf.Line(gdf.Point(0, 10, 0), gdf.Point(5, 0, 0))
-        return line1, line2, line3, line4
+def test_init(valid_lines) -> None:
+    CoonsPatch(valid_lines)
 
-    init_testdata = [
-        #curve1, curve2, curve3, curve4, exception, expected
-        (1, 1, 1, 1, TypeError, None),
-        ("1", "1", "1", "1", TypeError, None),
-        (True, False, True, False, TypeError, None)
-    ]
+def test_init_invalid() -> None:
+    with pytest.raises(TypeError):
+        CoonsPatch("line_collection")
 
-    def test_no_input(self):
-        with pytest.raises(TypeError):
-            gdf.CoonsPatch()
+def test_init_lines_not_connected(lines_not_connected):
+    with pytest.raises(CurveIntersectionError):
+        CoonsPatch(lines_not_connected)
 
-    @pytest.mark.parametrize("curve1, curve2, curve3, curve4, exception, expected", init_testdata)
-    def test_init_raises_exception_on_wrong_input_type(self, curve1, curve2, curve3, curve4, exception, expected):
-        if exception is not None:
-            with pytest.raises(exception):
-                gdf.CoonsPatch([curve1, curve2, curve3, curve4])
-        else:
-            assert expected == gdf.CoonsPatch([curve1, curve2, curve3, curve4])
-
-    def test_init_clean_loop(self, lines_clean_loop):
-        curve_selection, expected = lines_clean_loop
-        curve1, curve2, curve3, curve4 = curve_selection
-        surface = gdf.CoonsPatch([curve1, curve2, curve3, curve4])
-        assert surface.curves == expected
-
-    def test_init_jumbled_curves(self, lines_jumbled):
-        curve_selection, expected = lines_jumbled
-        curve1, curve2, curve3, curve4 = curve_selection
-        surface = gdf.CoonsPatch([curve1, curve2, curve3, curve4])
-        assert surface.curves == expected
-
-    def test_init_raises_exception_on_curves_not_connected(self, lines_not_connected):
-        curve1, curve2, curve3, curve4 = lines_not_connected
-        with pytest.raises(CurveIntersectionError):
-            gdf.CoonsPatch([curve1, curve2, curve3, curve4])
+def test_curves(valid_lines) -> None:
+    line_u0, line_u1, line_0w, line_1w = valid_lines
+    curves = CoonsPatch((line_u0, line_0w, line_u1, line_1w)).curves
+    assert curves == valid_lines

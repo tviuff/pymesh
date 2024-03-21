@@ -66,13 +66,13 @@ def test_radius(curve:Arc3P) -> None:
 def test_length(curve:Arc3P) -> None:
     assert isinstance(curve.length, float)
     assert curve.length == 1.0 * 90.0 * math.pi/180.0
-    curve.flipped_dir = True
+    curve.invert_arc = True
     assert curve.length == 1.0 * (360.0 - 90.0) * math.pi/180.0
 
 def test_angle(curve:Arc3P) -> None:
     assert isinstance(curve.angle, float)
     assert curve.angle == 90.0 * math.pi/180.0
-    curve.flipped_dir = True
+    curve.invert_arc = True
     assert curve.angle == (360.0 - 90.0) * math.pi/180.0
 
 def test_cross_product(point1:Point, point2:Point, point3:Point) -> None:
@@ -80,7 +80,7 @@ def test_cross_product(point1:Point, point2:Point, point3:Point) -> None:
     assert isinstance(curve.cross_product, ndarray) #! should be Vector3D
     cross_product_calc = np.cross(point2.xyz-point1.xyz, point3.xyz-point1.xyz)
     assert (curve.cross_product == cross_product_calc).any()
-    curve.flipped_dir = True
+    curve.invert_arc = True
     assert (curve.cross_product == -cross_product_calc).any()
 
 def test_plane_unit_normal(point1:Point, point2:Point, point3:Point) -> None:
@@ -89,7 +89,7 @@ def test_plane_unit_normal(point1:Point, point2:Point, point3:Point) -> None:
     calc_cross_product = np.cross(point2.xyz-point1.xyz, point3.xyz-point1.xyz)
     calc_plane_unit_normal = calc_cross_product / np.sqrt(np.sum(calc_cross_product**2))
     assert (curve.plane_unit_normal == calc_plane_unit_normal).any()
-    curve.flipped_dir = True
+    curve.invert_arc = True
     assert (curve.plane_unit_normal == -calc_plane_unit_normal).any()
 
 def test_get_path_fn(point1:Point, point2:Point, point3:Point) -> None:

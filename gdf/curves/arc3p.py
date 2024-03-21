@@ -15,13 +15,15 @@ class Arc3P(Curve):
     """
 
     def __init__(self,
-            point_centre:Point, point_start:Point, point_end:Point,
-            flipped_dir:bool=False
+            point_centre:Point,
+            point_start:Point,
+            point_end:Point,
+            invert_arc:bool=False
         ):
         self.point_centre = point_centre
         self.point_start = point_start
         self.point_end = point_end
-        self.flipped_dir = flipped_dir
+        self.invert_arc = invert_arc
         self._tolerance = 0.0001
         self._validate_input()
 
@@ -69,20 +71,20 @@ class Arc3P(Curve):
         return np.sqrt(np.sum(self.vector_start**2))
 
     @property
-    def flipped_dir(self) -> bool:
-        return self._flipped_dir
+    def invert_arc(self) -> bool:
+        return self._invert_arc
 
-    @flipped_dir.setter
-    def flipped_dir(self, value:bool) -> None:
+    @invert_arc.setter
+    def invert_arc(self, value:bool) -> None:
         if not isinstance(value, bool):
-            raise TypeError("flip_direction must be of type 'bool'")
-        self._flipped_dir = value
+            raise TypeError("invert_arc must be of type 'bool'")
+        self._invert_arc = value
 
     @property
     def cross_product(self) -> ndarray:
         vector_start = self.point_start.xyz - self.point_centre.xyz
         vector_end = self.point_end.xyz - self.point_centre.xyz
-        sign = -1 if self.flipped_dir else 1
+        sign = -1 if self.invert_arc else 1
         return sign * np.cross(vector_start, vector_end)
 
     @property
@@ -92,7 +94,7 @@ class Arc3P(Curve):
     @property
     def angle(self) -> float:
         angle = np.arccos(np.dot(self.vector_start, self.vector_end) / ( self.radius**2 ))
-        angle = 2*math.pi - angle if self.flipped_dir else angle
+        angle = 2*math.pi - angle if self.invert_arc else angle
         return angle
 
     @property
