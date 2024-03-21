@@ -18,11 +18,38 @@ Geometry package that handles basic geometry and facilitates the creation of 3-d
     - `PlaneSurface(Point, Point, Point)` creates a plane surface based on three points
     - `SweptSurface(Curve, Curve)` creates a surface by sweeping a curve along the path of another
 
-![Surface panels for a vertical cylinder](/img/example.png)
+## Building a simple geometry in Python
+
+    # example.py
+    point1 = Point(0, 0, 0)
+    point2 = point1.create_relative_point(dx=1.0)
+    point3 = Point(1, 1, 0)
+    point4 = Point(0, 1, 0)
+
+    line1 = Line(point1, point2)
+    line2 = Line(point2, point3)
+    line3 = Line(point3, point4)
+    line4 = Line(point4, point1)
+
+    surface1 = CoonsPatch([line1, line3, line2, line4])
+    for curve in surface1.curves:
+        print(curve)
+    surface1.flip_normal = True
+    surface1.num_points_u = 5
+    surface1.num_points_w = 7
+    surface1.dist_u = CosineDistribution(flip_direction=True)
+
+    surface_selection = CoonsPatch.get_all_surfaces()
+
+    viewer = GDFViewer(panel_normal_length=0.5)
+    viewer.add_panels(surface_selection, include_normals=True)
+    viewer.show()
 
 ## Inspecting the final geometry
 
-The `GDFViewer` is based on the `matplotlib` package and is used to conveniently plot and inspect the surface panels and their normals.
+The `GDFViewer` is based on the `matplotlib` package and is used to conveniently plot and inspect the surface panels and their normals as shown in the image below.
+
+![Surface panels for a vertical cylinder](/img/example.png)
 
 ## Writing to a *.gdf* file
 
