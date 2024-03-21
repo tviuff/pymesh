@@ -5,6 +5,17 @@ from abc import ABC, abstractmethod
 
 from gdf.points import Point
 
+def validate_curve_path_fn_input(u:int|float, flip_direction:bool) -> bool:
+    if not isinstance(flip_direction, bool):
+        raise TypeError("flip_direction must be of type 'bool'")
+    if not isinstance(u, (int, float)):
+        raise TypeError("u must be of type 'int' or 'float'")
+    if isinstance(u, int):
+        u = float(u)
+    if u < 0 or u > 1:
+        raise ValueError("u must be a value between 0 and 1")
+    return True
+
 class Curve(ABC):
     """Curve abstract base class"""
 
