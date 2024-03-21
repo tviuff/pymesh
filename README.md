@@ -1,6 +1,6 @@
-# GDF
+# GDF geometry package overview
 
-Geometry package that handles basic geometry and facilitates the creation of 3-dimensional surface panels. These surface panels are converted into a low-order geometric data file (GDF) for import and use in [WAMIT](https://www.wamit.com/).
+The `gdf` package handles basic geometry and facilitates the creation of 3-dimensional surface panels. These surface panels are converted into a low-order .gdf geometric data file for import and use in [WAMIT](https://www.wamit.com/).
 
 ## Building 3-dimesional surfaces
 
