@@ -6,29 +6,27 @@ from numpy import ndarray
 
 from gdf.constants import MeshConstants
 from gdf.curves import Curve
-from gdf.mesh.descriptors import BoundaryDistribution, MeshNumber
+from gdf.mesh.descriptors import BoundaryDistribution, PanelDensity
 from gdf.surfaces import Surface
-
-# ! see SweptSurface.generate_mesh_points()
 
 class SweptSurface(Surface):
     """Creates a surface based on a curve swept by another
     and creates mesh points for generating panels.
     """
 
-    dist_curve = BoundaryDistribution()
-    dist_sweeper_curve = BoundaryDistribution()
-    num_points_curve = MeshNumber()
-    num_points_sweeper_curve = MeshNumber()
+    boundary_distribution_curve = BoundaryDistribution()
+    boundary_distribution_sweeper_curve = BoundaryDistribution()
+    panel_density_curve = PanelDensity()
+    panel_density_sweeper_curve = PanelDensity()
 
     def __init__(self, curve:Curve, sweeper_curve:Curve):
         self._all_surfaces.append(self)
         self.curve = curve
         self.sweeper_curve = sweeper_curve
-        self.dist_curve = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.dist_sweeper_curve = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.num_points_curve = MeshConstants.DEFAULT_NUM_POINT.value
-        self.num_points_sweeper_curve = MeshConstants.DEFAULT_NUM_POINT.value
+        self.boundary_distribution_curve = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.boundary_distribution_sweeper_curve = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.panel_density_curve = MeshConstants.DEFAULT_DENSITY.value
+        self.panel_density_sweeper_curve = MeshConstants.DEFAULT_DENSITY.value
 
     @property
     def curve(self)-> Curve:
@@ -50,16 +48,29 @@ class SweptSurface(Surface):
             raise TypeError("sweeper_curve must be of type 'Curve'")
         self._sweeper_curve = value
 
+    def _get_num_points(self) -> tuple[int]:
+        density_curve = self.panel_density_curve
+        density_sweeper = self.panel_density_sweeper_curve
+        num_points_curve = density_curve + 1
+        num_points_sweeper = density_sweeper + 1
+        if isinstance(density_curve, float) or isinstance(density_sweeper, float):
+            length_curve = self.curve.length
+            length_sweeper = self.sweeper_curve.length
+            if isinstance(density_curve, float):
+                num_points_curve = int(np.ceil(length_curve / density_curve) + 1)
+            if isinstance(density_sweeper, float):
+                num_points_sweeper = int(np.ceil(length_sweeper / density_sweeper) + 1)
+        return num_points_curve, num_points_sweeper
+
     @property
     def mesh_points(self) -> ndarray:
-        curve_fn = self.curve.get_path_fn()
-        curve_np = self.num_points_curve
-        curve_dm_fn = self.dist_curve.get_dist_fn()
-        sweeper_fn = self.sweeper_curve.get_path_fn()
-        sweeper_np = self.num_points_sweeper_curve
-        sweeper_dm_fn = self.dist_sweeper_curve.get_dist_fn()
-        mp = np.zeros((3, curve_np, sweeper_np))
-        for i, u in enumerate(np.linspace(0, 1, num=curve_np, endpoint=True)):
-            for j, w in enumerate(np.linspace(0, 1, num=sweeper_np, endpoint=True)):
-                mp[:, i, j] = curve_fn(curve_dm_fn(u)) + sweeper_fn(sweeper_dm_fn(w))
+        np_curve, np_sweeper = self._get_num_points()
+        curve_path = self.curve.get_path_fn()
+        sweeper_path = self.sweeper_curve.get_path_fn()
+        dist_curve = self.boundary_distribution_curve.get_dist_fn()
+        dist_sweeper = self.boundary_distribution_sweeper_curve.get_dist_fn()
+        mp = np.zeros((3, np_curve, np_sweeper))
+        for i, u in enumerate(np.linspace(0, 1, num=np_curve, endpoint=True)):
+            for j, w in enumerate(np.linspace(0, 1, num=np_sweeper, endpoint=True)):
+                mp[:, i, j] = curve_path(dist_curve(u)) + sweeper_path(dist_sweeper(w))
         return mp
