@@ -6,7 +6,7 @@ from numpy import ndarray
 
 from gdf.surfaces import Surface
 from gdf.curves import Curve
-from gdf.mesh.descriptors import BoundaryDistribution, MeshNumber
+from gdf.mesh.descriptors import BoundaryDistribution, PanelDensity
 from gdf.mesh.distribution_methods import DistributionMethod
 from gdf.constants import MeshConstants
 from gdf.exceptions import CurveIntersectionError
@@ -19,26 +19,31 @@ class CoonsPatch(Surface):
     and creates mesh points for generating panels.
     """
 
-    dist_u = BoundaryDistribution()
-    dist_w = BoundaryDistribution()
-    num_points_u = MeshNumber()
-    num_points_w = MeshNumber()
+    boundary_distribution_u = BoundaryDistribution()
+    boundary_distribution_w = BoundaryDistribution()
+    panel_density_u = PanelDensity()
+    panel_density_w = PanelDensity()
 
     def __init__(self, curves:list[Curve]|tuple[Curve]):
         self._all_surfaces.append(self)
-        self.dist_u = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.dist_w = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.num_points_u = MeshConstants.DEFAULT_NUM_POINT.value
-        self.num_points_w = MeshConstants.DEFAULT_NUM_POINT.value
-        self.curves = curves # also sets flipped_curves
+        self.boundary_distribution_u = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.boundary_distribution_w = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.panel_density_u = MeshConstants.DEFAULT_DENSITY.value
+        self.panel_density_w = MeshConstants.DEFAULT_DENSITY.value
+        self.curves = curves # also sets self._flipped_curves
 
-    @property
-    def distribution_methods(self)-> tuple[DistributionMethod]:
-        return tuple([self.dist_u, self.dist_u, self.dist_w, self.dist_w])
-
-    @property
-    def flipped_curves(self) -> tuple[bool]:
-        return self._flipped_curves
+    def _get_num_points(self) -> tuple[int]:
+        density_u, density_w = self.panel_density_u, self.panel_density_w
+        num_points_u, num_points_w = density_u + 1, density_w + 1
+        if isinstance(density_u, float) or isinstance(density_w, float):
+            curve_u0, curve_u1, curve_0w, curve_1w = self.curves
+            if isinstance(density_u, float):
+                u_length = max(curve_u0.length, curve_u1.length)
+                num_points_u = int(np.ceil(u_length / density_u) + 1)
+            if isinstance(density_w, float):
+                w_length = max(curve_0w.length, curve_1w.length)
+                num_points_w = int(np.ceil(w_length / density_w) + 1)
+        return num_points_u, num_points_w
 
     @property
     def curves(self)-> tuple[Curve]:
@@ -59,19 +64,20 @@ class CoonsPatch(Surface):
         ref_point = curve_selection[-1].point_end
         flipped_curves = [False]
         index = 0
-        while len(curve_selection) <= 4 and \
-                len(initial_selection) >= 1 and \
-                index < len(initial_selection):
+        while len(curve_selection) <= 4 \
+                and len(initial_selection) >= 1 \
+                and index < len(initial_selection):
             next_curve_points = (
                 initial_selection[index].point_start,
                 initial_selection[index].point_end
             )
             if ref_point in next_curve_points:
                 if ref_point == next_curve_points[0]:
+                    # next curve has matching starting point
                     flipped_curves.append(False)
                     ref_point = next_curve_points[1]
                 else:
-                    # flip direction of curve to match points
+                    # next curve has matching ending point
                     flipped_curves.append(True)
                     ref_point = next_curve_points[0]
                 curve_selection.append(initial_selection.pop(index))
@@ -94,14 +100,13 @@ class CoonsPatch(Surface):
 
     @property
     def mesh_points(self) -> ndarray:
-        npu = self.num_points_u
-        npw = self.num_points_w
-        du0 = self.distribution_methods[0].get_dist_fn()
-        du1 = self.distribution_methods[1].get_dist_fn()
-        d0w = self.distribution_methods[2].get_dist_fn()
-        d1w = self.distribution_methods[3].get_dist_fn()
+        npu, npw = self._get_num_points()
+        du1 = self.boundary_distribution_u.get_dist_fn()
+        d0w = self.boundary_distribution_w.get_dist_fn()
+        du0 = self.boundary_distribution_u.get_dist_fn()
+        d1w = self.boundary_distribution_w.get_dist_fn()
         path_fns = []
-        for curve, flip in zip(self.curves, self.flipped_curves):
+        for curve, flip in zip(self.curves, self._flipped_curves):
             path_fns.append(curve.get_path_fn(flip_direction=flip))
         pu0 = path_fns[0]
         pu1 = path_fns[1]
