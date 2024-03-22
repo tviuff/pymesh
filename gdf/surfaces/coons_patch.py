@@ -7,7 +7,6 @@ from numpy import ndarray
 from gdf.surfaces import Surface
 from gdf.curves import Curve
 from gdf.mesh.descriptors import BoundaryDistribution, PanelDensity
-from gdf.mesh.distribution_methods import DistributionMethod
 from gdf.constants import MeshConstants
 from gdf.exceptions import CurveIntersectionError
 

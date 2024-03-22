@@ -6,7 +6,7 @@ from numpy import ndarray
 
 from gdf.constants import MeshConstants
 from gdf.points import Point
-from gdf.mesh.descriptors import BoundaryDistribution, MeshNumber
+from gdf.mesh.descriptors import BoundaryDistribution, PanelDensity
 from gdf.surfaces import Surface
 from gdf.surfaces.descriptors import SurfaceCornerPoint
 
@@ -16,39 +16,51 @@ class PlaneSurface(Surface):
     and creates mesh points for generating panels.
     """
 
-    point0 = SurfaceCornerPoint()
-    point1 = SurfaceCornerPoint()
-    point2 = SurfaceCornerPoint()
-    dist01 = BoundaryDistribution()
-    dist02 = BoundaryDistribution()
-    num_points_01 = MeshNumber()
-    num_points_02 = MeshNumber()
+    point_0 = SurfaceCornerPoint()
+    point_1 = SurfaceCornerPoint()
+    point_2 = SurfaceCornerPoint()
+    boundary_distribution_01 = BoundaryDistribution()
+    boundary_distribution_02 = BoundaryDistribution()
+    panel_density_01 = PanelDensity()
+    panel_density_02 = PanelDensity()
 
-    def __init__(self, point0:Point, point1:Point, point2:Point):
+    def __init__(self, point_0:Point, point_1:Point, point_2:Point):
         self._all_surfaces.append(self)
-        self.point0 = point0
-        self.point1 = point1
-        self.point2 = point2
-        self.dist01 = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.dist02 = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.num_points_01 = MeshConstants.DEFAULT_NUM_POINT.value
-        self.num_points_02 = MeshConstants.DEFAULT_NUM_POINT.value
+        self.point_0 = point_0
+        self.point_1 = point_1
+        self.point_2 = point_2
+        self.boundary_distribution_01 = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.boundary_distribution_02 = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.panel_density_01 = MeshConstants.DEFAULT_DENSITY.value
+        self.panel_density_02 = MeshConstants.DEFAULT_DENSITY.value
+
+    def _get_num_points(self) -> tuple[int]:
+        density_01, density_02 = self.panel_density_01, self.panel_density_02
+        num_points_01 = density_01 + 1
+        num_points_02 = density_02 + 1
+        if isinstance(density_01, float) or isinstance(density_02, float):
+            length_01 = float(np.sqrt(np.sum((self.point_1.xyz - self.point_0.xyz)**2)))
+            length_02 = float(np.sqrt(np.sum((self.point_2.xyz - self.point_0.xyz)**2)))
+            if isinstance(density_01, float):
+                num_points_01 = int(np.ceil(length_01 / density_01) + 1)
+            if isinstance(density_02, float):
+                num_points_02 = int(np.ceil(length_02 / density_02) + 1)
+        return num_points_01, num_points_02
 
     @property
     def mesh_points(self) -> ndarray:
 
         def line1(u):
-            fn = self.dist01.get_dist_fn()
-            return self.point0.xyz + (self.point1.xyz - self.point0.xyz)*fn(u)
+            fn = self.boundary_distribution_01.get_dist_fn()
+            return self.point_0.xyz + (self.point_1.xyz - self.point_0.xyz)*fn(u)
 
         def line2(u):
-            fn = self.dist02.get_dist_fn()
-            return self.point0.xyz + (self.point2.xyz - self.point0.xyz)*fn(u)
+            fn = self.boundary_distribution_02.get_dist_fn()
+            return self.point_0.xyz + (self.point_2.xyz - self.point_0.xyz)*fn(u)
 
-        np1 = self.num_points_01
-        np2 = self.num_points_02
-        mp = np.zeros((3, np1, np2))
-        for i, u in enumerate(np.linspace(0, 1, num=np1, endpoint=True)):
-            for j, w in enumerate(np.linspace(0, 1, num=np2, endpoint=True)):
+        num_points_01, num_points_02 = self._get_num_points()
+        mp = np.zeros((3, num_points_01, num_points_02))
+        for i, u in enumerate(np.linspace(0, 1, num=num_points_01, endpoint=True)):
+            for j, w in enumerate(np.linspace(0, 1, num=num_points_02, endpoint=True)):
                 mp[:, i, j] = line1(u) + line2(w)
         return mp

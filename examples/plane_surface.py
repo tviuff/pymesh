@@ -3,15 +3,17 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
 
-from gdf import Point, PlaneSurface, GDFViewer
+from gdf import Point, PlaneSurface, LinearDistribution, CosineDistribution, GDFViewer
 
-point1 = Point(0, 0, 0)
-point2 = Point(1, 0, 0)
-point3 = Point(0, 1, 0)
+point_0 = Point(0, 0, 0)
+point_1 = Point(1, 0, 0)
+point_2 = Point(0, 1, 0)
 
-surface = PlaneSurface(point0=point1, point1=point2, point2=point3)
-surface.num_points_01 = 3
-surface.num_points_02 = 3
+surface = PlaneSurface(point_0=point_0, point_1=point_1, point_2=point_2)
+surface.panel_density_01 = .2
+surface.panel_density_02 = .2
+surface.boundary_distribution_01 = LinearDistribution()
+surface.boundary_distribution_02 = CosineDistribution(flip_direction=True)
 
 surface_selection = PlaneSurface.get_all_surfaces()
 
