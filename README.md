@@ -101,3 +101,7 @@ The `examples` folder contain various code use examples of the `gdf` package. No
 - [Vertical Cylinder Example](/examples/vertical_cylinder.py)
 
 > *More details about the code beaviour will follow soon.*
+
+## Acknowledgements
+
+The various surface algorithms are based on lectures 48 and 49 from the [Lecture Series on Computer Aided Design](https://www.youtube.com/playlist?list=PLC3EE33F27CF14A06) by Dr. Anoop Chawla and P.V. Madhusudan Rao at the Department of Mechanical Engineering, IIT Delhi.
