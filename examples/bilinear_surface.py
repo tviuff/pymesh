@@ -3,18 +3,23 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
 
-from gdf import Point, BilinearSurface, CosineDistribution, GDFViewer
+from gdf import Point, BilinearSurface, LinearDistribution, CosineDistribution, GDFViewer
 
-point1 = Point(0, 0, 0)
-point2 = Point(1, 0,-1)
-point3 = Point(1, 1, 0)
-point4 = Point(0, 1, 0)
+point00 = Point(0, 0, 0)
+point10 = Point(1, 0,-1)
+point11 = Point(1, 1, 0)
+point01 = Point(0, 1, 0)
 
-surface = BilinearSurface(point00=point1, point01=point2, point10=point4, point11=point3)
-surface.num_points_01 = 10
-surface.num_points_02 = 10
-surface.dist_01 = CosineDistribution(flip_direction=False)
-surface.dist_02 = CosineDistribution(flip_direction=True)
+surface = BilinearSurface(
+    point_bottom_left = point00,
+    point_bottom_right = point10,
+    point_top_right = point11,
+    point_top_left = point01
+    )
+surface.panel_density_top_bottom = 10
+surface.panel_density_left_right = 5
+surface.distribution_top_bottom = CosineDistribution(flip_direction=False)
+surface.distribution_left_right = LinearDistribution()
 
 surface_selection = BilinearSurface.get_all_surfaces()
 

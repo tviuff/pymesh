@@ -6,23 +6,9 @@ from numpy import ndarray
 
 from gdf.constants import MeshConstants
 from gdf.points import Point
-from gdf.mesh.descriptors import BoundaryDistribution, MeshNumber
+from gdf.mesh.descriptors import BoundaryDistribution, PanelDensity
 from gdf.surfaces import Surface
-
-
-class SurfaceCornerPoint:
-    """Surface corner point descriptor class"""
-
-    def __set_name__(self, owner, name):
-        self._name = name
-
-    def __get__(self, instance, owner) -> Point:
-        return instance.__dict__[self._name]
-
-    def __set__(self, instance, value):
-        if not isinstance(value, Point):
-            raise TypeError(f"{self._name} must be of type 'Point'")
-        instance.__dict__[self._name] = value
+from gdf.surfaces.descriptors import SurfaceCornerPoint
 
 
 class BilinearSurface(Surface):
@@ -30,38 +16,70 @@ class BilinearSurface(Surface):
     and creates mesh points for generating panels.
     """
 
-    point00 = SurfaceCornerPoint()
-    point10 = SurfaceCornerPoint()
-    point01 = SurfaceCornerPoint()
-    point11 = SurfaceCornerPoint()
-    dist_01 = BoundaryDistribution()
-    dist_02 = BoundaryDistribution()
-    num_points_01 = MeshNumber()
-    num_points_02 = MeshNumber()
+    point_bottom_left = SurfaceCornerPoint()
+    point_bottom_right = SurfaceCornerPoint()
+    point_top_left = SurfaceCornerPoint()
+    point_top_right = SurfaceCornerPoint()
+    distribution_top_bottom = BoundaryDistribution()
+    distribution_left_right = BoundaryDistribution()
+    panel_density_top_bottom = PanelDensity()
+    panel_density_left_right = PanelDensity()
 
-    def __init__(self, point00:Point, point10:Point, point01:Point, point11:Point):
+    def __init__(self,
+            point_bottom_left:Point,
+            point_bottom_right:Point,
+            point_top_right:Point,
+            point_top_left:Point
+            ):
         self._all_surfaces.append(self)
-        self.point00 = point00
-        self.point10 = point10
-        self.point01 = point01
-        self.point11 = point11
-        self.dist_01 = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.dist_02 = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.num_points_01 = MeshConstants.DEFAULT_NUM_POINT.value
-        self.num_points_02 = MeshConstants.DEFAULT_NUM_POINT.value
+        self.point_bottom_left = point_bottom_left
+        self.point_bottom_right = point_bottom_right
+        self.point_top_right = point_top_right
+        self.point_top_left = point_top_left
+        self.distribution_top_bottom = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.distribution_left_right = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.panel_density_top_bottom = MeshConstants.DEFAULT_DENSITY.value
+        self.panel_density_left_right = MeshConstants.DEFAULT_DENSITY.value
+
+    def _get_lengths(self) -> tuple[float]:
+        length_left_right_bottom \
+            = np.sqrt(np.sum((self.point_bottom_left.xyz - self.point_bottom_right.xyz)**2))
+        length_left_right_top \
+            = np.sqrt(np.sum((self.point_top_left.xyz - self.point_top_right.xyz)**2))
+        length_top_bottom_left \
+            = np.sqrt(np.sum((self.point_bottom_left.xyz - self.point_top_left.xyz)**2))
+        length_top_bottom_right \
+            = np.sqrt(np.sum((self.point_bottom_right.xyz - self.point_top_right.xyz)**2))
+        length_left_right \
+            = float(np.max(length_left_right_bottom, length_left_right_top))
+        length_top_bottom \
+            = float(np.max(length_top_bottom_left, length_top_bottom_right))
+        return length_top_bottom, length_left_right
+
+    def _get_num_points(self) -> tuple[int]:
+        density_top_bottom = self.panel_density_top_bottom
+        density_left_right = self.panel_density_left_right
+        num_points_top_bottom = density_top_bottom + 1
+        num_points_left_right = density_left_right + 1
+        if isinstance(density_top_bottom, float) or isinstance(density_left_right, float):
+            length_top_bottom, length_left_right = self._get_lengths()
+            if isinstance(density_top_bottom, float):
+                num_points_top_bottom = int(np.ceil(length_top_bottom / density_top_bottom) + 1)
+            if isinstance(density_left_right, float):
+                num_points_left_right = int(np.ceil(length_left_right / density_left_right) + 1)
+        return num_points_top_bottom, num_points_left_right
 
     @property
     def mesh_points(self) -> ndarray:
-        np1 = self.num_points_01
-        np2 = self.num_points_02
-        dist1 = self.dist_01.get_dist_fn()
-        dist2 = self.dist_02.get_dist_fn()
-        mp = np.zeros((3, np1, np2))
-        for i, u in enumerate(np.linspace(0, 1, num=np1, endpoint=True)):
-            for j, w in enumerate(np.linspace(0, 1, num=np2, endpoint=True)):
+        np_top_bottom, np_left_right = self._get_num_points()
+        dist_tb = self.distribution_top_bottom.get_dist_fn()
+        dist_lr = self.distribution_left_right.get_dist_fn()
+        mp = np.zeros((3, np_left_right, np_top_bottom))
+        for i, u in enumerate(np.linspace(0, 1, num=np_left_right, endpoint=True)):
+            for j, w in enumerate(np.linspace(0, 1, num=np_top_bottom, endpoint=True)):
                 mp[:, i, j] = 0 \
-                    + (1-dist1(u)) * (1-dist2(w)) * self.point00.xyz \
-                    + dist1(u) * (1-dist2(w)) * self.point10.xyz \
-                    + (1-dist1(u)) * dist2(w) * self.point01.xyz \
-                    + dist1(u) * dist2(w) * self.point11.xyz
+                    + (1-dist_lr(u)) * dist_tb(w) * self.point_bottom_left.xyz \
+                    + dist_lr(u) * dist_tb(w) * self.point_bottom_right.xyz \
+                    + (1-dist_lr(u)) * (1-dist_tb(w)) * self.point_top_left.xyz \
+                    + dist_lr(u) * (1-dist_tb(w)) * self.point_top_right.xyz
         return mp
