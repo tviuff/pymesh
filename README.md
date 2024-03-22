@@ -66,7 +66,7 @@ writer = GDFWriter()
 writer.write(surface_selection, filename=Path("output", "rectangle.gdf"))
 ```
 
-Above code generates the following `output/rectangle.gdf` file:
+Above code generates the following `output/rectangle.gdf` output. For information regarding `GDFWriter` file formatting, the reader is referred to Section 6.1 in the [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pdf).
 
 ```
 auto-generated .gdf file using the gdf package
@@ -99,14 +99,5 @@ The `examples` folder contain various code use examples of the `gdf` package. No
 - [Swept Surface Example](/examples/swept_surface.py)
 - [Bilinear Surface Example](/examples/bilinear_surface.py)
 - [Vertical Cylinder Example](/examples/vertical_cylinder.py)
-
-## Resources
-
-- [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pdf)
-- [Markdown Guide](https://www.markdownguide.org/basic-syntax/)
-- YouTube videos by ArjanCodes:
-    - [8 Python Coding Tips](https://www.youtube.com/watch?v=woIkysZytSs)
-    - [The Ultimate Guide to Writing Classes](https://www.youtube.com/watch?v=lX9UQp2NwTk)
-    - [Cohesion and Coupling](https://www.youtube.com/watch?v=eiDyK_ofPPM)
 
 > *More details about the code beaviour will follow soon.*
