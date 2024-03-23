@@ -106,3 +106,18 @@ The `examples` folder contain various code use examples of the `gdf` package. No
 ## Acknowledgements
 
 The various surface algorithms are based on lectures 48 and 49 from the [Lecture Series on Computer Aided Design](https://www.youtube.com/playlist?list=PLC3EE33F27CF14A06) by Dr. Anoop Chawla and P.V. Madhusudan Rao at the Department of Mechanical Engineering, IIT Delhi.
+
+## Other resources
+
+- The [Seven Rules](https://cbea.ms/git-commit/#seven-rules) of a great Git Commit message:
+    1. Separate subject from body with a blank line
+    2. Limit the subject line to 50 characters
+    3. Capitalize the subject line
+    4. Do not end the subject line with a period
+    5. Use the imperative mood in the subject line<br><br>Imperative mood just means “spoken or written as if giving a command or instruction”. Examples are:
+        - Clean your room
+        - Close the door
+        - Take out the trash
+    6. Wrap the body at 72 characters
+    7. Use the body to explain what and why vs. how
+- [Markdown Guide](https://www.markdownguide.org/basic-syntax/#overview)

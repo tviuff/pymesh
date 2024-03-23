@@ -15,7 +15,9 @@ class GDFViewer():
     def __init__(self, panel_normal_length:float=1.0) -> None:
         plt.close("all")
         mpl_style.use('seaborn-v0_8')
-        ax = plt.figure().add_subplot(projection='3d')
+        fig = plt.figure()
+        fig.patch.set_facecolor('#EAEAF2')
+        ax = fig.add_subplot(projection='3d')
         ax.set_xlabel('X axis')
         ax.set_ylabel('Y axis')
         ax.set_zlabel('Z axis')
