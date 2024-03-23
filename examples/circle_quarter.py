@@ -25,7 +25,7 @@ point01c = Point(0, circle_diameter/2, 0)
 line10 = Line(point10, point11)
 arc10 = Arc3P(point00, point10c, point11c)
 surface_circle10 = RuledSurface(line10, arc10)
-surface_circle10.flip_normal = False
+surface_circle10.flip_panel_normals()
 line01 = Line(point01, point11)
 arc01 = Arc3P(point00, point01c, point11c)
 surface_circle01 = RuledSurface(line01, arc01)

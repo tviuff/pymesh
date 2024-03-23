@@ -3,11 +3,13 @@
 
 from abc import ABC, abstractmethod
 
+# ! log fliping of normal :)
+
 class Surface(ABC):
     """Surface abstract class"""
 
-    _flip_normal = False
-    _all_surfaces = []
+    _normal_is_flipped:bool = False
+    _all_surfaces:list = [] # to contain every surface type instanciated
 
     @classmethod
     def get_all_surfaces(cls) -> list:
@@ -18,8 +20,8 @@ class Surface(ABC):
     def mesh_points(self):
         """Returns surface mesh points"""
 
-    def flip_normal(self) -> None:
-        self._flip_normal = not self._flip_normal
+    def flip_panel_normals(self) -> None:
+        self._normal_is_flipped = not self._normal_is_flipped
 
     @property
     def panels(self) -> list[list[float]]:
@@ -34,7 +36,7 @@ class Surface(ABC):
         for j in range(0, mp.shape[2]-1):
             for i in range(0, mp.shape[1]-1):
                 xyz1, xyz2, xyz3, xyz4 = mp[:,i,j], mp[:,i+1,j], mp[:,i+1,j+1], mp[:,i,j+1]
-                if self._flip_normal:
+                if self._normal_is_flipped:
                     xyz1, xyz2, xyz3, xyz4 = xyz4, xyz3, xyz2, xyz1
                 panels.append([xyz1[0], xyz1[1], xyz1[2],
                                xyz2[0], xyz2[1], xyz2[2],
