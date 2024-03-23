@@ -5,20 +5,20 @@ import numpy as np
 from numpy import ndarray
 
 from gdf.constants import MeshConstants
-from gdf.curves import Curve
-from gdf.mesh.descriptors import BoundaryDistribution, PanelDensity
-from gdf.surfaces import Surface
-
+from gdf.curves.curve import Curve
+from gdf.descriptors import AsNumber, AsInstanceOf
+from gdf.mesh_distributions import MeshDistribution
+from gdf.surfaces.surface import Surface
 
 class RuledSurface(Surface):
     """Creates a ruled surface based on two curves
     and creates mesh points for generating panels.
     """
 
-    boundary_distribution_curves = BoundaryDistribution()
-    boundary_distribution_in_between = BoundaryDistribution()
-    panel_density_curves = PanelDensity()
-    panel_density_in_between = PanelDensity()
+    boundary_distribution_curves = AsInstanceOf(MeshDistribution)
+    boundary_distribution_in_between = AsInstanceOf(MeshDistribution)
+    panel_density_curves = AsNumber(minvalue=0)
+    panel_density_in_between = AsNumber(minvalue=0)
 
     def __init__(self, curve_1:Curve, curve_2:Curve):
         self._all_surfaces.append(self)

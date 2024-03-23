@@ -5,7 +5,7 @@ import numpy as np
 from numpy import ndarray
 
 from gdf.auxiliary.point import Point
-from gdf.curves.curve import Curve, validate_curve_path_fn_input
+from gdf.curves.curve import Curve
 
 class Line(Curve):
     """Line generated from two points in space"""
@@ -52,7 +52,7 @@ class Line(Curve):
     def get_path_fn(self, flip_direction:bool=False):
         def fn(u:int|float, flip_direction:bool=flip_direction) -> ndarray:
             """Line path function mapping input float from 0 to 1 to a physical xyz point"""
-            u = validate_curve_path_fn_input(u=u, flip_direction=flip_direction)
+            u = self._validate_curve_path_fn_input(u=u, flip_direction=flip_direction)
             xyz0 = self.point_start.xyz
             dxyz = self.point_end.xyz - self.point_start.xyz
             return xyz0 + dxyz * u

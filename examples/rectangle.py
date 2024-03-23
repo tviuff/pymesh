@@ -20,9 +20,9 @@ line4 = Line(point4, point1)
 
 surface = CoonsPatch([line1, line3, line2, line4])
 surface.flip_normal = True # flips surface panel normals
-surface.num_points_u = 5 # specifies number of points along the u dimension
-surface.num_points_w = 5 # specifies number of points along the w dimension
-surface.dist_u = ExponentialDistribution() # distribution method along the u dimension
+surface.panel_density_u = 5 # specifies number of points along the u dimension
+surface.panel_density_w = 5 # specifies number of points along the w dimension
+surface.boundary_distribution_u = ExponentialDistribution() # distribution method along the u dimension
 
 surface_selection = CoonsPatch.get_all_surfaces()
 

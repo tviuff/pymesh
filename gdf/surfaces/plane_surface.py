@@ -6,23 +6,22 @@ from numpy import ndarray
 
 from gdf.auxiliary.point import Point
 from gdf.constants import MeshConstants
-from gdf.mesh.descriptors import BoundaryDistribution, PanelDensity
-from gdf.surfaces import Surface
-from gdf.surfaces.descriptors import SurfaceCornerPoint
-
+from gdf.descriptors import AsNumber, AsInstanceOf
+from gdf.mesh_distributions import MeshDistribution
+from gdf.surfaces.surface import Surface
 
 class PlaneSurface(Surface):
     """Creates a plane surface based on three points in space
     and creates mesh points for generating panels.
     """
 
-    point_0 = SurfaceCornerPoint()
-    point_1 = SurfaceCornerPoint()
-    point_2 = SurfaceCornerPoint()
-    boundary_distribution_01 = BoundaryDistribution()
-    boundary_distribution_02 = BoundaryDistribution()
-    panel_density_01 = PanelDensity()
-    panel_density_02 = PanelDensity()
+    point_0 = AsInstanceOf(Point)
+    point_1 = AsInstanceOf(Point)
+    point_2 = AsInstanceOf(Point)
+    boundary_distribution_01 = AsInstanceOf(MeshDistribution)
+    boundary_distribution_02 = AsInstanceOf(MeshDistribution)
+    panel_density_01 = AsNumber(minvalue=0)
+    panel_density_02 = AsNumber(minvalue=0)
 
     def __init__(self, point_0:Point, point_1:Point, point_2:Point):
         self._all_surfaces.append(self)

@@ -6,24 +6,23 @@ from numpy import ndarray
 
 from gdf.auxiliary.point import Point
 from gdf.constants import MeshConstants
-from gdf.mesh.descriptors import BoundaryDistribution, PanelDensity
-from gdf.surfaces import Surface
-from gdf.surfaces.descriptors import SurfaceCornerPoint
-
+from gdf.descriptors import AsNumber, AsInstanceOf
+from gdf.mesh_distributions import MeshDistribution
+from gdf.surfaces.surface import Surface
 
 class BilinearSurface(Surface):
     """Creates a bilinear surface based on four points in space
     and creates mesh points for generating panels.
     """
 
-    point_bottom_left = SurfaceCornerPoint()
-    point_bottom_right = SurfaceCornerPoint()
-    point_top_left = SurfaceCornerPoint()
-    point_top_right = SurfaceCornerPoint()
-    distribution_top_bottom = BoundaryDistribution()
-    distribution_left_right = BoundaryDistribution()
-    panel_density_top_bottom = PanelDensity()
-    panel_density_left_right = PanelDensity()
+    point_bottom_left = AsInstanceOf(Point)
+    point_bottom_right = AsInstanceOf(Point)
+    point_top_left = AsInstanceOf(Point)
+    point_top_right = AsInstanceOf(Point)
+    distribution_top_bottom = AsInstanceOf(MeshDistribution)
+    distribution_left_right = AsInstanceOf(MeshDistribution)
+    panel_density_top_bottom = AsNumber(minvalue=0)
+    panel_density_left_right = AsNumber(minvalue=0)
 
     def __init__(self,
             point_bottom_left:Point,

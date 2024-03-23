@@ -7,7 +7,7 @@ from numpy import ndarray
 
 from gdf.auxiliary.point import Point
 from gdf.auxiliary.vector3d import Vector3D
-from gdf.curves.curve import Curve, validate_curve_path_fn_input
+from gdf.curves.curve import Curve
 
 class ArcPVA(Curve):
     """Circular arc generated from a point, an axis of rotation and an angle (rad).
@@ -87,7 +87,7 @@ class ArcPVA(Curve):
     def get_path_fn(self, flip_direction:bool=False):
         def fn(u:int|float, flip_direction:bool=flip_direction) -> ndarray:
             """ArcPVA path function mapping input float from 0 to 1 to a physical xyz point"""
-            u = validate_curve_path_fn_input(u=u, flip_direction=flip_direction)
+            u = self._validate_curve_path_fn_input(u=u, flip_direction=flip_direction)
             v = self.vector_point.unit_vector * self.vector_point.length
             k = self.axis.unit_vector * self.axis.length
             a = self.angle

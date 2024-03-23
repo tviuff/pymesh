@@ -5,19 +5,20 @@ import numpy as np
 from numpy import ndarray
 
 from gdf.constants import MeshConstants
-from gdf.curves import Curve
-from gdf.mesh.descriptors import BoundaryDistribution, PanelDensity
-from gdf.surfaces import Surface
+from gdf.curves.curve import Curve
+from gdf.descriptors import AsNumber, AsInstanceOf
+from gdf.mesh_distributions import MeshDistribution
+from gdf.surfaces.surface import Surface
 
 class SweptSurface(Surface):
     """Creates a surface based on a curve swept by another
     and creates mesh points for generating panels.
     """
 
-    boundary_distribution_curve = BoundaryDistribution()
-    boundary_distribution_sweeper_curve = BoundaryDistribution()
-    panel_density_curve = PanelDensity()
-    panel_density_sweeper_curve = PanelDensity()
+    boundary_distribution_curve = AsInstanceOf(MeshDistribution)
+    boundary_distribution_sweeper_curve = AsInstanceOf(MeshDistribution)
+    panel_density_curve = AsNumber(minvalue=0)
+    panel_density_sweeper_curve = AsNumber(minvalue=0)
 
     def __init__(self, curve:Curve, sweeper_curve:Curve):
         self._all_surfaces.append(self)

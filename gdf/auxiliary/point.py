@@ -7,14 +7,17 @@ from typing import Self
 import numpy as np
 from numpy import ndarray
 
-from gdf.auxiliary.descriptors import CartesianCoordinate
+from gdf.descriptors import AsNumber
 
 class Point:
-    """Creates and handles point coordinates"""
+    """Point class.
+    
+    Takes positional arguments x, y, z as either type 'int' or 'float'.
+    """
 
-    x = CartesianCoordinate()
-    y = CartesianCoordinate()
-    z = CartesianCoordinate()
+    x = AsNumber(return_type=float)
+    y = AsNumber(return_type=float)
+    z = AsNumber(return_type=float)
 
     def __init__(self, x:int|float, y:int|float, z:int|float) -> None:
         self.x, self.y, self.z = x, y, z

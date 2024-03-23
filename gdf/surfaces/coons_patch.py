@@ -4,21 +4,22 @@
 import numpy as np
 from numpy import ndarray
 
-from gdf.curves import Curve
+from gdf.curves.curve import Curve
 from gdf.constants import MeshConstants
+from gdf.descriptors import AsNumber, AsInstanceOf
 from gdf.exceptions import CurveIntersectionError
-from gdf.mesh.descriptors import BoundaryDistribution, PanelDensity
-from gdf.surfaces import Surface
+from gdf.mesh_distributions import MeshDistribution
+from gdf.surfaces.surface import Surface
 
 class CoonsPatch(Surface):
     """Coons patch class taking a selection of four curves
     and creates mesh points for generating panels.
     """
 
-    boundary_distribution_u = BoundaryDistribution()
-    boundary_distribution_w = BoundaryDistribution()
-    panel_density_u = PanelDensity()
-    panel_density_w = PanelDensity()
+    boundary_distribution_u = AsInstanceOf(MeshDistribution)
+    boundary_distribution_w = AsInstanceOf(MeshDistribution)
+    panel_density_u = AsNumber(minvalue=0)
+    panel_density_w = AsNumber(minvalue=0)
 
     def __init__(self, curves:list[Curve]|tuple[Curve]):
         self._all_surfaces.append(self)
@@ -27,19 +28,6 @@ class CoonsPatch(Surface):
         self.panel_density_u = MeshConstants.DEFAULT_DENSITY.value
         self.panel_density_w = MeshConstants.DEFAULT_DENSITY.value
         self.curves = curves # also sets self._flipped_curves
-
-    def _get_num_points(self) -> tuple[int]:
-        density_u, density_w = self.panel_density_u, self.panel_density_w
-        num_points_u, num_points_w = density_u + 1, density_w + 1
-        if isinstance(density_u, float) or isinstance(density_w, float):
-            curve_u0, curve_u1, curve_0w, curve_1w = self.curves
-            if isinstance(density_u, float):
-                u_length = max(curve_u0.length, curve_u1.length)
-                num_points_u = int(np.ceil(u_length / density_u) + 1)
-            if isinstance(density_w, float):
-                w_length = max(curve_0w.length, curve_1w.length)
-                num_points_w = int(np.ceil(w_length / density_w) + 1)
-        return num_points_u, num_points_w
 
     @property
     def curves(self)-> tuple[Curve]:
@@ -93,6 +81,19 @@ class CoonsPatch(Surface):
         for index in (1, 2):
             cflip[index] = not cflip[index]
         return cflip, cselect
+
+    def _get_num_points(self) -> tuple[int]:
+        density_u, density_w = self.panel_density_u, self.panel_density_w
+        num_points_u, num_points_w = density_u + 1, density_w + 1
+        if isinstance(density_u, float) or isinstance(density_w, float):
+            curve_u0, curve_u1, curve_0w, curve_1w = self.curves
+            if isinstance(density_u, float):
+                u_length = max(curve_u0.length, curve_u1.length)
+                num_points_u = int(np.ceil(u_length / density_u) + 1)
+            if isinstance(density_w, float):
+                w_length = max(curve_0w.length, curve_1w.length)
+                num_points_w = int(np.ceil(w_length / density_w) + 1)
+        return num_points_u, num_points_w
 
     @property
     def mesh_points(self) -> ndarray:

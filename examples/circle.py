@@ -32,9 +32,9 @@ line5 = Line(point_bl_ext, point_bl)
 line6 = Line(point_br_ext, point_br)
 line7 = Arc3P(point_ctr, point_bl_ext, point_br_ext)
 surface2 = CoonsPatch([line7, line1, line5, line6])
-surface2.num_points_u = 5
-surface2.num_points_w = 5
-surface2.dist_w = LinearDistribution()
+surface2.panel_density_u = 7
+surface2.panel_density_w = 2
+surface2.boundary_distribution_w = LinearDistribution()
 surface2.flip_normal = True
 
 # Top semi-circle and surface patch

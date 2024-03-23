@@ -3,7 +3,7 @@
 
 import time
 
-from gdf import Point, Line, Arc3P, CoonsPatch, LinearDistribution
+from gdf import Point, Line, Arc3P, CoonsPatch, LinearDistribution # ! IMPORT ABS PATH
 
 def time_it(func):
     """Wrapper function used to time function execution time"""
