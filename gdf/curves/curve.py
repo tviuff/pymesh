@@ -3,7 +3,7 @@
 
 from abc import ABC, abstractmethod
 
-from gdf.points import Point
+from gdf.auxiliary.point import Point
 
 def validate_curve_path_fn_input(u:int|float, flip_direction:bool) -> float:
     if not isinstance(u, (int, float)):

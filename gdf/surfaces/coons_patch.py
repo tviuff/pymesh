@@ -4,11 +4,11 @@
 import numpy as np
 from numpy import ndarray
 
-from gdf.surfaces import Surface
 from gdf.curves import Curve
-from gdf.mesh.descriptors import BoundaryDistribution, PanelDensity
 from gdf.constants import MeshConstants
 from gdf.exceptions import CurveIntersectionError
+from gdf.mesh.descriptors import BoundaryDistribution, PanelDensity
+from gdf.surfaces import Surface
 
 # ! cleanup: .curves .dist_u .dist_w
 # ! .dists (shape = 4) instead of flipped_curves and apply flipping directly

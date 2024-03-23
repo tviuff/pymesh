@@ -1,7 +1,8 @@
 """Module initializer (constructor)
 """
 
-from .descriptors import MeshNumber, BoundaryDistribution
-from .distribution_methods import DistributionMethod
-from .distribution_methods import LinearDistribution, ExponentialDistribution
-from .distribution_methods import PowerDistribution, CosineDistribution
+from gdf.mesh.distribution_methods import DistributionMethod
+from gdf.mesh.distribution_methods import LinearDistribution
+from gdf.mesh.distribution_methods import CosineDistribution
+from gdf.mesh.distribution_methods import ExponentialDistribution
+from gdf.mesh.distribution_methods import PowerDistribution

@@ -1,7 +1,7 @@
 """Module initializer (constructor)
 """
 
-from .curve import Curve, validate_curve_path_fn_input
-from .arc3p import Arc3P
-from .arcpva import ArcPVA
-from .line import Line
+from gdf.curves.curve import Curve, validate_curve_path_fn_input
+from gdf.curves.arc3p import Arc3P
+from gdf.curves.arcpva import ArcPVA
+from gdf.curves.line import Line

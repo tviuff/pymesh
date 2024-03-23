@@ -1,8 +1,7 @@
-"""Module with curve distibution classes
+"""Module containing surface class descriptors
 """
 
-from gdf import Point
-
+from gdf.auxiliary.point import Point
 
 class SurfaceCornerPoint:
     """Surface corner point descriptor class"""

@@ -5,8 +5,8 @@ import math
 import numpy as np
 from numpy import ndarray
 
-from gdf.points import Point
-from .curve import Curve, validate_curve_path_fn_input
+from gdf.auxiliary.point import Point
+from gdf.curves.curve import Curve, validate_curve_path_fn_input
 
 class Arc3P(Curve):
     """Circular arc generated from 3 points in space.

@@ -4,8 +4,8 @@
 import numpy as np
 from numpy import ndarray
 
+from gdf.auxiliary.point import Point
 from gdf.constants import MeshConstants
-from gdf.points import Point
 from gdf.mesh.descriptors import BoundaryDistribution, PanelDensity
 from gdf.surfaces import Surface
 from gdf.surfaces.descriptors import SurfaceCornerPoint
