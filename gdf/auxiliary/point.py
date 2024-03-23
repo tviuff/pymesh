@@ -41,7 +41,7 @@ class Point:
         dz = self.z - point.z
         return math.sqrt(dx**2 + dy**2 + dz**2)
 
-    def create_relative_point(self, dx:int|float=0.,dy:int|float=0.,dz:int|float=0.) -> Self:
+    def create_relative_point(self, dx:int|float=0, dy:int|float=0, dz:int|float=0) -> Self:
         """Creates a new point using relative positional arguments dx, dy, dz"""
         for value in (dx, dy, dz):
             if not isinstance(value, (float, int)):
