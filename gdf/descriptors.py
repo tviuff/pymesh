@@ -65,6 +65,6 @@ class AsInstanceOf(Validator):
     def __init__(self, cls):
         self.cls = cls
 
-    def validate(self, obj):
-        if not isinstance(obj, self.cls):
-            raise TypeError(f'Expected {obj!r} to be an instance of {self.cls!r}')
+    def validate(self, value):
+        if not isinstance(value, self.cls):
+            raise TypeError(f'Expected {value!r} to be an instance of {self.cls!r}')
