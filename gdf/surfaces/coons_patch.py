@@ -10,9 +10,6 @@ from gdf.exceptions import CurveIntersectionError
 from gdf.mesh.descriptors import BoundaryDistribution, PanelDensity
 from gdf.surfaces import Surface
 
-# ! cleanup: .curves .dist_u .dist_w
-# ! .dists (shape = 4) instead of flipped_curves and apply flipping directly
-
 class CoonsPatch(Surface):
     """Coons patch class taking a selection of four curves
     and creates mesh points for generating panels.
@@ -107,10 +104,7 @@ class CoonsPatch(Surface):
         path_fns = []
         for curve, flip in zip(self.curves, self._flipped_curves):
             path_fns.append(curve.get_path_fn(flip_direction=flip))
-        pu0 = path_fns[0]
-        pu1 = path_fns[1]
-        p0w = path_fns[2]
-        p1w = path_fns[3]
+        pu0, pu1, p0w, p1w = path_fns
         p00 = pu0(du0(0))
         p11 = pu1(du1(1))
         p01 = p0w(d0w(1))
