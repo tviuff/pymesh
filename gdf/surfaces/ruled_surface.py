@@ -10,6 +10,8 @@ from gdf.descriptors import AsNumber, AsInstanceOf
 from gdf.mesh_distributions import MeshDistribution
 from gdf.surfaces.surface import Surface
 
+# ! Consider using a combination of .length and .get_path_fn() to avoid coupling
+
 class RuledSurface(Surface):
     """Creates a ruled surface based on two curves
     and creates mesh points for generating panels.

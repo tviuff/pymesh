@@ -11,6 +11,8 @@ from gdf.exceptions import CurveIntersectionError
 from gdf.mesh_distributions import MeshDistribution
 from gdf.surfaces.surface import Surface
 
+# ! Consider using sets instead of list|tuple: enforcing uniquenes !
+
 class CoonsPatch(Surface):
     """Coons patch class taking a selection of four curves
     and creates mesh points for generating panels.
@@ -74,7 +76,8 @@ class CoonsPatch(Surface):
         self._flipped_curves = tuple(cflip)
         self._curves = tuple(cselect)
 
-    def _set_coons_patch_curve_order(self, cflip, cselect) -> tuple[list]:
+    @staticmethod
+    def _set_coons_patch_curve_order(cflip, cselect) -> tuple[list]:
         """Sets the order u0, u1, 0w, 1w where u0 = first item in cselect"""
         cselect = [cselect[0], cselect[2], cselect[3], cselect[1]]
         cflip = [cflip[0], cflip[2], cflip[3], cflip[1]]

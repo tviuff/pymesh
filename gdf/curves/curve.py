@@ -5,6 +5,8 @@ from abc import ABC, abstractmethod
 
 from gdf.auxiliary.point import Point
 
+# ! Consider removing point_start_point_end and only store .length and .get_path_fn() !
+
 class Curve(ABC):
     """Curve abstract base class"""
 
