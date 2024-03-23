@@ -1,14 +1,18 @@
 [tool.poetry]
-package-mode = false
-description = "Simple GDF mesh panel generator for input to programs such as WAMIT."
+name = "gdf"
+version = "0.1.0"
+description = "Geometry package for generating geometric data files for import and use in WAMIT"
 authors = ["Thomas Viuff <tviuff@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+packages = [{include = "gdf"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
 numpy = "^1.26.4"
 matplotlib = "^3.8.3"
+
+[tool.poetry.group.test.dependencies]
 pytest = "^8.0.2"
 
 [build-system]
