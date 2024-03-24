@@ -2,6 +2,9 @@
 """
 
 from abc import ABC, abstractmethod
+from typing import Tuple
+
+from numpy import ndarray
 
 
 class Validator(ABC):
@@ -65,3 +68,17 @@ class AsInstanceOf(Validator):
     def validate(self, value):
         if not isinstance(value, self.cls):
             raise TypeError(f"Expected {value!r} to be an instance of {self.cls!r}")
+
+
+class AsNDArray(Validator):
+    """Descriptor validating that object is an instance of a numpy ndarray."""
+
+    def __init__(self, shape: Tuple[int]):
+        self.shape = shape
+
+    def validate(self, arr):
+        if not isinstance(arr, ndarray):
+            raise TypeError(f"Expected {arr!r} to be an instance of {ndarray!r}")
+        assert (
+            arr.shape == self.shape
+        ), f"Expected shape to be {self.shape!r} but received {arr.shape!r}"

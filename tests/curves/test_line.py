@@ -2,6 +2,7 @@
 
 import math
 
+import numpy as np
 import pytest
 
 from pygdf import Point, Line
@@ -40,12 +41,12 @@ def test_length(point1: Point, point2: Point, dx, dy, dz) -> None:
 
 def test_get_path_fn(point1: Point, point2: Point) -> None:
     path_fn = Line(point1, point2).get_path_fn()
-    assert (path_fn(0) == point1.xyz).any()
-    assert (path_fn(1) == point2.xyz).any()
-    assert (path_fn(0, flip_direction=True) == point2.xyz).any()
-    assert (path_fn(1, flip_direction=True) == point1.xyz).any()
-    assert (path_fn(0.2) == point1.xyz + 0.2 * (point2.xyz - point1.xyz)).any()
-    assert (
+    assert np.all(path_fn(0) == point1.xyz)
+    assert np.all(path_fn(1) == point2.xyz)
+    assert np.all(path_fn(0, flip_direction=True) == point2.xyz)
+    assert np.all(path_fn(1, flip_direction=True) == point1.xyz)
+    assert np.all(path_fn(0.2) == point1.xyz + 0.2 * (point2.xyz - point1.xyz))
+    assert np.all(
         path_fn(0.2, flip_direction=True)
-        == point2.xyz + 0.2 * (point1.xyz - point2.xyz)
-    ).any()
+        == point1.xyz + (1.0 - 0.2) * (point2.xyz - point1.xyz)
+    )

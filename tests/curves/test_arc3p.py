@@ -39,37 +39,26 @@ def test_init_invalid() -> None:
 
 
 def test_eq(curve: Arc3P) -> None:
+    # ! redundant test..
     assert curve == curve
 
 
-def test_point_centre(point1: Point, point2: Point, point3: Point) -> None:
-    point_centre = Arc3P(point1, point2, point3).point_centre
-    assert isinstance(point_centre, Point)
-    assert point_centre == point1
+def test_centre(point1: Point, point2: Point, point3: Point) -> None:
+    curve1 = Arc3P(point1, point2, point3)
+    assert isinstance(curve1.centre, ndarray)
+    assert np.all(curve1.centre == point1.xyz)
 
 
-def test_point_start(point1: Point, point2: Point, point3: Point) -> None:
-    point_start = Arc3P(point1, point2, point3).point_start
-    assert isinstance(point_start, Point)
-    assert point_start == point2
+def test_start(point1: Point, point2: Point, point3: Point) -> None:
+    curve1 = Arc3P(point1, point2, point3)
+    assert isinstance(curve1.start, ndarray)
+    assert np.all(curve1.start == point2.xyz)
 
 
-def test_point_end(point1: Point, point2: Point, point3: Point) -> None:
-    point_end = Arc3P(point1, point2, point3).point_end
-    assert isinstance(point_end, Point)
-    assert point_end == point3
-
-
-def test_vector_start(point1: Point, point2: Point, point3: Point) -> None:
-    vector_start = Arc3P(point1, point2, point3).vector_start
-    assert isinstance(vector_start, ndarray)  #! should be Vector3D
-    assert (vector_start == point2.xyz - point1.xyz).any()
-
-
-def test_vector_end(point1: Point, point2: Point, point3: Point) -> None:
-    vector_end = Arc3P(point1, point2, point3).vector_end
-    assert isinstance(vector_end, ndarray)  #! should be Vector3D
-    assert (vector_end == point3.xyz - point1.xyz).any()
+def test_end(point1: Point, point2: Point, point3: Point) -> None:
+    curve1 = Arc3P(point1, point2, point3)
+    assert isinstance(curve1.end, ndarray)
+    assert np.all(curve1.end == point3.xyz)
 
 
 def test_radius(curve: Arc3P) -> None:
@@ -80,43 +69,53 @@ def test_radius(curve: Arc3P) -> None:
 def test_length(curve: Arc3P) -> None:
     assert isinstance(curve.length, float)
     assert curve.length == 1.0 * 90.0 * math.pi / 180.0
-    curve.invert_arc = True
+    curve.inverse_sector = True
     assert curve.length == 1.0 * (360.0 - 90.0) * math.pi / 180.0
 
 
 def test_angle(curve: Arc3P) -> None:
     assert isinstance(curve.angle, float)
     assert curve.angle == 90.0 * math.pi / 180.0
-    curve.invert_arc = True
+    curve.inverse_sector = True
     assert curve.angle == (360.0 - 90.0) * math.pi / 180.0
 
 
 def test_cross_product(point1: Point, point2: Point, point3: Point) -> None:
-    curve = Arc3P(point1, point2, point3)
-    assert isinstance(curve.cross_product, ndarray)  #! should be Vector3D
+    curve1 = Arc3P(point1, point2, point3)
+    assert isinstance(curve1.cross_product, ndarray)  #! should be Vector3D
     cross_product_calc = np.cross(point2.xyz - point1.xyz, point3.xyz - point1.xyz)
-    assert (curve.cross_product == cross_product_calc).any()
-    curve.invert_arc = True
-    assert (curve.cross_product == -cross_product_calc).any()
+    assert np.all(curve1.cross_product == cross_product_calc)
+    curve1.inverse_sector = True
+    assert np.all(curve1.cross_product == -cross_product_calc)
 
 
 def test_plane_unit_normal(point1: Point, point2: Point, point3: Point) -> None:
-    curve = Arc3P(point1, point2, point3)
-    assert isinstance(curve.plane_unit_normal, ndarray)  #! should be Vector3D
+    curve1 = Arc3P(point1, point2, point3)
+    assert isinstance(curve1.plane_unit_normal, ndarray)  #! should be Vector3D
     calc_cross_product = np.cross(point2.xyz - point1.xyz, point3.xyz - point1.xyz)
     calc_plane_unit_normal = calc_cross_product / np.sqrt(np.sum(calc_cross_product**2))
-    assert (curve.plane_unit_normal == calc_plane_unit_normal).any()
-    curve.invert_arc = True
-    assert (curve.plane_unit_normal == -calc_plane_unit_normal).any()
+    assert np.all(curve1.plane_unit_normal == calc_plane_unit_normal)
+    curve1.inverse_sector = True
+    assert np.all(curve1.plane_unit_normal == -calc_plane_unit_normal)
 
 
-def test_get_path_fn(point1: Point, point2: Point, point3: Point) -> None:
-    path_fn = Arc3P(point1, point2, point3).get_path_fn()
-    assert (path_fn(0) == point2.xyz).any()
-    assert (path_fn(1) == point3.xyz).any()
-    assert (path_fn(0, flip_direction=True) == point3.xyz).any()
-    assert (path_fn(1, flip_direction=True) == point2.xyz).any()
-    assert (path_fn(0.5) == np.array([np.sqrt(2), np.sqrt(2), 0])).any()
-    assert (
-        path_fn(0.5, flip_direction=True) == np.array([np.sqrt(2), np.sqrt(2), 0])
-    ).any()
+def test_path(
+    assert_rounded_path_xyz, point1: Point, point2: Point, point3: Point
+) -> None:
+    decimals = 4
+    curve1 = Arc3P(point1, point2, point3)
+    assert_rounded_path_xyz(curve1, 0, point2.xyz, decimals)
+    assert_rounded_path_xyz(curve1, 1, point3.xyz, decimals)
+    assert_rounded_path_xyz(curve1, -1, point2.xyz, decimals)
+    assert_rounded_path_xyz(
+        curve1,
+        0.5,
+        np.array([1 / np.sqrt(2), 1 / np.sqrt(2), 0]),
+        decimals,
+    )
+    assert_rounded_path_xyz(
+        curve1,
+        -0.5,
+        np.array([1 / np.sqrt(2), 1 / np.sqrt(2), 0]),
+        decimals,
+    )

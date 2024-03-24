@@ -2,7 +2,6 @@
 """
 
 import numpy as np
-from numpy import ndarray
 
 from pygdf.auxiliary.point import Point
 from pygdf.constants import MeshConstants
@@ -83,7 +82,7 @@ class BilinearSurface(Surface):
         return num_points_top_bottom, num_points_left_right
 
     @property
-    def mesh_points(self) -> ndarray:
+    def mesh_points(self) -> np.ndarray:
         np_top_bottom, np_left_right = self._get_num_points()
         dist_tb = self.distribution_top_bottom.get_dist_fn()
         dist_lr = self.distribution_left_right.get_dist_fn()

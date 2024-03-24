@@ -3,6 +3,7 @@
 import math
 
 import numpy as np
+from numpy import ndarray
 import pytest
 
 from pygdf import Point, Vector3D, ArcPVA
@@ -41,10 +42,16 @@ def test_eq(curve: ArcPVA) -> None:
     assert curve == curve
 
 
+def test_start(point: Point, axis: Vector3D, angle: float) -> None:
+    curve = ArcPVA(point, axis, angle)
+    assert isinstance(curve.start, np.ndarray)
+    assert np.all(curve.start == point.xyz)
+
+
 def test_point_start(point: Point, axis: Vector3D, angle: float) -> None:
-    point_start = ArcPVA(point, axis, angle).point_start
-    assert isinstance(point_start, Point)
-    assert point_start == point
+    curve = ArcPVA(point, axis, angle)
+    assert isinstance(curve.point_start, Point)
+    assert curve.point_start == point
 
 
 def test_point_end(curve: ArcPVA) -> None:
@@ -55,10 +62,10 @@ def test_point_end(curve: ArcPVA) -> None:
     assert curve.point_end == point_end
 
 
-def test_vector_point(point: Point, axis: Vector3D, angle: float) -> None:
-    vector_point = ArcPVA(point, axis, angle).vector_point
-    assert isinstance(vector_point, Vector3D)
-    assert vector_point == Vector3D(Point(0, 0, 0), point)
+def test_start(point: Point, axis: Vector3D, angle: float) -> None:
+    curve = ArcPVA(point, axis, angle)
+    assert isinstance(curve.start, ndarray)
+    assert np.all(curve.start == point.xyz)
 
 
 def test_axis(point: Point, axis: Vector3D, angle: float) -> None:
@@ -83,13 +90,23 @@ def test_length(curve: ArcPVA) -> None:
     assert curve.length == 1.0 * 90.0 * math.pi / 180.0
 
 
-def test_get_path_fn(point: Point, axis: Vector3D, angle: float) -> None:
-    path_fn = ArcPVA(point, axis, angle).get_path_fn()
-    assert (path_fn(0) == point.xyz).any()
-    assert (path_fn(1) == Point(0, 1, 0).xyz).any()
-    assert (path_fn(0, flip_direction=True) == Point(0, 1, 0).xyz).any()
-    assert (path_fn(1, flip_direction=True) == point.xyz).any()
-    assert (path_fn(0.5) == np.array([np.sqrt(2), np.sqrt(2), 0])).any()
-    assert (
-        path_fn(0.5, flip_direction=True) == np.array([np.sqrt(2), np.sqrt(2), 0])
-    ).any()
+def test_path(
+    assert_rounded_path_xyz, point: Point, axis: Vector3D, angle: float
+) -> None:
+    decimals = 4
+    curve1 = ArcPVA(point, axis, angle)
+    assert_rounded_path_xyz(curve1, 0, point.xyz, decimals)
+    assert_rounded_path_xyz(curve1, 1, Point(0, 1, 0).xyz, decimals)
+    assert_rounded_path_xyz(curve1, -1, point.xyz, decimals)
+    assert_rounded_path_xyz(
+        curve1,
+        0.5,
+        np.array([1 / np.sqrt(2), 1 / np.sqrt(2), 0]),
+        decimals,
+    )
+    assert_rounded_path_xyz(
+        curve1,
+        -0.5,
+        np.array([1 / np.sqrt(2), 1 / np.sqrt(2), 0]),
+        decimals,
+    )

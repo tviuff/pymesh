@@ -41,7 +41,7 @@ def test_z(point2: Point, dz: float) -> None:
 
 
 def test_xyz(point2: Point, dx: float, dy: float, dz: float) -> None:
-    assert (point2.xyz == np.array([dx, dy, dz])).any()
+    assert np.all(point2.xyz == np.array([dx, dy, dz]))
 
 
 def test_get_distance(

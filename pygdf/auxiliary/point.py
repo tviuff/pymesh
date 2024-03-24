@@ -28,7 +28,7 @@ class Point:
         return np.array([self.x, self.y, self.z])
 
     def __eq__(self, other):
-        return (self.xyz == other.xyz).all()
+        return np.all(self.xyz == other.xyz)
 
     def __repr__(self):
         return f"{type(self).__name__}(x={self.x:.2f}, y={self.y:.2f}, z={self.z:.2f})"

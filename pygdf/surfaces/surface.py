@@ -2,6 +2,9 @@
 """
 
 from abc import ABC, abstractmethod
+from typing import List
+
+from numpy import ndarray
 
 # ! log fliping of normal :)
 
@@ -10,22 +13,31 @@ class Surface(ABC):
     """Surface abstract class"""
 
     _normal_is_flipped: bool = False
-    _all_surfaces: list = []  # to contain every surface type instanciated
+    _all_surfaces: List = []  # to contain every surface type instanciated
 
     @classmethod
-    def get_all_surfaces(cls) -> list:
+    def get_all_surfaces(cls) -> List:
+        """Returns a list of all generated surfaces, independent of surface class name"""
         return cls._all_surfaces
 
     @property
     @abstractmethod
-    def mesh_points(self):
-        """Returns surface mesh points"""
+    def mesh_points(self) -> ndarray:
+        """Returns surface mesh points as a numpy ndarray.
+
+        Calling the numpy .shape property will return the tuple
+        (3, num_panels_u + 1, num_panels_w + 1), where 3 represents
+        the x, y and z coordinates. num_panels_u and num_panels_w
+        are the number of panels along each of the two surface
+        dimensions.
+        """
 
     def flip_panel_normals(self) -> None:
+        """Flips all surface panel normals"""
         self._normal_is_flipped = not self._normal_is_flipped
 
     @property
-    def panels(self) -> list[list[float]]:
+    def panels(self) -> List[List[float]]:
         """Returns list of quadrilateral panels.
 
         Each panel is defined as a list of 12 floating numbers,
@@ -36,12 +48,10 @@ class Surface(ABC):
         mp = self.mesh_points
         for j in range(0, mp.shape[2] - 1):
             for i in range(0, mp.shape[1] - 1):
-                xyz1, xyz2, xyz3, xyz4 = (
-                    mp[:, i, j],
-                    mp[:, i + 1, j],
-                    mp[:, i + 1, j + 1],
-                    mp[:, i, j + 1],
-                )
+                xyz1 = mp[:, i, j]
+                xyz2 = mp[:, i + 1, j]
+                xyz3 = mp[:, i + 1, j + 1]
+                xyz4 = mp[:, i, j + 1]
                 if self._normal_is_flipped:
                     xyz1, xyz2, xyz3, xyz4 = xyz4, xyz3, xyz2, xyz1
                 panels.append(

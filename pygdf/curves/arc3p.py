@@ -6,8 +6,10 @@ import numpy as np
 from numpy import ndarray
 
 from pygdf.auxiliary.point import Point
-from pygdf.curves.curve import Curve
-from pygdf.descriptors import AsInstanceOf
+from pygdf.curves.curve import Curve, validate_path_parameter, validate_curve_path_input
+from pygdf.descriptors import AsInstanceOf, AsNDArray
+
+TOLERANCE = 0.000001
 
 
 class Arc3P(Curve):
@@ -16,67 +18,56 @@ class Arc3P(Curve):
     Implementation based on: https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
     """
 
-    point_centre = AsInstanceOf(Point)
-    point_start = AsInstanceOf(Point)
-    point_end = AsInstanceOf(Point)
-    invert_arc = AsInstanceOf(bool)
+    centre = AsNDArray(shape=(3,))
+    inverse_sector = AsInstanceOf(bool)
 
     def __init__(
         self,
-        point_centre: Point,
-        point_start: Point,
-        point_end: Point,
-        invert_arc: bool = False,
+        centre: Point,
+        start: Point,
+        end: Point,
+        inverse_sector: bool = False,
     ):
-        self.point_centre = point_centre
-        self.point_start = point_start
-        self.point_end = point_end
-        self.invert_arc = invert_arc
-        self._tolerance = 0.0001
-        self._validate_input()
+        validate_input_types(centre, start, end, inverse_sector)
+        validate_radii_and_cross_product(centre, start, end)
+        self.centre = centre.xyz
+        self.start = start.xyz
+        self.end = end.xyz
+        self.inverse_sector = inverse_sector
+
+    @property
+    def point_start(self) -> Point:
+        xyz = self.start
+        return Point(xyz[0], xyz[1], xyz[2])
+
+    @property
+    def point_end(self) -> Point:
+        xyz = self.end
+        return Point(xyz[0], xyz[1], xyz[2])
 
     def __eq__(self, other):
         return (
-            self.point_centre == other.point_centre
-            and self.point_start == other.point_start
-            and self.point_end == other.point_end
+            np.all(self.centre == other.centre)
+            and np.all(self.start == other.start)
+            and np.all(self.end == other.end)
         )
 
     def __repr__(self):
-        return f"{type(self).__name__}({self.point_centre}, {self.point_start}, {self.point_end})"
-
-    def _validate_input(self) -> None:
-        diff_radii = np.sqrt(np.sum(self.vector_end**2)) - np.sqrt(
-            np.sum(self.vector_start**2)
-        )
-        radius_start = np.sqrt(np.sum(self.vector_start**2))
-        if (diff_radii / radius_start) > self._tolerance:
-            raise ValueError(
-                f"Input points resulted in "
-                f"(radius_end - radius_start)  > {self._tolerance} x radius_start"
-            )
-        if (self.cross_product == 0).all():
-            raise ValueError("Input points resulted in parallel plane vectors")
-
-    @property
-    def vector_start(self) -> ndarray:
-        return self.point_start.xyz - self.point_centre.xyz
-
-    @property
-    def vector_end(self) -> ndarray:
-        return self.point_end.xyz - self.point_centre.xyz
+        cls = type(self).__name__
+        c, s, e, i = self.centre, self.start, self.end, self.inverse_sector
+        c = Point(c[0], c[1], c[2])
+        s = Point(s[0], s[1], s[2])
+        e = Point(e[0], e[1], e[2])
+        return f"{cls}(centre={c}, start={s}, end={e}, inverse_sector={i})"
 
     @property
     def radius(self) -> float:
-        """Returns the length of vector_start"""
-        return np.sqrt(np.sum(self.vector_start**2))
+        return np.sqrt(np.sum((self.start - self.centre) ** 2))
 
     @property
     def cross_product(self) -> ndarray:
-        vector_start = self.point_start.xyz - self.point_centre.xyz
-        vector_end = self.point_end.xyz - self.point_centre.xyz
-        sign = -1 if self.invert_arc else 1
-        return sign * np.cross(vector_start, vector_end)
+        sign = -1 if self.inverse_sector else 1
+        return sign * np.cross((self.start - self.centre), (self.end - self.centre))
 
     @property
     def plane_unit_normal(self) -> ndarray:
@@ -84,23 +75,58 @@ class Arc3P(Curve):
 
     @property
     def angle(self) -> float:
-        angle = np.arccos(np.dot(self.vector_start, self.vector_end) / (self.radius**2))
-        angle = 2 * math.pi - angle if self.invert_arc else angle
+        angle = np.arccos(
+            np.dot((self.start - self.centre), (self.end - self.centre))
+            / (self.radius**2)
+        )
+        angle = 2 * math.pi - angle if self.inverse_sector else angle
         return angle
 
     @property
     def length(self) -> float:
         return self.radius * self.angle
 
+    def path(self, u: int | float) -> ndarray:
+        u = validate_path_parameter(u)
+        v, k, a = (self.start - self.centre), self.plane_unit_normal, self.angle
+        xyz0 = self.centre
+        part1 = v * math.cos(a * u)
+        part2 = np.cross(k, v) * math.sin(a * u)
+        part3 = k * np.dot(k, v) * (1 - math.cos(a * u))
+        return xyz0 + part1 + part2 + part3
+
     def get_path_fn(self, flip_direction: bool = False):
         def fn(u: int | float, flip_direction: bool = flip_direction) -> ndarray:
             """Arc3P path function mapping input float from 0 to 1 to a physical xyz point"""
-            u = self._validate_curve_path_fn_input(u=u, flip_direction=flip_direction)
-            v, k, a = self.vector_start, self.plane_unit_normal, self.angle
-            xyz0 = self.point_centre.xyz
+            u = validate_curve_path_input(u=u, flip_direction=flip_direction)
+            v, k, a = (self.start - self.centre), self.plane_unit_normal, self.angle
+            xyz0 = self.centre
             dxyz1 = v * math.cos(a * u)
             dxyz2 = np.cross(k, v) * math.sin(a * u)
             dxyz3 = k * np.dot(k, v) * (1 - math.cos(a * u))
             return xyz0 + dxyz1 + dxyz2 + dxyz3
 
         return fn
+
+
+def validate_input_types(
+    centre: Point, start: Point, end: Point, inverse_sector: bool
+) -> None:
+    if not isinstance(centre, Point):
+        raise TypeError("centre is not of type 'Point'")
+    if not isinstance(start, Point):
+        raise TypeError("start is not of type 'Point'")
+    if not isinstance(end, Point):
+        raise TypeError("end is not of type 'Point'")
+    if not isinstance(inverse_sector, bool):
+        raise TypeError("inverse_sector is not of type 'bool'")
+
+
+def validate_radii_and_cross_product(centre: Point, start: Point, end: Point) -> None:
+    radius_start = np.sqrt(np.sum((start.xyz - centre.xyz)) ** 2)
+    radius_end = np.sqrt(np.sum((end.xyz - centre.xyz) ** 2))
+    if np.abs(radius_end - radius_start) / radius_start > TOLERANCE:
+        raise ValueError("Resulting radii at start and end are different")
+    cross_product = np.cross((start.xyz - centre.xyz), (end.xyz - centre.xyz))
+    if np.all(cross_product == 0):
+        raise ValueError("Resulting cross product is zero")
