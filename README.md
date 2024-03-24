@@ -1,14 +1,14 @@
-# GDF geometry package overview
+# PYGDF geometry package overview
 
-The `gdf` package handles basic geometry and facilitates the creation of 3-dimensional surface panels. These surface panels are converted into a low-order .gdf geometric data file for import and use in [WAMIT](https://www.wamit.com/).
+The `pygdf` package handles basic geometry and facilitates the creation of 3-dimensional surface panels. These surface panels are converted into a low-order geometric data file (gdf) for import and use in [WAMIT](https://www.wamit.com/).
 
 ## Generating, inspecting and writing 3-dimesional surface panels to a .gdf file
 
-The `gdf` package is based on object-oriented programming and the user will be interacting with the following classes when building the geometry:
+The package is based on object-oriented programming and the user will be interacting with the following classes when building the geometry:
 
-- Points and vectors:
-    - `Point(x, y, z)` auxilliary point in 3-dimentional space for creating other points, vectors, curves and surfaces
-    - `Vector3D(Point, Point)` auxilliary 3-dimentional vector for creating surfaces
+- Auxiliary geometry items:
+    - `Point(x, y, z)` creates a point in 3-dimentional space
+    - `Vector3D(Point, Point)` creates a 3-dimentional vector
 - Curves:
     - `Line(Point, Point)` creates a straight line between two points
     - `Arc3P(Point, Point, Point)` creates a circular arc defined by a center point, a starting point and an ending point
@@ -24,7 +24,7 @@ The `gdf` package is based on object-oriented programming and the user will be i
 # examples/rectangle.py
 
 from pathlib import Path
-from gdf import Point, Line, CoonsPatch, ExponentialDistribution, GDFViewer, GDFWriter
+from pygdf import Point, Line, CoonsPatch, ExponentialDistribution, GDFViewer, GDFWriter
 
 point1 = Point(0, 0, 0)
 point2 = Point(1, 0, 0)
@@ -71,7 +71,7 @@ writer.write(surface_selection, filename=Path("output", "rectangle.gdf"))
 Above code generates the following `output/rectangle.gdf` output. For information regarding `GDFWriter` file formatting, the reader is referred to Section 6.1 in the [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pdf).
 
 ```
-auto-generated .gdf file using the gdf package
+auto-generated using the pygdf package
 1.000000 9.816000
 0 0
 15
