@@ -9,18 +9,19 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 from pygdf.surfaces.surface import Surface
 
-class GDFViewer():
+
+class GDFViewer:
     """Plots surface panels and normals using matplotlib with seaborn-v0_8 style"""
 
-    def __init__(self, panel_normal_length:float=1.0) -> None:
+    def __init__(self, panel_normal_length: float = 1.0) -> None:
         plt.close("all")
-        mpl_style.use('seaborn-v0_8')
+        mpl_style.use("seaborn-v0_8")
         fig = plt.figure()
-        fig.patch.set_facecolor('#EAEAF2')
-        ax = fig.add_subplot(projection='3d')
-        ax.set_xlabel('X axis')
-        ax.set_ylabel('Y axis')
-        ax.set_zlabel('Z axis')
+        fig.patch.set_facecolor("#EAEAF2")
+        ax = fig.add_subplot(projection="3d")
+        ax.set_xlabel("X axis")
+        ax.set_ylabel("Y axis")
+        ax.set_zlabel("Z axis")
         self._panel_normal_length = panel_normal_length
         self._ax = ax
         self.xyzlim = np.array([1, 1, 1])
@@ -37,7 +38,7 @@ class GDFViewer():
         return self._xyzlim
 
     @xyzlim.setter
-    def xyzlim(self, value:ndarray):
+    def xyzlim(self, value: ndarray):
         if not isinstance(value, ndarray):
             raise TypeError("xyzlim must be of type 'ndarray'")
         self._xyzlim = np.ceil(value)
@@ -66,7 +67,9 @@ class GDFViewer():
 
     def __validate_surface_selection(self, selection) -> None:
         if not isinstance(selection, (tuple, list, Surface)):
-            raise TypeError("selection must be of type 'Surface' or a tuple or list of such")
+            raise TypeError(
+                "selection must be of type 'Surface' or a tuple or list of such"
+            )
         if isinstance(selection, (list, tuple)):
             for item in selection:
                 if not isinstance(item, Surface):
@@ -78,13 +81,13 @@ class GDFViewer():
         if isinstance(selection, list):
             return tuple(selection)
         if isinstance(selection, Surface):
-            return (selection, )
+            return (selection,)
         return selection
 
-    def add_curve_points(self, xyz:ndarray) -> None:
+    def add_curve_points(self, xyz: ndarray) -> None:
         """Adds curve xyz points to plot"""
         ax = self.get_ax()
-        ax.scatter(xyz[:, 0], xyz[:, 1], xyz[:, 2], color='blue')
+        ax.scatter(xyz[:, 0], xyz[:, 1], xyz[:, 2], color="blue")
         self.__update_axis_limits(xyz)
 
     def add_mesh_points(self, surfaces) -> None:
@@ -96,19 +99,20 @@ class GDFViewer():
             self.__update_axis_limits(xyz)
             for i in range(0, xyz.shape[1]):
                 for j in range(0, xyz.shape[2]):
-                    ax.scatter(xyz[0,i,j], xyz[1,i,j], xyz[2,i,j], color='blue')
+                    ax.scatter(xyz[0, i, j], xyz[1, i, j], xyz[2, i, j], color="blue")
 
-    def add_panels(self,
-        surfaces:Surface|list[Surface]|tuple[Surface],
-        restricted_panels:list[int] = None,
-        include_normals:bool = False,
-        include_vertex_annotation:bool = False,
-        facecolor:str = "#0072BD",
-        edgecolor:str = "black",
-        linewidth:float = 0.5,
-        alpha:float = .8,
-        normalcolor:str = "grey"
-        ) -> None:
+    def add_panels(
+        self,
+        surfaces: Surface | list[Surface] | tuple[Surface],
+        restricted_panels: list[int] = None,
+        include_normals: bool = False,
+        include_vertex_annotation: bool = False,
+        facecolor: str = "#0072BD",
+        edgecolor: str = "black",
+        linewidth: float = 0.5,
+        alpha: float = 0.8,
+        normalcolor: str = "grey",
+    ) -> None:
         """"""
         if restricted_panels is None:
             restricted_panels = []
@@ -124,19 +128,21 @@ class GDFViewer():
                 if include_vertex_annotation:
                     ax.scatter(xyz[:, 0], xyz[:, 1], xyz[:, 2], color="blue")
                     for i in range(0, xyz.shape[0]):
-                        ax.text(xyz[i, 0], xyz[i, 1], xyz[i, 2], f"{i+1}", color='k')
+                        ax.text(xyz[i, 0], xyz[i, 1], xyz[i, 2], f"{i+1}", color="k")
                 if include_normals:
                     self._plot_normals(panel, colors=normalcolor)
                 verts = [list(zip(panel[0::3], panel[1::3], panel[2::3]))]
-                ax.add_collection3d(Poly3DCollection(
-                    verts,
-                    facecolors = facecolor,
-                    linewidths = linewidth,
-                    edgecolors = edgecolor,
-                    alpha = alpha
-                ))
+                ax.add_collection3d(
+                    Poly3DCollection(
+                        verts,
+                        facecolors=facecolor,
+                        linewidths=linewidth,
+                        edgecolors=edgecolor,
+                        alpha=alpha,
+                    )
+                )
 
-    def _plot_normals(self, panel:list, colors:str) -> None:
+    def _plot_normals(self, panel: list, colors: str) -> None:
         ax = self.get_ax()
         panel = np.array(panel)
         xyz1, xyz2, xyz3, xyz4 = panel[0:3], panel[3:6], panel[6:9], panel[9:12]
@@ -145,11 +151,17 @@ class GDFViewer():
         cross_product = np.cross(a, b)
         x, y, z = point[0], point[1], point[2]
         u, v, w = cross_product[0], cross_product[1], cross_product[2]
-        ax.quiver(x, y, z, u, v, w,
-            length = self.panel_normal_length,
-            normalize = True,
-            colors = colors
-            )
+        ax.quiver(
+            x,
+            y,
+            z,
+            u,
+            v,
+            w,
+            length=self.panel_normal_length,
+            normalize=True,
+            colors=colors,
+        )
 
     def show(self):
         ax = self.get_ax()

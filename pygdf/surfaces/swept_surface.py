@@ -10,6 +10,7 @@ from pygdf.descriptors import AsNumber, AsInstanceOf
 from pygdf.mesh_distributions import MeshDistribution
 from pygdf.surfaces.surface import Surface
 
+
 class SweptSurface(Surface):
     """Creates a surface based on a curve swept by another
     and creates mesh points for generating panels.
@@ -20,31 +21,33 @@ class SweptSurface(Surface):
     panel_density_curve = AsNumber(minvalue=0)
     panel_density_sweeper_curve = AsNumber(minvalue=0)
 
-    def __init__(self, curve:Curve, sweeper_curve:Curve):
+    def __init__(self, curve: Curve, sweeper_curve: Curve):
         self._all_surfaces.append(self)
         self.curve = curve
         self.sweeper_curve = sweeper_curve
         self.boundary_distribution_curve = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.boundary_distribution_sweeper_curve = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.boundary_distribution_sweeper_curve = (
+            MeshConstants.DEFAULT_DIST_METHOD.value()
+        )
         self.panel_density_curve = MeshConstants.DEFAULT_DENSITY.value
         self.panel_density_sweeper_curve = MeshConstants.DEFAULT_DENSITY.value
 
     @property
-    def curve(self)-> Curve:
+    def curve(self) -> Curve:
         return self._curve
 
     @curve.setter
-    def curve(self, curve:Curve) -> None:
+    def curve(self, curve: Curve) -> None:
         if not isinstance(curve, Curve):
             raise TypeError("curve must be of type 'Curve'")
         self._curve = curve
 
     @property
-    def sweeper_curve(self)-> Curve:
+    def sweeper_curve(self) -> Curve:
         return self._sweeper_curve
 
     @sweeper_curve.setter
-    def sweeper_curve(self, value:Curve) -> None:
+    def sweeper_curve(self, value: Curve) -> None:
         if not isinstance(value, Curve):
             raise TypeError("sweeper_curve must be of type 'Curve'")
         self._sweeper_curve = value

@@ -12,7 +12,7 @@ class Validator(ABC):
     return_type = None
 
     def __set_name__(self, obj, name):
-        self.private_name = '_' + name # pylint: disable=attribute-defined-outside-init
+        self.private_name = "_" + name  # pylint: disable=attribute-defined-outside-init
 
     def __get__(self, obj, objtype=None):
         return getattr(obj, self.private_name)
@@ -25,7 +25,7 @@ class Validator(ABC):
     def convert_to_type(self, value):
         if self.return_type is None:
             return value
-        return self.return_type(value) # pylint: disable=not-callable
+        return self.return_type(value)  # pylint: disable=not-callable
 
     @abstractmethod
     def validate(self, value):
@@ -37,26 +37,23 @@ class AsNumber(Validator):
     Based on: https://docs.python.org/3/howto/descriptor.html#custom-validators.
     """
 
-    def __init__(self,
-            minvalue:int|float = None,
-            maxvalue:int|float = None,
-            return_type:type = None
-            ):
+    def __init__(
+        self,
+        minvalue: int | float = None,
+        maxvalue: int | float = None,
+        return_type: type = None,
+    ):
         self.minvalue = minvalue
         self.maxvalue = maxvalue
         self.return_type = return_type
 
     def validate(self, value):
         if not isinstance(value, (int, float)):
-            raise TypeError(f'Expected {value!r} to be an int or float')
+            raise TypeError(f"Expected {value!r} to be an int or float")
         if self.minvalue is not None and value < self.minvalue:
-            raise ValueError(
-                f'Expected {value!r} to be at least {self.minvalue!r}'
-            )
+            raise ValueError(f"Expected {value!r} to be at least {self.minvalue!r}")
         if self.maxvalue is not None and value > self.maxvalue:
-            raise ValueError(
-                f'Expected {value!r} to be no more than {self.maxvalue!r}'
-            )
+            raise ValueError(f"Expected {value!r} to be no more than {self.maxvalue!r}")
 
 
 class AsInstanceOf(Validator):
@@ -67,4 +64,4 @@ class AsInstanceOf(Validator):
 
     def validate(self, value):
         if not isinstance(value, self.cls):
-            raise TypeError(f'Expected {value!r} to be an instance of {self.cls!r}')
+            raise TypeError(f"Expected {value!r} to be an instance of {self.cls!r}")

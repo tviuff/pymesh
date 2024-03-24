@@ -12,6 +12,7 @@ from pygdf.surfaces.surface import Surface
 
 # ! Consider using a combination of .length and .get_path_fn() to avoid coupling
 
+
 class RuledSurface(Surface):
     """Creates a ruled surface based on two curves
     and creates mesh points for generating panels.
@@ -22,12 +23,14 @@ class RuledSurface(Surface):
     panel_density_curves = AsNumber(minvalue=0)
     panel_density_in_between = AsNumber(minvalue=0)
 
-    def __init__(self, curve_1:Curve, curve_2:Curve):
+    def __init__(self, curve_1: Curve, curve_2: Curve):
         self._all_surfaces.append(self)
         self.curve_1 = curve_1
         self.curve_2 = curve_2
         self.boundary_distribution_curves = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.boundary_distribution_in_between = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.boundary_distribution_in_between = (
+            MeshConstants.DEFAULT_DIST_METHOD.value()
+        )
         self.panel_density_curves = MeshConstants.DEFAULT_DENSITY.value
         self.panel_density_in_between = MeshConstants.DEFAULT_DENSITY.value
 
@@ -60,8 +63,10 @@ class RuledSurface(Surface):
         length_1 = max(self.curve_1.length, self.curve_2.length)
         start_points = (self.curve_1.point_start.xyz, self.curve_2.point_start.xyz)
         end_points = (self.curve_1.point_end.xyz, self.curve_2.point_end.xyz)
-        length_2_start = float(np.sqrt(np.sum((start_points[0] - start_points[1])**2)))
-        length_2_end = float(np.sqrt(np.sum((end_points[0] - end_points[1])**2)))
+        length_2_start = float(
+            np.sqrt(np.sum((start_points[0] - start_points[1]) ** 2))
+        )
+        length_2_end = float(np.sqrt(np.sum((end_points[0] - end_points[1]) ** 2)))
         length_2 = max(length_2_start, length_2_end)
         return length_1, length_2
 
@@ -87,7 +92,9 @@ class RuledSurface(Surface):
         mp = np.zeros((3, np_curves, np_in_between))
         for i, u in enumerate(np.linspace(0, 1, num=np_curves, endpoint=True)):
             for j, w in enumerate(np.linspace(0, 1, num=np_in_between, endpoint=True)):
-                mp[:, i, j] = 0 \
-                    + ( 1 - dist_in_between(w) ) * curve_fn_1( dist_curves(u) ) \
-                    + dist_in_between(w) * curve_fn_2( dist_curves(u) )
+                mp[:, i, j] = (
+                    0
+                    + (1 - dist_in_between(w)) * curve_fn_1(dist_curves(u))
+                    + dist_in_between(w) * curve_fn_2(dist_curves(u))
+                )
         return mp

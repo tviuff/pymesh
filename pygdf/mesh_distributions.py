@@ -5,10 +5,11 @@ from abc import ABC, abstractmethod
 
 from pygdf.descriptors import AsNumber
 
+
 class MeshDistribution(ABC):
     """Abstract mesh distribution class"""
 
-    def __init__(self, flip_direction:bool=False):
+    def __init__(self, flip_direction: bool = False):
         self.flip_direction = flip_direction
 
     def __str__(self) -> str:
@@ -25,20 +26,20 @@ class MeshDistribution(ABC):
         self._flip_direction = value
 
     @abstractmethod
-    def get_dist_fn(self, flip_direction:bool):
+    def get_dist_fn(self, flip_direction: bool):
         """Returns distribution function which takes a single float from 0 to 1
         and returns a float between 0 and 1 according to the distribution type.
         """
 
     @staticmethod
-    def flip_exp(exp, flip_direction:bool):
+    def flip_exp(exp, flip_direction: bool):
         """Flips 'exp' to '1.0 - exp' if flip_direction is True"""
         if not flip_direction:
             return exp
         return 1.0 - exp
 
     @staticmethod
-    def validate_fn_input(u:int|float, flip_direction:bool) -> float:
+    def validate_fn_input(u: int | float, flip_direction: bool) -> float:
         """Validates type of inputs u and flip_direction"""
         if not isinstance(flip_direction, bool):
             raise TypeError("flip_direction mus be of type 'bool'")
@@ -58,15 +59,17 @@ class LinearDistribution(MeshDistribution):
     expression: fn(u) = u
     """
 
-    def __init__(self, flip_direction:bool=False):
+    def __init__(self, flip_direction: bool = False):
         super().__init__(flip_direction=flip_direction)
 
     def get_dist_fn(self):
-        flip = True if self.flip_direction else False # breaks ref to self
-        def fn(u:int|float, flip_direction:bool=flip) -> float:
+        flip = True if self.flip_direction else False  # breaks ref to self
+
+        def fn(u: int | float, flip_direction: bool = flip) -> float:
             u = self.validate_fn_input(u=u, flip_direction=flip_direction)
             exp = u
             return self.flip_exp(exp, flip_direction)
+
         return fn
 
 
@@ -75,15 +78,17 @@ class CosineDistribution(MeshDistribution):
     expression: fn(u) = cos[(u-1)*pi/2]
     """
 
-    def __init__(self, flip_direction:bool=False):
+    def __init__(self, flip_direction: bool = False):
         super().__init__(flip_direction=flip_direction)
 
     def get_dist_fn(self):
-        flip = True if self.flip_direction else False # breaks ref to self
-        def fn(u:int|float, flip_direction:bool=flip) -> float:
+        flip = True if self.flip_direction else False  # breaks ref to self
+
+        def fn(u: int | float, flip_direction: bool = flip) -> float:
             u = self.validate_fn_input(u=u, flip_direction=flip_direction)
-            exp = math.cos((u - 1.0)*math.pi/2)
+            exp = math.cos((u - 1.0) * math.pi / 2)
             return self.flip_exp(exp, flip_direction)
+
         return fn
 
 
@@ -94,16 +99,18 @@ class ExponentialDistribution(MeshDistribution):
 
     ratio = AsNumber(return_type=float)
 
-    def __init__(self, ratio:int|float=1.0, flip_direction:bool=False):
+    def __init__(self, ratio: int | float = 1.0, flip_direction: bool = False):
         super().__init__(flip_direction=flip_direction)
         self.ratio = ratio
 
     def get_dist_fn(self):
-        flip = True if self.flip_direction else False # breaks ref to self
-        def fn(u:int|float, flip_direction:bool=flip) -> float:
+        flip = True if self.flip_direction else False  # breaks ref to self
+
+        def fn(u: int | float, flip_direction: bool = flip) -> float:
             u = self.validate_fn_input(u=u, flip_direction=flip_direction)
-            exp = (math.exp(self.ratio*u) - 1.0) / (math.exp(self.ratio*1.0) - 1.0)
+            exp = (math.exp(self.ratio * u) - 1.0) / (math.exp(self.ratio * 1.0) - 1.0)
             return self.flip_exp(exp, flip_direction)
+
         return fn
 
 
@@ -114,14 +121,16 @@ class PowerDistribution(MeshDistribution):
 
     power = AsNumber(return_type=float)
 
-    def __init__(self, power:int|float=1.0, flip_direction:bool=False):
+    def __init__(self, power: int | float = 1.0, flip_direction: bool = False):
         super().__init__(flip_direction=flip_direction)
         self.power = power
 
     def get_dist_fn(self):
-        flip = True if self.flip_direction else False # breaks ref to self
-        def fn(u:int|float, flip_direction:bool=flip) -> float:
+        flip = True if self.flip_direction else False  # breaks ref to self
+
+        def fn(u: int | float, flip_direction: bool = flip) -> float:
             u = self.validate_fn_input(u=u, flip_direction=flip_direction)
             exp = u**self.power
             return self.flip_exp(exp, flip_direction)
+
         return fn

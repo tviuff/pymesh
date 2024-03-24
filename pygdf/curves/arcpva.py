@@ -9,24 +9,29 @@ from pygdf.auxiliary.point import Point
 from pygdf.auxiliary.vector3d import Vector3D
 from pygdf.curves.curve import Curve
 
+
 class ArcPVA(Curve):
     """Circular arc generated from a point, an axis of rotation and an angle (rad).
     For more iformation, see https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula.
     """
 
-    def __init__(self, point:Point, axis:Vector3D, angle:float):
+    def __init__(self, point: Point, axis: Vector3D, angle: float):
         self.point_start = point
         self.axis = axis
         self.angle = angle
 
     def __eq__(self, other):
-        return self.vector_point == other.vector_point \
-            and self.axis == other.axis \
-                and self.angle == other.angle
+        return (
+            self.vector_point == other.vector_point
+            and self.axis == other.axis
+            and self.angle == other.angle
+        )
 
     def __repr__(self):
-        txt = f"{type(self).__name__}(point={self.point_start}, " \
-                f"axis={self.axis}, angle={self.angle})"
+        txt = (
+            f"{type(self).__name__}(point={self.point_start}, "
+            f"axis={self.axis}, angle={self.angle})"
+        )
         return txt
 
     @property
@@ -77,15 +82,15 @@ class ArcPVA(Curve):
     def radius(self) -> float:
         a = self.vector_point.point_end.xyz - self.vector_point.point_start.xyz
         b = self.axis.point_end.xyz - self.axis.point_start.xyz
-        r = a - np.dot(a, b)/np.dot(b, b)*b
+        r = a - np.dot(a, b) / np.dot(b, b) * b
         return np.sqrt(np.sum(r**2))
 
     @property
     def length(self) -> float:
         return self.radius * self.angle
 
-    def get_path_fn(self, flip_direction:bool=False):
-        def fn(u:int|float, flip_direction:bool=flip_direction) -> ndarray:
+    def get_path_fn(self, flip_direction: bool = False):
+        def fn(u: int | float, flip_direction: bool = flip_direction) -> ndarray:
             """ArcPVA path function mapping input float from 0 to 1 to a physical xyz point"""
             u = self._validate_curve_path_fn_input(u=u, flip_direction=flip_direction)
             v = self.vector_point.unit_vector * self.vector_point.length
@@ -96,4 +101,5 @@ class ArcPVA(Curve):
             dxyz2 = np.cross(k, v) * math.sin(a * u)
             dxyz3 = k * np.dot(k, v) * (1 - math.cos(a * u))
             return xyz0 + dxyz1 + dxyz2 + dxyz3
+
         return fn

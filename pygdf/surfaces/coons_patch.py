@@ -13,6 +13,7 @@ from pygdf.surfaces.surface import Surface
 
 # ! Consider using sets instead of list|tuple: enforcing uniquenes !
 
+
 class CoonsPatch(Surface):
     """Coons patch class taking a selection of four curves
     and creates mesh points for generating panels.
@@ -23,16 +24,16 @@ class CoonsPatch(Surface):
     panel_density_u = AsNumber(minvalue=0)
     panel_density_w = AsNumber(minvalue=0)
 
-    def __init__(self, curves:list[Curve]|tuple[Curve]):
+    def __init__(self, curves: list[Curve] | tuple[Curve]):
         self._all_surfaces.append(self)
         self.boundary_distribution_u = MeshConstants.DEFAULT_DIST_METHOD.value()
         self.boundary_distribution_w = MeshConstants.DEFAULT_DIST_METHOD.value()
         self.panel_density_u = MeshConstants.DEFAULT_DENSITY.value
         self.panel_density_w = MeshConstants.DEFAULT_DENSITY.value
-        self.curves = curves # also sets self._flipped_curves
+        self.curves = curves  # also sets self._flipped_curves
 
     @property
-    def curves(self)-> tuple[Curve]:
+    def curves(self) -> tuple[Curve]:
         return self._curves
 
     @curves.setter
@@ -50,12 +51,14 @@ class CoonsPatch(Surface):
         ref_point = curve_selection[-1].point_end
         flipped_curves = [False]
         index = 0
-        while len(curve_selection) <= 4 \
-                and len(initial_selection) >= 1 \
-                and index < len(initial_selection):
+        while (
+            len(curve_selection) <= 4
+            and len(initial_selection) >= 1
+            and index < len(initial_selection)
+        ):
             next_curve_points = (
                 initial_selection[index].point_start,
-                initial_selection[index].point_end
+                initial_selection[index].point_end,
             )
             if ref_point in next_curve_points:
                 if ref_point == next_curve_points[0]:
@@ -70,9 +73,15 @@ class CoonsPatch(Surface):
                 index = 0
                 continue
             index += 1
-        if ref_point != curve_selection[0].point_start or index > len(initial_selection):
-            raise CurveIntersectionError("Selected curves does not share intersection points")
-        cflip, cselect = self._set_coons_patch_curve_order(flipped_curves, curve_selection)
+        if ref_point != curve_selection[0].point_start or index > len(
+            initial_selection
+        ):
+            raise CurveIntersectionError(
+                "Selected curves does not share intersection points"
+            )
+        cflip, cselect = self._set_coons_patch_curve_order(
+            flipped_curves, curve_selection
+        )
         self._flipped_curves = tuple(cflip)
         self._curves = tuple(cselect)
 
@@ -116,8 +125,13 @@ class CoonsPatch(Surface):
         mp = np.zeros((3, npu, npw))
         for i, u in enumerate(np.linspace(0, 1, num=npu, endpoint=True)):
             for j, w in enumerate(np.linspace(0, 1, num=npw, endpoint=True)):
-                p1 = (1-u)*p0w(d0w(w)) + u*p1w(d1w(w))
-                p2 = (1-w)*pu0(du0(u)) + w*pu1(du1(u))
-                p3 = (1-u)*(1-w)*p00 + u*(1-w)*p10 + (1-u)*w*p01 + u*w*p11
+                p1 = (1 - u) * p0w(d0w(w)) + u * p1w(d1w(w))
+                p2 = (1 - w) * pu0(du0(u)) + w * pu1(du1(u))
+                p3 = (
+                    (1 - u) * (1 - w) * p00
+                    + u * (1 - w) * p10
+                    + (1 - u) * w * p01
+                    + u * w * p11
+                )
                 mp[:, i, j] = p1 + p2 - p3
         return mp
