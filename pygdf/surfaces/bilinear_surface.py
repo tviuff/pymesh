@@ -37,8 +37,8 @@ class BilinearSurface(Surface):
         self.point_bottom_right = point_bottom_right
         self.point_top_right = point_top_right
         self.point_top_left = point_top_left
-        self.distribution_top_bottom = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.distribution_left_right = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.distribution_top_bottom = MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
+        self.distribution_left_right = MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
         self.panel_density_top_bottom = MeshConstants.DEFAULT_DENSITY.value
         self.panel_density_left_right = MeshConstants.DEFAULT_DENSITY.value
 

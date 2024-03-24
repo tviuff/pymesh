@@ -25,9 +25,11 @@ class SweptSurface(Surface):
         self._all_surfaces.append(self)
         self.curve = curve
         self.sweeper_curve = sweeper_curve
-        self.boundary_distribution_curve = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.boundary_distribution_curve = (
+            MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
+        )
         self.boundary_distribution_sweeper_curve = (
-            MeshConstants.DEFAULT_DIST_METHOD.value()
+            MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
         )
         self.panel_density_curve = MeshConstants.DEFAULT_DENSITY.value
         self.panel_density_sweeper_curve = MeshConstants.DEFAULT_DENSITY.value

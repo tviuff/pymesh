@@ -26,8 +26,8 @@ class CoonsPatch(Surface):
 
     def __init__(self, curves: list[Curve] | tuple[Curve]):
         self._all_surfaces.append(self)
-        self.boundary_distribution_u = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.boundary_distribution_w = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.boundary_distribution_u = MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
+        self.boundary_distribution_w = MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
         self.panel_density_u = MeshConstants.DEFAULT_DENSITY.value
         self.panel_density_w = MeshConstants.DEFAULT_DENSITY.value
         self.curves = curves  # also sets self._flipped_curves

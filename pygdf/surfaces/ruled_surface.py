@@ -27,9 +27,11 @@ class RuledSurface(Surface):
         self._all_surfaces.append(self)
         self.curve_1 = curve_1
         self.curve_2 = curve_2
-        self.boundary_distribution_curves = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.boundary_distribution_curves = (
+            MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
+        )
         self.boundary_distribution_in_between = (
-            MeshConstants.DEFAULT_DIST_METHOD.value()
+            MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
         )
         self.panel_density_curves = MeshConstants.DEFAULT_DENSITY.value
         self.panel_density_in_between = MeshConstants.DEFAULT_DENSITY.value

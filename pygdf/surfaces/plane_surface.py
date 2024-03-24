@@ -29,8 +29,12 @@ class PlaneSurface(Surface):
         self.point_0 = point_0
         self.point_1 = point_1
         self.point_2 = point_2
-        self.boundary_distribution_01 = MeshConstants.DEFAULT_DIST_METHOD.value()
-        self.boundary_distribution_02 = MeshConstants.DEFAULT_DIST_METHOD.value()
+        self.boundary_distribution_01 = (
+            MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
+        )
+        self.boundary_distribution_02 = (
+            MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
+        )
         self.panel_density_01 = MeshConstants.DEFAULT_DENSITY.value
         self.panel_density_02 = MeshConstants.DEFAULT_DENSITY.value
 

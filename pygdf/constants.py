@@ -10,4 +10,4 @@ class MeshConstants(Enum):
     """Contains mesh constants"""
 
     DEFAULT_DENSITY = 0.5
-    DEFAULT_DIST_METHOD = LinearDistribution
+    DEFAULT_DISTRIBUTION_METHOD = LinearDistribution
