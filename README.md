@@ -57,7 +57,7 @@ The `GDFViewer` is based on the `matplotlib` package and is used to conveniently
 
 ![](/images/rectangle.png "Visualization of rectangle surface panels using GDFViewer")
 
-### Writing to a .gdf file
+### Writing to a gdf file
 
 The `GDFWriter` takes care of converting the surfaces into a usable .gdf file.
 
@@ -94,7 +94,7 @@ auto-generated using the pygdf package
 
 ## Example files
 
-The `examples` folder contain various code use examples of the `gdf` package. Noteworthy example files are:
+The `/examples` folder contain various code use examples of the package. Noteworthy example files are:
 
 - [Ruled Surface Example](/examples/ruled_surface.py)
 - [Swept Surface Example](/examples/swept_surface.py)
