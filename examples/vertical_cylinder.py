@@ -1,11 +1,11 @@
 """Circle panel example"""
 
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
+sys.path.append(os.path.abspath(os.path.join('..', 'pygdf')))
 
 import math
 
-from gdf import Point, Vector3D, Line, ArcPVA, SweptSurface, GDFViewer
+from pygdf import Point, Vector3D, Line, ArcPVA, SweptSurface, GDFViewer
 from examples.circle import surface_selection
 
 point_ctr = Point(0, 0, 0)

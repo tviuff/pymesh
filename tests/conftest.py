@@ -2,7 +2,7 @@
 
 import pytest
 
-from gdf import Point, Line
+from pygdf import Point, Line
 
 @pytest.fixture
 def dx() -> int:

@@ -1,9 +1,9 @@
 """Rectangular surface example"""
 
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
+sys.path.append(os.path.abspath(os.path.join('..', 'pygdf')))
 
-from gdf import Point, PlaneSurface, LinearDistribution, CosineDistribution, GDFViewer
+from pygdf import Point, PlaneSurface, LinearDistribution, CosineDistribution, GDFViewer
 
 point_0 = Point(0, 0, 0)
 point_1 = Point(1, 0, 0)

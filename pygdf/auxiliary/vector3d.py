@@ -4,7 +4,7 @@
 import numpy as np
 from numpy import ndarray
 
-from gdf.auxiliary.point import Point
+from pygdf.auxiliary.point import Point
 
 # ! add descriptors
 # ! add vector math operations for easy use in the rest of the code

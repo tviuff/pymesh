@@ -2,9 +2,9 @@
 
 import sys, os
 
-sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
+sys.path.append(os.path.abspath(os.path.join('..', 'pygdf')))
 
-from gdf import Point, Line, Arc3P, CoonsPatch, LinearDistribution, GDFViewer
+from pygdf import Point, Line, Arc3P, CoonsPatch, LinearDistribution, GDFViewer
 
 # Points forming an inner rectangle in the circle
 point_ctr = Point(0, 0, 0)

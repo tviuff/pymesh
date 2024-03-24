@@ -4,11 +4,11 @@
 import numpy as np
 from numpy import ndarray
 
-from gdf.auxiliary.point import Point
-from gdf.constants import MeshConstants
-from gdf.descriptors import AsNumber, AsInstanceOf
-from gdf.mesh_distributions import MeshDistribution
-from gdf.surfaces.surface import Surface
+from pygdf.auxiliary.point import Point
+from pygdf.constants import MeshConstants
+from pygdf.descriptors import AsNumber, AsInstanceOf
+from pygdf.mesh_distributions import MeshDistribution
+from pygdf.surfaces.surface import Surface
 
 class BilinearSurface(Surface):
     """Creates a bilinear surface based on four points in space

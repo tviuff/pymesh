@@ -5,9 +5,9 @@ import math
 import numpy as np
 from numpy import ndarray
 
-from gdf.auxiliary.point import Point
-from gdf.curves.curve import Curve
-from gdf.descriptors import AsInstanceOf
+from pygdf.auxiliary.point import Point
+from pygdf.curves.curve import Curve
+from pygdf.descriptors import AsInstanceOf
 
 class Arc3P(Curve):
     """Circular arc generated from 3 points in space.

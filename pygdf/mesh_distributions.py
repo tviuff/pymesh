@@ -3,7 +3,7 @@
 import math
 from abc import ABC, abstractmethod
 
-from gdf.descriptors import AsNumber
+from pygdf.descriptors import AsNumber
 
 class MeshDistribution(ABC):
     """Abstract mesh distribution class"""

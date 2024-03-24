@@ -4,7 +4,7 @@ import math
 
 import pytest
 
-from gdf import Point, Line
+from pygdf import Point, Line
 
 def test_init(point1:Point, point2:Point) -> None:
     Line(point1, point2)

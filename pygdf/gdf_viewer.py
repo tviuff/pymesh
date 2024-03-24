@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 from matplotlib import style as mpl_style
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-from gdf.surfaces.surface import Surface
+from pygdf.surfaces.surface import Surface
 
 class GDFViewer():
     """Plots surface panels and normals using matplotlib with seaborn-v0_8 style"""

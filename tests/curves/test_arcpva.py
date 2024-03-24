@@ -5,7 +5,7 @@ import math
 import numpy as np
 import pytest
 
-from gdf import Point, Vector3D, ArcPVA
+from pygdf import Point, Vector3D, ArcPVA
 
 @pytest.fixture
 def point() -> Point:

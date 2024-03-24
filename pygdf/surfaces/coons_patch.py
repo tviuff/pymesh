@@ -4,12 +4,12 @@
 import numpy as np
 from numpy import ndarray
 
-from gdf.curves.curve import Curve
-from gdf.constants import MeshConstants
-from gdf.descriptors import AsNumber, AsInstanceOf
-from gdf.exceptions import CurveIntersectionError
-from gdf.mesh_distributions import MeshDistribution
-from gdf.surfaces.surface import Surface
+from pygdf.curves.curve import Curve
+from pygdf.constants import MeshConstants
+from pygdf.descriptors import AsNumber, AsInstanceOf
+from pygdf.exceptions import CurveIntersectionError
+from pygdf.mesh_distributions import MeshDistribution
+from pygdf.surfaces.surface import Surface
 
 # ! Consider using sets instead of list|tuple: enforcing uniquenes !
 

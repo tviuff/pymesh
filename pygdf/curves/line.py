@@ -4,8 +4,8 @@
 import numpy as np
 from numpy import ndarray
 
-from gdf.auxiliary.point import Point
-from gdf.curves.curve import Curve
+from pygdf.auxiliary.point import Point
+from pygdf.curves.curve import Curve
 
 class Line(Curve):
     """Line generated from two points in space"""

@@ -6,7 +6,7 @@ import numpy as np
 from numpy import ndarray
 import pytest
 
-from gdf import Point, Arc3P
+from pygdf import Point, Arc3P
 
 @pytest.fixture
 def point1() -> Point:

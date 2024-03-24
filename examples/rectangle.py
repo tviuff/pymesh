@@ -1,12 +1,12 @@
 """Rectangular surface example"""
 
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
+sys.path.append(os.path.abspath(os.path.join('..', 'pygdf')))
 
 # examples/rectangle.py
 
 from pathlib import Path
-from gdf import Point, Line, CoonsPatch, ExponentialDistribution, GDFViewer, GDFWriter
+from pygdf import Point, Line, CoonsPatch, ExponentialDistribution, GDFViewer, GDFWriter
 
 point1 = Point(0, 0, 0)
 point2 = Point(1, 0, 0)

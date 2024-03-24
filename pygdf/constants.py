@@ -3,7 +3,7 @@
 
 from enum import Enum
 
-from gdf.mesh_distributions import LinearDistribution
+from pygdf.mesh_distributions import LinearDistribution
 
 class MeshConstants(Enum):
     """Contains mesh constants"""

@@ -5,7 +5,7 @@ import math
 import numpy as np
 import pytest
 
-from gdf import Point
+from pygdf import Point
 
 def test_init(dx, dy, dz) -> None:
     Point(dx, dy, dz)

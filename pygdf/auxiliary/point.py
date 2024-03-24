@@ -7,7 +7,7 @@ from typing import Self
 import numpy as np
 from numpy import ndarray
 
-from gdf.descriptors import AsNumber
+from pygdf.descriptors import AsNumber
 
 class Point:
     """Point class.

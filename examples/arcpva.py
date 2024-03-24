@@ -1,10 +1,10 @@
 """Circular curve example"""
 
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
+sys.path.append(os.path.abspath(os.path.join('..', 'pygdf')))
 
 import math
-from gdf import Point, Vector3D, ArcPVA, GDFViewer
+from pygdf import Point, Vector3D, ArcPVA, GDFViewer
 
 curve1 = ArcPVA(
     point = Point(1, 0, 0),

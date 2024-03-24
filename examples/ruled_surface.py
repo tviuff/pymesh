@@ -1,9 +1,9 @@
 """Ruled surface example"""
 
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
+sys.path.append(os.path.abspath(os.path.join('..', 'pygdf')))
 
-from gdf import Point, Line, RuledSurface, LinearDistribution, CosineDistribution, GDFViewer
+from pygdf import Point, Line, RuledSurface, LinearDistribution, CosineDistribution, GDFViewer
 
 line_1 = Line(Point(0, 0, 0), Point(1, 0, 0))
 line_2 = Line(Point(0, 1, 0), Point(1, 1, 0))

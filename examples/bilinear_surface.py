@@ -1,9 +1,9 @@
 """Bilinear surface example"""
 
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'gdf')))
+sys.path.append(os.path.abspath(os.path.join('..', 'pygdf')))
 
-from gdf import Point, BilinearSurface, LinearDistribution, CosineDistribution, GDFViewer
+from pygdf import Point, BilinearSurface, LinearDistribution, CosineDistribution, GDFViewer
 
 point00 = Point(0, 0, 0)
 point10 = Point(1, 0,-1)

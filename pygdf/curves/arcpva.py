@@ -5,9 +5,9 @@ import math
 import numpy as np
 from numpy import ndarray
 
-from gdf.auxiliary.point import Point
-from gdf.auxiliary.vector3d import Vector3D
-from gdf.curves.curve import Curve
+from pygdf.auxiliary.point import Point
+from pygdf.auxiliary.vector3d import Vector3D
+from pygdf.curves.curve import Curve
 
 class ArcPVA(Curve):
     """Circular arc generated from a point, an axis of rotation and an angle (rad).
