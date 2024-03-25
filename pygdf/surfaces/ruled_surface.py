@@ -5,10 +5,10 @@ import numpy as np
 
 from pygdf.constants import MeshConstants
 from pygdf.curves.curve import Curve
-from pygdf.custom_types import NDArray3xNxN
+from pygdf.custom_types import NDArray3, NDArray3xNxN
 from pygdf.descriptors import AsNumber, AsInstanceOf
 from pygdf.mesh_distributions import MeshDistribution
-from pygdf.surfaces.surface import Surface
+from pygdf.surfaces.surface import Surface, validate_path_parameters
 
 # ! Consider using a combination of .length and .get_path_fn() to avoid coupling
 
@@ -83,6 +83,10 @@ class RuledSurface(Surface):
             if isinstance(density_2, float):
                 num_points_2 = int(np.ceil(length_2 / density_2) + 1)
         return num_points_1, num_points_2
+
+    def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
+        u, w = validate_path_parameters(u, w)
+        return (1 - w) * self.curve_1.path(u) + w * self.curve_2.path(u)
 
     @property
     def mesh_points(self) -> NDArray3xNxN[np.float64]:

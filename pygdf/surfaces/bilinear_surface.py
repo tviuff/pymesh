@@ -5,10 +5,10 @@ import numpy as np
 
 from pygdf.auxiliary.point import Point
 from pygdf.constants import MeshConstants
-from pygdf.custom_types import NDArray3xNxN
+from pygdf.custom_types import NDArray3, NDArray3xNxN
 from pygdf.descriptors import AsNumber, AsInstanceOf
 from pygdf.mesh_distributions import MeshDistribution
-from pygdf.surfaces.surface import Surface
+from pygdf.surfaces.surface import Surface, validate_path_parameters
 
 
 class BilinearSurface(Surface):
@@ -81,6 +81,15 @@ class BilinearSurface(Surface):
                     np.ceil(length_left_right / density_left_right) + 1
                 )
         return num_points_top_bottom, num_points_left_right
+
+    def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
+        u, w = validate_path_parameters(u, w)
+        return (
+            (1 - u) * w * self.point_bottom_left.xyz
+            + u * w * self.point_bottom_right.xyz
+            + (1 - u) * (1 - w) * self.point_top_left.xyz
+            + u * (1 - w) * self.point_top_right.xyz
+        )
 
     @property
     def mesh_points(self) -> NDArray3xNxN[np.float64]:

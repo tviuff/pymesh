@@ -5,11 +5,11 @@ import numpy as np
 
 from pygdf.curves.curve import Curve
 from pygdf.constants import MeshConstants
-from pygdf.custom_types import NDArray3xNxN
+from pygdf.custom_types import NDArray3, NDArray3xNxN
 from pygdf.descriptors import AsNumber, AsInstanceOf
 from pygdf.exceptions import CurveIntersectionError
 from pygdf.mesh_distributions import MeshDistribution
-from pygdf.surfaces.surface import Surface
+from pygdf.surfaces.surface import Surface, validate_path_parameters
 
 # ! Consider using sets instead of list|tuple: enforcing uniquenes !
 
@@ -106,6 +106,23 @@ class CoonsPatch(Surface):
                 w_length = max(curve_0w.length, curve_1w.length)
                 num_points_w = int(np.ceil(w_length / density_w) + 1)
         return num_points_u, num_points_w
+
+    def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
+        u, w = validate_path_parameters(u, w)
+        flip = [-1 if flipped else 1 for flipped in self._flipped_curves]
+        p00 = self.curves[0].path(flip[0] * 0)
+        p11 = self.curves[1].path(flip[1] * 1)
+        p01 = self.curves[2].path(flip[2] * 1)
+        p10 = self.curves[3].path(flip[3] * 0)
+        p1 = (1 - u) * w + u * w
+        p2 = (1 - w) * u + w * u
+        p3 = (
+            (1 - u) * (1 - w) * p00
+            + u * (1 - w) * p10
+            + (1 - u) * w * p01
+            + u * w * p11
+        )
+        return p1 + p2 - p3
 
     @property
     def mesh_points(self) -> NDArray3xNxN[np.float64]:

@@ -26,12 +26,12 @@ class Surface(ABC):
         """Surface path function that returns a point in the physical space.
 
         u:
-        normalized surface dimension parameter between -1 and 1.
+        Normalized surface dimension parameter between -1 and 1.
         If positive, u is the percentage of the dimension covered
         If negative, the value is added to 1, i.e. the direction is flipped
 
         w:
-        normalized surface dimension parameter between -1 and 1.
+        Normalized surface dimension parameter between -1 and 1.
         If positive, u is the percentage of the dimension covered
         If negative, the value is added to 1, i.e. the direction is flipped
 
@@ -90,3 +90,34 @@ class Surface(ABC):
                     ]
                 )
         return panels
+
+
+def validate_path_parameters(u: int | float, w: int | float) -> tuple[float, float]:
+    """Validates the normalized surface path parameters.
+
+    u:
+    Normalized surface dimension parameter between -1 and 1.
+    If positive, u is the percentage of the dimension covered
+    If negative, the value is added to 1, i.e. the direction is flipped
+
+    w:
+    Normalized surface dimension parameter between -1 and 1.
+    If positive, u is the percentage of the dimension covered
+    If negative, the value is added to 1, i.e. the direction is flipped
+
+    return:
+    tuple(u, w)
+    """
+
+    def validate_parameter(value: int | float) -> float:
+        if not isinstance(value, (int, float)):
+            raise TypeError(f"Expected an int or float number, but got {value!r}")
+        if isinstance(value, int):
+            value = float(value)
+        if value < -1 or 1 < value:
+            raise ValueError(f"Expected a value between -1 and 1 but got {value!r}")
+        if value < 0:
+            value += 1
+        return value
+
+    return validate_parameter(u), validate_parameter(w)
