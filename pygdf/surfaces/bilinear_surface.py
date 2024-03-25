@@ -7,7 +7,7 @@ from pygdf.auxiliary.point import Point
 from pygdf.constants import MeshConstants
 from pygdf.custom_types import NDArray3, NDArray3xNxN
 from pygdf.descriptors import AsNumber, AsInstanceOf
-from pygdf.mesh_distributions import MeshDistribution
+from pygdf.mesh.distribution_types import MeshDistribution
 from pygdf.surfaces.surface import Surface, validate_path_parameters
 
 

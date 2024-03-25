@@ -3,7 +3,7 @@
 
 from enum import Enum
 
-from pygdf.mesh_distributions import LinearDistribution
+from pygdf.mesh.distribution_types import LinearDistribution
 
 
 class MeshConstants(Enum):

@@ -6,8 +6,8 @@ from pygdf.auxiliary.vector3d import Vector3D
 from pygdf.curves.arc3p import Arc3P
 from pygdf.curves.arcpva import ArcPVA
 from pygdf.curves.line import Line
-from pygdf.mesh_distributions import LinearDistribution, ExponentialDistribution
-from pygdf.mesh_distributions import PowerDistribution, CosineDistribution
+from pygdf.mesh.distribution_types import LinearDistribution, ExponentialDistribution
+from pygdf.mesh.distribution_types import PowerDistribution, CosineDistribution
 from pygdf.gdf_viewer import GDFViewer
 from pygdf.gdf_writer import GDFWriter
 from pygdf.surfaces.bilinear_surface import BilinearSurface
