@@ -7,8 +7,8 @@ import numpy as np
 from pygdf.auxiliary.point import Point
 from pygdf.auxiliary.vector3d import Vector3D
 from pygdf.curves.curve import Curve, validate_path_parameter, validate_curve_path_input
-from pygdf.typing import NDArray3
-from pygdf.descriptors import AsInstanceOf, AsNumber
+from pygdf.utils.typing import NDArray3
+from pygdf.utils.descriptors import AsInstanceOf, AsNumber
 
 # ! Keep constructor as is for now
 

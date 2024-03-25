@@ -6,8 +6,8 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 from pygdf.auxiliary.point import Point
-from pygdf.typing import NDArray3
-from pygdf.descriptors import AsInstanceOf, AsNDArray
+from pygdf.utils.typing import NDArray3
+from pygdf.utils.descriptors import AsInstanceOf, AsNDArray
 
 # ! Consider removing point_start_point_end and only store .length and .path()
 

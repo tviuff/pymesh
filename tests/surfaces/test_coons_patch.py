@@ -3,7 +3,7 @@
 import pytest
 
 from pygdf import Point, Line, Arc3P, ArcPVA, CoonsPatch
-from pygdf.exceptions import CurveIntersectionError
+from pygdf.utils.exceptions import CurveIntersectionError
 
 # ! Include flipped_curves in tests
 

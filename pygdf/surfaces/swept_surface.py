@@ -3,11 +3,11 @@
 
 import numpy as np
 
-from pygdf.constants import MeshConstants
+from pygdf.utils.constants import MeshConstants
 from pygdf.curves.curve import Curve
 from pygdf.mesh.surface_mesh_generator import SurfaceMeshGenerator
-from pygdf.typing import NDArray3, NDArray3xNxN
-from pygdf.descriptors import AsNumber, AsInstanceOf
+from pygdf.utils.typing import NDArray3, NDArray3xNxN
+from pygdf.utils.descriptors import AsNumber, AsInstanceOf
 from pygdf.mesh.distributions import MeshDistribution
 from pygdf.surfaces.surface import Surface, validate_path_parameters
 

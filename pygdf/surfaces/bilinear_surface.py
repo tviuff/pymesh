@@ -4,9 +4,9 @@
 import numpy as np
 
 from pygdf.auxiliary.point import Point
-from pygdf.constants import MeshConstants
-from pygdf.typing import NDArray3, NDArray3xNxN
-from pygdf.descriptors import AsNumber, AsInstanceOf
+from pygdf.utils.constants import MeshConstants
+from pygdf.utils.typing import NDArray3, NDArray3xNxN
+from pygdf.utils.descriptors import AsNumber, AsInstanceOf
 from pygdf.mesh.distributions import MeshDistribution
 from pygdf.surfaces.surface import Surface, validate_path_parameters
 

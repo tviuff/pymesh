@@ -6,8 +6,8 @@ import numpy as np
 
 from pygdf.auxiliary.point import Point
 from pygdf.curves.curve import Curve, validate_path_parameter, validate_curve_path_input
-from pygdf.typing import NDArray3
-from pygdf.descriptors import AsInstanceOf, AsNDArray
+from pygdf.utils.typing import NDArray3
+from pygdf.utils.descriptors import AsInstanceOf, AsNDArray
 
 TOLERANCE = 0.000001
 

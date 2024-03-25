@@ -3,7 +3,7 @@
 import math
 from abc import ABC, abstractmethod
 
-from pygdf.descriptors import AsNumber
+from pygdf.utils.descriptors import AsNumber
 
 
 class MeshDistribution(ABC):

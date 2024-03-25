@@ -4,10 +4,10 @@
 import numpy as np
 
 from pygdf.curves.curve import Curve
-from pygdf.constants import MeshConstants
-from pygdf.typing import NDArray3, NDArray3xNxN
-from pygdf.descriptors import AsNumber, AsInstanceOf
-from pygdf.exceptions import CurveIntersectionError
+from pygdf.utils.constants import MeshConstants
+from pygdf.utils.typing import NDArray3, NDArray3xNxN
+from pygdf.utils.descriptors import AsNumber, AsInstanceOf
+from pygdf.utils.exceptions import CurveIntersectionError
 from pygdf.mesh.distributions import MeshDistribution
 from pygdf.surfaces.surface import Surface, validate_path_parameters
 
@@ -123,6 +123,9 @@ class CoonsPatch(Surface):
             + u * w * p11
         )
         return p1 + p2 - p3
+
+    def get_max_lengths(self) -> tuple[float]:
+        pass
 
     @property
     def mesh_points(self) -> NDArray3xNxN[np.float64]:
