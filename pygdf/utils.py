@@ -2,6 +2,33 @@
 """
 
 import time
+from typing import Callable, TypeVar, ParamSpec
+
+
+T = TypeVar("T")
+P = ParamSpec("P")
+
+
+def copy_doc(wrapper: Callable[P, T]):
+    """Copies the doc string of the given function to another.
+    This function is intended to be used as a decorator.
+
+    .. code-block:: python3
+
+        def foo(x: int, y: int) -> str:
+        '''I have a docstring and arguments'''
+            ...
+
+        @copy_doc(foo)
+        def bar():
+            ...
+    """
+
+    def decorator(func: Callable) -> Callable[P, T]:
+        func.__doc__ = wrapper.__doc__
+        return func
+
+    return decorator
 
 
 def time_it(func):

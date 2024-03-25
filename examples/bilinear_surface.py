@@ -23,6 +23,7 @@ surface = BilinearSurface(
     point_top_right=point11,
     point_top_left=point01,
 )
+
 surface.panel_density_top_bottom = 10
 surface.panel_density_left_right = 5
 surface.distribution_top_bottom = CosineDistribution(flip_direction=False)

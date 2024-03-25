@@ -6,7 +6,7 @@ from collections.abc import Callable
 
 import numpy as np
 
-from pygdf.custom_types import NDArray3
+from pygdf.typing import NDArray3
 
 
 class Validator(ABC):

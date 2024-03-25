@@ -12,7 +12,7 @@ class MeshDistribution(ABC):
     def __init__(self, flip_direction: bool = False):
         self.flip_direction = flip_direction
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         return self.__class__.__name__
 
     @property

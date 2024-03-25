@@ -2,11 +2,12 @@
 """
 
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 
 import numpy as np
 
 from pygdf.curves.curve import validate_path_parameter
-from pygdf.custom_types import NDArray3, NDArray3xNxN
+from pygdf.typing import NDArray3, NDArray3xNxN
 
 # ! log fliping of normal :)
 
@@ -14,6 +15,7 @@ from pygdf.custom_types import NDArray3, NDArray3xNxN
 class Surface(ABC):
     """Surface abstract class"""
 
+    mesher = None
     _normal_is_flipped: bool = False
     _all_surfaces: list = []  # to contain every surface type instanciated
 
@@ -24,7 +26,7 @@ class Surface(ABC):
 
     @abstractmethod
     def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
-        """Surface path function that returns a point in the physical space.
+        """Surface path function that returns a point in physical space.
 
         u:
         Normalized surface dimension parameter between -1 and 1.
@@ -38,6 +40,17 @@ class Surface(ABC):
 
         return:
         numpy ndarray with shape (3, )
+        """
+
+    def get_path(self) -> Callable[[int | float, int | float], NDArray3[np.float64]]:
+        """Returns surface path function"""
+        return self.path
+
+    @abstractmethod
+    def get_max_lengths(self) -> tuple[float]:
+        """Returns a tuple of shape (2,) with the longest surface
+        boundary length along each of the u and w dimensions. Indices
+        0 and 1 represent the u and w dimensions, respectively.
         """
 
     @property

@@ -4,7 +4,7 @@
 import numpy as np
 
 from pygdf.auxiliary.point import Point
-from pygdf.custom_types import NDArray3
+from pygdf.typing import NDArray3
 from pygdf.descriptors import AsNDArray
 
 # ! add vector math operations for easy use in the rest of the code

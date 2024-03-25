@@ -5,7 +5,7 @@ import numpy as np
 
 from pygdf.curves.curve import Curve
 from pygdf.constants import MeshConstants
-from pygdf.custom_types import NDArray3, NDArray3xNxN
+from pygdf.typing import NDArray3, NDArray3xNxN
 from pygdf.descriptors import AsNumber, AsInstanceOf
 from pygdf.exceptions import CurveIntersectionError
 from pygdf.mesh.distributions import MeshDistribution
