@@ -20,6 +20,24 @@ class Surface(ABC):
         """Returns a list of all generated surfaces, independent of surface class name"""
         return cls._all_surfaces
 
+    @abstractmethod
+    def path(self, u: int | float, w: int | float) -> ndarray:
+        """Surface path function that returns a point in the physical space.
+
+        u:
+        normalized surface dimension parameter between -1 and 1.
+        If positive, u is the percentage of the dimension covered
+        If negative, the value is added to 1, i.e. the direction is flipped
+
+        w:
+        normalized surface dimension parameter between -1 and 1.
+        If positive, u is the percentage of the dimension covered
+        If negative, the value is added to 1, i.e. the direction is flipped
+
+        return:
+        numpy ndarray with shape (3, )
+        """
+
     @property
     @abstractmethod
     def mesh_points(self) -> ndarray:

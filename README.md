@@ -41,7 +41,7 @@ surface.flip_panel_normals() # flips surface panel normals
 
 # Setting meshing options for the normalized u and w dimensons
 surface.panel_density_u = 3 # int specifies number of panels
-surface.panel_density_w = 0.2 # float specifies number of panels per meter
+surface.panel_density_w = 0.2 # float specifies largest panel length along boundaries
 surface.boundary_distribution_u = ExponentialDistribution() # mesh distribution type
 
 surface_selection = CoonsPatch.get_all_surfaces() # get all instanciated surfaces
@@ -53,7 +53,7 @@ viewer.show() # plot selected surface panels
 
 ### Inspecting the final geometry
 
-The `GDFViewer` is based on the `matplotlib` package and is used to conveniently plot and inspect the surface panels and their normals as shown in the image below.
+A `GDFViewer`, based on the `matplotlib` package, is used to conveniently plot and inspect the surface panels and their normals as shown in the image below.
 
 ![](/images/rectangle.png "Visualization of rectangle surface panels using GDFViewer")
 
@@ -68,7 +68,7 @@ writer = GDFWriter()
 writer.write(surface_selection, filename=Path("output", "rectangle.gdf"))
 ```
 
-Above code generates the following `output/rectangle.gdf` output. For information regarding `GDFWriter` file formatting, the reader is referred to Section 6.1 in the [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pdf).
+Above code generates the following `/output/rectangle.gdf` output. For information regarding `GDFWriter` file formatting, the reader is referred to Section 6.1 in the [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pdf).
 
 ```
 auto-generated using the pygdf package
