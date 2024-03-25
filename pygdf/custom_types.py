@@ -12,3 +12,6 @@ DType = TypeVar("DType", bound=np.generic)
 NDArray3 = Annotated[npt.NDArray[DType], Literal[3]]
 
 NDArray3xNxN = Annotated[npt.NDArray[DType], Literal[3, "N", "N"]]
+
+# un-used but interesting type suggestions
+type number = int | float

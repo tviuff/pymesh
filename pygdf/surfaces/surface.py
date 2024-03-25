@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
+from pygdf.curves.curve import validate_path_parameter
 from pygdf.custom_types import NDArray3, NDArray3xNxN
 
 # ! log fliping of normal :)
@@ -108,16 +109,4 @@ def validate_path_parameters(u: int | float, w: int | float) -> tuple[float, flo
     return:
     tuple(u, w)
     """
-
-    def validate_parameter(value: int | float) -> float:
-        if not isinstance(value, (int, float)):
-            raise TypeError(f"Expected an int or float number, but got {value!r}")
-        if isinstance(value, int):
-            value = float(value)
-        if value < -1 or 1 < value:
-            raise ValueError(f"Expected a value between -1 and 1 but got {value!r}")
-        if value < 0:
-            value += 1
-        return value
-
-    return validate_parameter(u), validate_parameter(w)
+    return validate_path_parameter(u), validate_path_parameter(w)
