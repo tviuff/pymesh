@@ -4,9 +4,9 @@ import sys, os
 
 sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
-from pygdf import Point, Line, RuledSurface
-from pygdf import LinearDistribution, ExponentialDistribution
-from pygdf import GDFViewer
+from pymesh import Point, Line, RuledSurface
+from pymesh import LinearDistribution, ExponentialDistribution
+from pymesh import GDFViewer
 
 line_1 = Line(Point(0, 0, 0), Point(1, 0, 0))
 line_2 = Line(Point(0, 1, 0), Point(1, 1, 0))

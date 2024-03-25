@@ -1,9 +1,10 @@
 """code playground"""
 
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'pygdf')))
 
-from pygdf import Point, Line, Arc3P, SweptSurface, GDFViewer
+sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
+
+from pymesh import Point, Line, Arc3P, SweptSurface, GDFViewer
 
 line = Line(Point(0, 0, 0), Point(0, 0, 1))
 curve = Arc3P(Point(0, 0, 0), Point(1, 0, 0), Point(1, 0.0001, 0))

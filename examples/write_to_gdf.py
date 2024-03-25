@@ -1,10 +1,11 @@
 """Write rectangular surface panels to gdf file"""
 
 import sys, os
-sys.path.append(os.path.abspath(os.path.join('..', 'pygdf')))
+
+sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
 from pathlib import Path
-from pygdf import Point, Line, CoonsPatch, GDFWriter
+from pymesh import Point, Line, CoonsPatch, GDFWriter
 
 line1 = Line(Point(0, 0, 0), Point(1, 0, 0))
 line2 = Line(Point(1, 0, 0), Point(1, 1, 0))

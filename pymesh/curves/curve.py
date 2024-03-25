@@ -5,9 +5,9 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
-from pygdf.auxiliary.point import Point
-from pygdf.utils.typing import NDArray3
-from pygdf.utils.descriptors import AsInstanceOf, AsNDArray
+from pymesh.auxiliary.point import Point
+from pymesh.utils.typing import NDArray3
+from pymesh.utils.descriptors import AsInstanceOf, AsNDArray
 
 # ! Consider removing point_start_point_end and only store .length and .path()
 

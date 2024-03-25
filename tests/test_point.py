@@ -5,7 +5,7 @@ import math
 import numpy as np
 import pytest
 
-from pygdf import Point
+from pymesh import Point
 
 
 def test_init(dx, dy, dz) -> None:

@@ -4,9 +4,9 @@ import sys, os
 
 sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
-from pygdf import Point, Line, Arc3P, SweptSurface
-from pygdf import LinearDistribution, CosineDistribution
-from pygdf import GDFViewer
+from pymesh import Point, Line, Arc3P, SweptSurface
+from pymesh import LinearDistribution, CosineDistribution
+from pymesh import GDFViewer
 
 line = Line(Point(0, 0, 0), Point(0, 0, 1))
 curve = Arc3P(Point(0, 0, 0), Point(1, 0, 0), Point(0, 1, 0))

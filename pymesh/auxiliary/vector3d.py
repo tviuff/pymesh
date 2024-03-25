@@ -3,9 +3,9 @@
 
 import numpy as np
 
-from pygdf.auxiliary.point import Point
-from pygdf.utils.typing import NDArray3
-from pygdf.utils.descriptors import AsNDArray
+from pymesh.auxiliary.point import Point
+from pymesh.utils.typing import NDArray3
+from pymesh.utils.descriptors import AsNDArray
 
 # ! add vector math operations for easy use in the rest of the code
 

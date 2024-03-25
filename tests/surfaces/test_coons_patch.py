@@ -2,8 +2,8 @@
 
 import pytest
 
-from pygdf import Point, Line, Arc3P, ArcPVA, CoonsPatch
-from pygdf.utils.exceptions import CurveIntersectionError
+from pymesh import Point, Line, Arc3P, ArcPVA, CoonsPatch
+from pymesh.utils.exceptions import CurveIntersectionError
 
 # ! Include flipped_curves in tests
 

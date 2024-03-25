@@ -3,7 +3,7 @@
 from pathlib import Path
 import os
 
-from pygdf.surfaces.surface import Surface
+from pymesh.surfaces.surface import Surface
 
 # ! fix typing of NDArray cases
 

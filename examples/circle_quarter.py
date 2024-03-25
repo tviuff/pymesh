@@ -5,7 +5,7 @@ import sys, os
 sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
 import math
-from pygdf import Point, Line, Arc3P, PlaneSurface, RuledSurface, GDFViewer
+from pymesh import Point, Line, Arc3P, PlaneSurface, RuledSurface, GDFViewer
 
 # Points forming an inner rectangle in the circle
 square_size = 0.8

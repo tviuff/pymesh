@@ -3,13 +3,13 @@
 
 import numpy as np
 
-from pygdf.utils.constants import MeshConstants
-from pygdf.curves.curve import Curve
-from pygdf.mesh.surface_mesh_generator import SurfaceMeshGenerator
-from pygdf.utils.typing import NDArray3, NDArray3xNxN
-from pygdf.utils.descriptors import AsNumber, AsInstanceOf
-from pygdf.mesh.distributions import MeshDistribution
-from pygdf.surfaces.surface import Surface, validate_path_parameters
+from pymesh.utils.constants import MeshConstants
+from pymesh.curves.curve import Curve
+from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
+from pymesh.utils.typing import NDArray3, NDArray3xNxN
+from pymesh.utils.descriptors import AsNumber, AsInstanceOf
+from pymesh.mesh.distributions import MeshDistribution
+from pymesh.surfaces.surface import Surface, validate_path_parameters
 
 
 class SweptSurface(Surface):

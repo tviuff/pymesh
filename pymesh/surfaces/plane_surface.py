@@ -3,12 +3,12 @@
 
 import numpy as np
 
-from pygdf.auxiliary.point import Point
-from pygdf.utils.constants import MeshConstants
-from pygdf.utils.typing import NDArray3, NDArray3xNxN
-from pygdf.utils.descriptors import AsNumber, AsInstanceOf
-from pygdf.mesh.distributions import MeshDistribution
-from pygdf.surfaces.surface import Surface, validate_path_parameters
+from pymesh.auxiliary.point import Point
+from pymesh.utils.constants import MeshConstants
+from pymesh.utils.typing import NDArray3, NDArray3xNxN
+from pymesh.utils.descriptors import AsNumber, AsInstanceOf
+from pymesh.mesh.distributions import MeshDistribution
+from pymesh.surfaces.surface import Surface, validate_path_parameters
 
 
 class PlaneSurface(Surface):

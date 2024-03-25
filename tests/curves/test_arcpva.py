@@ -6,7 +6,7 @@ import numpy as np
 from numpy import ndarray
 import pytest
 
-from pygdf import Point, Vector3D, ArcPVA
+from pymesh import Point, Vector3D, ArcPVA
 
 
 @pytest.fixture

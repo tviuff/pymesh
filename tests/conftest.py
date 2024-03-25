@@ -4,8 +4,8 @@ import pytest
 import numpy as np
 from numpy import ndarray
 
-from pygdf import Point, Line
-from pygdf.curves.curve import Curve
+from pymesh import Point, Line
+from pymesh.curves.curve import Curve
 
 
 @pytest.fixture

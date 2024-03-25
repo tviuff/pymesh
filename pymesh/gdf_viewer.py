@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 from matplotlib import style as mpl_style
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-from pygdf.surfaces.surface import Surface
+from pymesh.surfaces.surface import Surface
 
 # ! fix typing of NDArray cases
 

@@ -4,7 +4,7 @@ import sys, os
 
 sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
-from pygdf import (
+from pymesh import (
     Point,
     BilinearSurface,
     LinearDistribution,

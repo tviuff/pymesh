@@ -5,10 +5,10 @@ from typing import Self
 
 import numpy as np
 
-from pygdf.utils.constants import MeshConstants
-from pygdf.utils.descriptors import AsContainerOf
-from pygdf.mesh.distributions import MeshDistribution
-from pygdf.utils.typing import NDArray3xNxN
+from pymesh.utils.constants import MeshConstants
+from pymesh.utils.descriptors import AsContainerOf
+from pymesh.mesh.distributions import MeshDistribution
+from pymesh.utils.typing import NDArray3xNxN
 
 
 LENGTH: int = 2

@@ -3,9 +3,13 @@
 
 import numpy as np
 
-from pygdf.auxiliary.point import Point
-from pygdf.curves.curve import Curve, validate_path_parameter, validate_curve_path_input
-from pygdf.utils.typing import NDArray3
+from pymesh.auxiliary.point import Point
+from pymesh.curves.curve import (
+    Curve,
+    validate_path_parameter,
+    validate_curve_path_input,
+)
+from pymesh.utils.typing import NDArray3
 
 
 def validate_length_of_line(point1: Point, point2: Point) -> None:

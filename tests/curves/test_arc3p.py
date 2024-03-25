@@ -6,7 +6,7 @@ import numpy as np
 from numpy import ndarray
 import pytest
 
-from pygdf import Point, Arc3P
+from pymesh import Point, Arc3P
 
 
 @pytest.fixture

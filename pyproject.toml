@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "pygdf"
+name = "pymesh"
 version = "0.1.0"
 description = "Geometry package for generating geometric data files for import and use in WAMIT"
 authors = ["Thomas Viuff <tviuff@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "pygdf"}]
+packages = [{include = "pymesh"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"

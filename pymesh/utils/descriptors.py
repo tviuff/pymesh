@@ -6,7 +6,7 @@ from collections.abc import Callable
 
 import numpy as np
 
-from pygdf.utils.typing import NDArray3
+from pymesh.utils.typing import NDArray3
 
 
 class Validator(ABC):

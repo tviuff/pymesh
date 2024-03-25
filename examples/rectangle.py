@@ -7,7 +7,14 @@ sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 # examples/rectangle.py
 
 from pathlib import Path
-from pygdf import Point, Line, CoonsPatch, ExponentialDistribution, GDFViewer, GDFWriter
+from pymesh import (
+    Point,
+    Line,
+    CoonsPatch,
+    ExponentialDistribution,
+    GDFViewer,
+    GDFWriter,
+)
 
 point1 = Point(0, 0, 0)
 point2 = Point(1, 0, 0)

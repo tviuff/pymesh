@@ -3,10 +3,10 @@
 
 import numpy as np
 
-from pygdf.curves.curve import Curve
-from pygdf.utils.typing import NDArray3, NDArray3xNxN
-from pygdf.mesh.surface_mesh_generator import SurfaceMeshGenerator
-from pygdf.surfaces.surface import Surface, validate_path_parameters
+from pymesh.curves.curve import Curve
+from pymesh.utils.typing import NDArray3, NDArray3xNxN
+from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
+from pymesh.surfaces.surface import Surface, validate_path_parameters
 
 
 class RuledSurface(Surface):

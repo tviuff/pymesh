@@ -6,8 +6,8 @@ from typing import Self
 
 import numpy as np
 
-from pygdf.utils.descriptors import AsNumber
-from pygdf.utils.typing import NDArray3
+from pymesh.utils.descriptors import AsNumber
+from pymesh.utils.typing import NDArray3
 
 
 class Point:

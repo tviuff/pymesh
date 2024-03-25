@@ -6,8 +6,8 @@ from collections.abc import Callable
 
 import numpy as np
 
-from pygdf.curves.curve import validate_path_parameter
-from pygdf.utils.typing import NDArray3, NDArray3xNxN
+from pymesh.curves.curve import validate_path_parameter
+from pymesh.utils.typing import NDArray3, NDArray3xNxN
 
 # ! log fliping of normal :)
 
