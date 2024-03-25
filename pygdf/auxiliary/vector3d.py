@@ -2,9 +2,9 @@
 """
 
 import numpy as np
-from numpy import ndarray
 
 from pygdf.auxiliary.point import Point
+from pygdf.custom_types import NDArray3
 from pygdf.descriptors import AsNDArray
 
 # ! add vector math operations for easy use in the rest of the code
@@ -27,7 +27,7 @@ class Vector3D:
         )
 
     def __repr__(self):
-        # ! does not work properly
+        # ! might not work properly
         cls = type(self).__name__
         vector = self.unit_vector * self.length
         txt = f"{cls}(dx={vector[0]}, " f"dy={vector[1]}, dz={vector[1]})"
@@ -38,5 +38,5 @@ class Vector3D:
         return np.sqrt(np.sum((self.end - self.start) ** 2))
 
     @property
-    def unit_vector(self) -> ndarray:
+    def unit_vector(self) -> NDArray3[np.float64]:
         return (self.end - self.start) / self.length

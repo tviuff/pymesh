@@ -5,6 +5,8 @@ import os
 
 from pygdf.surfaces.surface import Surface
 
+# ! fix typing of NDArray cases
+
 
 class GDFWriter:
     """Writes surface panels to filename with the extension '.gdf'

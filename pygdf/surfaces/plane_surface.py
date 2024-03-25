@@ -2,10 +2,10 @@
 """
 
 import numpy as np
-from numpy import ndarray
 
 from pygdf.auxiliary.point import Point
 from pygdf.constants import MeshConstants
+from pygdf.custom_types import NDArray3xNxN
 from pygdf.descriptors import AsNumber, AsInstanceOf
 from pygdf.mesh_distributions import MeshDistribution
 from pygdf.surfaces.surface import Surface
@@ -56,7 +56,7 @@ class PlaneSurface(Surface):
         return num_points_01, num_points_02
 
     @property
-    def mesh_points(self) -> ndarray:
+    def mesh_points(self) -> NDArray3xNxN[np.float64]:
 
         def line1(u):
             fn = self.boundary_distribution_01.get_dist_fn()

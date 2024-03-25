@@ -2,10 +2,10 @@
 """
 
 import numpy as np
-from numpy import ndarray
 
 from pygdf.constants import MeshConstants
 from pygdf.curves.curve import Curve
+from pygdf.custom_types import NDArray3xNxN
 from pygdf.descriptors import AsNumber, AsInstanceOf
 from pygdf.mesh_distributions import MeshDistribution
 from pygdf.surfaces.surface import Surface
@@ -69,7 +69,7 @@ class SweptSurface(Surface):
         return num_points_curve, num_points_sweeper
 
     @property
-    def mesh_points(self) -> ndarray:
+    def mesh_points(self) -> NDArray3xNxN[np.float64]:
         np_curve, np_sweeper = self._get_num_points()
         curve_path = self.curve.get_path_fn()
         sweeper_path = self.sweeper_curve.get_path_fn()

@@ -59,7 +59,7 @@ A `GDFViewer`, based on the `matplotlib` package, is used to conveniently plot a
 
 ![](/images/rectangle.png "Visualization of rectangle surface panels using GDFViewer")
 
-### Writing to a gdf file
+### Writing to a geometric data file
 
 The `GDFWriter` takes care of converting the surfaces into a usable .gdf file.
 

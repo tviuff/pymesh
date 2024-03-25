@@ -2,10 +2,10 @@
 """
 
 import numpy as np
-from numpy import ndarray
 
 from pygdf.auxiliary.point import Point
 from pygdf.curves.curve import Curve, validate_path_parameter, validate_curve_path_input
+from pygdf.custom_types import NDArray3
 
 
 def validate_length_of_line(point1: Point, point2: Point) -> None:
@@ -35,12 +35,14 @@ class Line(Curve):
     def length(self) -> float:
         return np.sqrt(np.sum((self.end - self.start) ** 2))
 
-    def path(self, u: int | float) -> ndarray:
+    def path(self, u: int | float) -> NDArray3[np.float64]:
         u = validate_path_parameter(u)
         return self.start + (self.end - self.start) * u
 
     def get_path_fn(self, flip_direction: bool = False):
-        def fn(u: int | float, flip_direction: bool = flip_direction) -> ndarray:
+        def fn(
+            u: int | float, flip_direction: bool = flip_direction
+        ) -> NDArray3[np.float64]:
             """Line path function mapping input float from 0 to 1 to a physical xyz point"""
             u = validate_curve_path_input(u=u, flip_direction=flip_direction)
             xyz0 = self.point_start.xyz

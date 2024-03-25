@@ -3,10 +3,10 @@
 
 import math
 import numpy as np
-from numpy import ndarray
 
 from pygdf.auxiliary.point import Point
 from pygdf.curves.curve import Curve, validate_path_parameter, validate_curve_path_input
+from pygdf.custom_types import NDArray3
 from pygdf.descriptors import AsInstanceOf, AsNDArray
 
 TOLERANCE = 0.000001
@@ -65,12 +65,12 @@ class Arc3P(Curve):
         return np.sqrt(np.sum((self.start - self.centre) ** 2))
 
     @property
-    def cross_product(self) -> ndarray:
+    def cross_product(self) -> NDArray3[np.float64]:
         sign = -1 if self.inverse_sector else 1
         return sign * np.cross((self.start - self.centre), (self.end - self.centre))
 
     @property
-    def plane_unit_normal(self) -> ndarray:
+    def plane_unit_normal(self) -> NDArray3[np.float64]:
         return self.cross_product / np.sqrt(np.sum(self.cross_product**2))
 
     @property
@@ -86,7 +86,7 @@ class Arc3P(Curve):
     def length(self) -> float:
         return self.radius * self.angle
 
-    def path(self, u: int | float) -> ndarray:
+    def path(self, u: int | float) -> NDArray3[np.float64]:
         u = validate_path_parameter(u)
         v, k, a = (self.start - self.centre), self.plane_unit_normal, self.angle
         xyz0 = self.centre
@@ -96,7 +96,9 @@ class Arc3P(Curve):
         return xyz0 + part1 + part2 + part3
 
     def get_path_fn(self, flip_direction: bool = False):
-        def fn(u: int | float, flip_direction: bool = flip_direction) -> ndarray:
+        def fn(
+            u: int | float, flip_direction: bool = flip_direction
+        ) -> NDArray3[np.float64]:
             """Arc3P path function mapping input float from 0 to 1 to a physical xyz point"""
             u = validate_curve_path_input(u=u, flip_direction=flip_direction)
             v, k, a = (self.start - self.centre), self.plane_unit_normal, self.angle

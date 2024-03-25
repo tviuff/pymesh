@@ -2,9 +2,10 @@
 """
 
 from abc import ABC, abstractmethod
-from typing import Tuple
 
-from numpy import ndarray
+import numpy as np
+
+from pygdf.custom_types import NDArray3
 
 
 class Validator(ABC):
@@ -73,12 +74,15 @@ class AsInstanceOf(Validator):
 class AsNDArray(Validator):
     """Descriptor validating that object is an instance of a numpy ndarray."""
 
-    def __init__(self, shape: Tuple[int]):
+    def __init__(self, shape: tuple[int]):
         self.shape = shape
 
+    def __set__(self, obj, value: NDArray3[np.float64]):
+        super().__set__(obj, value)
+
     def validate(self, arr):
-        if not isinstance(arr, ndarray):
-            raise TypeError(f"Expected {arr!r} to be an instance of {ndarray!r}")
+        if not isinstance(arr, np.ndarray):
+            raise TypeError(f"Expected {arr!r} to be an instance of {np.ndarray!r}")
         assert (
             arr.shape == self.shape
         ), f"Expected shape to be {self.shape!r} but received {arr.shape!r}"

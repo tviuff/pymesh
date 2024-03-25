@@ -2,7 +2,7 @@
 
 import sys, os
 
-sys.path.append(os.path.abspath(os.path.join('..', 'pygdf')))
+sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
 from pygdf import Point, Line, Arc3P, CoonsPatch, LinearDistribution, GDFViewer
 
@@ -12,7 +12,7 @@ point_bl = Point(-1, -1, 0)
 point_br = point_bl.create_relative_point(dx=2.0)
 point_tl = Point(-1, 1, 0)
 point_tr = Point(+1, 1, 0)
-
+point_ctr.xyz
 # Lines connecting above points to form a rectangle
 line1 = Line(point_bl, point_br)
 line2 = Line(point_tl, point_tr)
@@ -57,8 +57,5 @@ surface_selection = CoonsPatch.get_all_surfaces()
 
 if __name__ == "__main__":
     viewer = GDFViewer(panel_normal_length=0.5)
-    viewer.add_panels(
-        surfaces = surface_selection,
-        include_normals = True
-        )
+    viewer.add_panels(surfaces=surface_selection, include_normals=True)
     viewer.show()

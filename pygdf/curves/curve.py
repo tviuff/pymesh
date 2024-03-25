@@ -3,9 +3,10 @@
 
 from abc import ABC, abstractmethod
 
-from numpy import ndarray
+import numpy as np
 
 from pygdf.auxiliary.point import Point
+from pygdf.custom_types import NDArray3
 from pygdf.descriptors import AsInstanceOf, AsNDArray
 
 # ! Consider removing point_start_point_end and only store .length and .path()
@@ -26,7 +27,7 @@ class Curve(ABC):
         """Returns the curve path length"""
 
     @abstractmethod
-    def path(self, u: int | float) -> ndarray:
+    def path(self, u: int | float) -> NDArray3[np.float64]:
         """Curve path function that returns a physical point in space.
 
         u:

@@ -2,10 +2,10 @@
 """
 
 import numpy as np
-from numpy import ndarray
 
 from pygdf.curves.curve import Curve
 from pygdf.constants import MeshConstants
+from pygdf.custom_types import NDArray3xNxN
 from pygdf.descriptors import AsNumber, AsInstanceOf
 from pygdf.exceptions import CurveIntersectionError
 from pygdf.mesh_distributions import MeshDistribution
@@ -108,7 +108,7 @@ class CoonsPatch(Surface):
         return num_points_u, num_points_w
 
     @property
-    def mesh_points(self) -> ndarray:
+    def mesh_points(self) -> NDArray3xNxN[np.float64]:
         npu, npw = self._get_num_points()
         du1 = self.boundary_distribution_u.get_dist_fn()
         d0w = self.boundary_distribution_w.get_dist_fn()

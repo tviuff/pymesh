@@ -2,10 +2,10 @@
 """
 
 import numpy as np
-from numpy import ndarray
 
 from pygdf.constants import MeshConstants
 from pygdf.curves.curve import Curve
+from pygdf.custom_types import NDArray3xNxN
 from pygdf.descriptors import AsNumber, AsInstanceOf
 from pygdf.mesh_distributions import MeshDistribution
 from pygdf.surfaces.surface import Surface
@@ -85,7 +85,7 @@ class RuledSurface(Surface):
         return num_points_1, num_points_2
 
     @property
-    def mesh_points(self) -> ndarray:
+    def mesh_points(self) -> NDArray3xNxN[np.float64]:
         np_curves, np_in_between = self._get_num_points()
         curve_fn_1 = self.curve_1.get_path_fn()
         curve_fn_2 = self.curve_2.get_path_fn()

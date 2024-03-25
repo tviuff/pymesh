@@ -3,11 +3,11 @@
 
 import math
 import numpy as np
-from numpy import ndarray
 
 from pygdf.auxiliary.point import Point
 from pygdf.auxiliary.vector3d import Vector3D
 from pygdf.curves.curve import Curve, validate_path_parameter, validate_curve_path_input
+from pygdf.custom_types import NDArray3
 from pygdf.descriptors import AsInstanceOf, AsNumber
 
 # ! Keep constructor as is for now
@@ -27,7 +27,7 @@ class ArcPVA(Curve):
         self.angle = angle
 
     @property
-    def end(self) -> ndarray:
+    def end(self) -> NDArray3[np.float64]:
         return self.path(1)
 
     @property
@@ -65,7 +65,7 @@ class ArcPVA(Curve):
     def length(self) -> float:
         return self.radius * self.angle
 
-    def path(self, u: int | float) -> ndarray:
+    def path(self, u: int | float) -> NDArray3[np.float64]:
         u = validate_path_parameter(u)
         pvec = self.start - self.axis.start
         avec = self.axis.end - self.axis.start
@@ -77,7 +77,9 @@ class ArcPVA(Curve):
         return xyz0 + part1 + part2 + part3
 
     def get_path_fn(self, flip_direction: bool = False):
-        def fn(u: int | float, flip_direction: bool = flip_direction) -> ndarray:
+        def fn(
+            u: int | float, flip_direction: bool = flip_direction
+        ) -> NDArray3[np.float64]:
             """ArcPVA path function mapping input float from 0 to 1 to a physical xyz point"""
             u = validate_curve_path_input(u=u, flip_direction=flip_direction)
             vp = self.start - self.axis.start

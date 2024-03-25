@@ -5,9 +5,9 @@ import math
 from typing import Self
 
 import numpy as np
-from numpy import ndarray
 
 from pygdf.descriptors import AsNumber
+from pygdf.custom_types import NDArray3
 
 
 class Point:
@@ -24,7 +24,7 @@ class Point:
         self.x, self.y, self.z = x, y, z
 
     @property
-    def xyz(self) -> ndarray:
+    def xyz(self) -> NDArray3[np.float64]:
         return np.array([self.x, self.y, self.z])
 
     def __eq__(self, other):
@@ -47,10 +47,10 @@ class Point:
     ) -> Self:
         """Creates a new point using relative positional arguments dx, dy, dz"""
         for value in (dx, dy, dz):
-            if not isinstance(value, (float, int)):
-                raise TypeError("relative position must be of type 'float' or 'int'")
+            if not isinstance(value, (int, float)):
+                raise TypeError("Relative position must be of type 'float' or 'int'")
         if (dx == 0.0) and (dy == 0.0) and (dz == 0.0):
-            raise ValueError("a non-zero relative position must be given")
+            raise ValueError("A non-zero relative position must be given")
         x = self.x + float(dx)
         y = self.y + float(dy)
         z = self.z + float(dz)

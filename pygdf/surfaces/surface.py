@@ -2,9 +2,10 @@
 """
 
 from abc import ABC, abstractmethod
-from typing import List
 
-from numpy import ndarray
+import numpy as np
+
+from pygdf.custom_types import NDArray3, NDArray3xNxN
 
 # ! log fliping of normal :)
 
@@ -13,15 +14,15 @@ class Surface(ABC):
     """Surface abstract class"""
 
     _normal_is_flipped: bool = False
-    _all_surfaces: List = []  # to contain every surface type instanciated
+    _all_surfaces: list = []  # to contain every surface type instanciated
 
     @classmethod
-    def get_all_surfaces(cls) -> List:
+    def get_all_surfaces(cls) -> list:
         """Returns a list of all generated surfaces, independent of surface class name"""
         return cls._all_surfaces
 
     @abstractmethod
-    def path(self, u: int | float, w: int | float) -> ndarray:
+    def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
         """Surface path function that returns a point in the physical space.
 
         u:
@@ -40,7 +41,7 @@ class Surface(ABC):
 
     @property
     @abstractmethod
-    def mesh_points(self) -> ndarray:
+    def mesh_points(self) -> NDArray3xNxN[np.float64]:
         """Returns surface mesh points as a numpy ndarray.
 
         Calling the numpy .shape property will return the tuple
@@ -55,7 +56,7 @@ class Surface(ABC):
         self._normal_is_flipped = not self._normal_is_flipped
 
     @property
-    def panels(self) -> List[List[float]]:
+    def panels(self) -> list[list[float]]:
         """Returns list of quadrilateral panels.
 
         Each panel is defined as a list of 12 floating numbers,

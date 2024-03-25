@@ -1,13 +1,14 @@
 """Module containing gdf viewer class"""
 
 import numpy as np
-from numpy import ndarray
 
 from matplotlib import pyplot as plt
 from matplotlib import style as mpl_style
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 from pygdf.surfaces.surface import Surface
+
+# ! fix typing of NDArray cases
 
 
 class GDFViewer:
@@ -34,12 +35,12 @@ class GDFViewer:
         return self._panel_normal_length
 
     @property
-    def xyzlim(self) -> ndarray:
+    def xyzlim(self) -> np.ndarray:
         return self._xyzlim
 
     @xyzlim.setter
-    def xyzlim(self, value: ndarray):
-        if not isinstance(value, ndarray):
+    def xyzlim(self, value: np.ndarray):
+        if not isinstance(value, np.ndarray):
             raise TypeError("xyzlim must be of type 'ndarray'")
         self._xyzlim = np.ceil(value)
 
@@ -48,7 +49,7 @@ class GDFViewer:
             # panel vert
             xyzlim = np.max(np.abs(xyz), axis=0)
             self.xyzlim = np.max([self.xyzlim, xyzlim], axis=0)
-        elif isinstance(xyz, ndarray):
+        elif isinstance(xyz, np.ndarray):
             if len(xyz.shape) == 3:
                 # mesh points
                 x = np.max(np.abs(xyz[0, :, :]))
@@ -84,7 +85,7 @@ class GDFViewer:
             return (selection,)
         return selection
 
-    def add_curve_points(self, xyz: ndarray) -> None:
+    def add_curve_points(self, xyz: np.ndarray) -> None:
         """Adds curve xyz points to plot"""
         ax = self.get_ax()
         ax.scatter(xyz[:, 0], xyz[:, 1], xyz[:, 2], color="blue")

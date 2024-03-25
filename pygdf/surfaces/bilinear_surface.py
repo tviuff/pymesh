@@ -5,6 +5,7 @@ import numpy as np
 
 from pygdf.auxiliary.point import Point
 from pygdf.constants import MeshConstants
+from pygdf.custom_types import NDArray3xNxN
 from pygdf.descriptors import AsNumber, AsInstanceOf
 from pygdf.mesh_distributions import MeshDistribution
 from pygdf.surfaces.surface import Surface
@@ -82,7 +83,7 @@ class BilinearSurface(Surface):
         return num_points_top_bottom, num_points_left_right
 
     @property
-    def mesh_points(self) -> np.ndarray:
+    def mesh_points(self) -> NDArray3xNxN[np.float64]:
         np_top_bottom, np_left_right = self._get_num_points()
         dist_tb = self.distribution_top_bottom.get_dist_fn()
         dist_lr = self.distribution_left_right.get_dist_fn()
