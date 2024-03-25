@@ -1,6 +1,8 @@
 # PYGDF geometry package overview
 
-The `pygdf` package handles basic geometry and facilitates the creation of 3-dimensional surface panels. These surface panels are converted into a low-order geometric data file (gdf) for import and use in [WAMIT](https://www.wamit.com/).
+The `pygdf` package handles basic geometry and facilitates the creation of 3-dimensional surface panels. These surface panels are converted into a low-order geometric data file for import and use in [WAMIT](https://www.wamit.com/).
+
+> *Sections on installation coming soon.*
 
 ## Generating, inspecting and writing 3-dimesional surface panels to a .gdf file
 
@@ -100,8 +102,6 @@ The `/examples` folder contain various code use examples of the package. Notewor
 - [Swept Surface Example](/examples/swept_surface.py)
 - [Bilinear Surface Example](/examples/bilinear_surface.py)
 - [Vertical Cylinder Example](/examples/vertical_cylinder.py)
-
-> *More details about the code beaviour will follow soon.*
 
 ## Acknowledgements
 
