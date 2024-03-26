@@ -40,7 +40,3 @@ class PlaneSurface(Surface):
         length_01 = float(np.sqrt(np.sum((self.point_1.xyz - self.point_0.xyz) ** 2)))
         length_02 = float(np.sqrt(np.sum((self.point_2.xyz - self.point_0.xyz) ** 2)))
         return length_01, length_02
-
-    @property
-    def mesh_points(self) -> NDArray3xNxN[np.float64]:
-        return self.mesher.generate_mesh_points()

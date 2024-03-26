@@ -44,8 +44,8 @@ class Surface(ABC):
         """Returns a list of all generated surfaces, independent of surface class name"""
         return cls._all_surfaces
 
-    def flip_panel_normals(self) -> None:
-        """Flips all surface panel normals"""
+    def flip_normal(self) -> None:
+        """Flips surface normal"""
         self._normal_is_flipped = not self._normal_is_flipped
 
     def get_path(
@@ -84,7 +84,6 @@ class Surface(ABC):
         """
 
     @property
-    @abstractmethod
     def mesh_points(self) -> NDArray3xNxN[np.float64]:
         """Returns surface mesh points as a numpy ndarray.
 
@@ -94,6 +93,7 @@ class Surface(ABC):
         are the number of panels along each of the two surface
         dimensions.
         """
+        return self.mesher.generate_mesh_points()
 
     @property
     def panels(self) -> list[list[float]]:

@@ -63,7 +63,3 @@ class RuledSurface(Surface):
     ) -> NDArray3[np.float64]:
         u, w = validate_surface_path_parameters(u, w, uflip, wflip)
         return (1 - w) * self.curve_1.path(u) + w * self.curve_2.path(u)
-
-    @property
-    def mesh_points(self) -> NDArray3xNxN[np.float64]:
-        return self.mesher.generate_mesh_points()

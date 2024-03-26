@@ -49,6 +49,44 @@ class SurfaceMeshGenerator:
             MeshConstants.DEFAULT_DENSITY.value,
         )
 
+    def set_u_parameters(
+        self, panel_density: int | float = None, distribution: MeshDistribution = None
+    ) -> None:
+        """Sets surface mesh parameters for the u dimension"""
+        index = 0
+        if panel_density is not None:
+            self._set_panel_density_index(panel_density, index)
+        if distribution is not None:
+            self._set_mesh_distribution_index(distribution, index)
+
+    def set_w_parameters(
+        self, panel_density: int | float = None, distribution: MeshDistribution = None
+    ) -> None:
+        """Sets surface mesh parameters for the w dimension"""
+        index = 1
+        if panel_density is not None:
+            self._set_panel_density_index(panel_density, index)
+        if distribution is not None:
+            self._set_mesh_distribution_index(distribution, index)
+
+    def _set_panel_density_index(self, value: int | float, index: int) -> None:
+        if not isinstance(index, int):
+            raise TypeError(f"Expected {index!r} to be an int.")
+        if index not in [0, 1]:
+            raise TypeError(f"Expected {index!r} to be either 0 or 1.")
+        densities = list(self.panel_densities)
+        densities[index] = value
+        self.panel_densities = tuple(densities)
+
+    def _set_mesh_distribution_index(self, value: int | float, index: int) -> None:
+        if not isinstance(index, int):
+            raise TypeError(f"Expected {index!r} to be an int.")
+        if index not in [0, 1]:
+            raise TypeError(f"Expected {index!r} to be either 0 or 1.")
+        distributions = list(self.mesh_distributions)
+        distributions[index] = value
+        self.mesh_distributions = tuple(distributions)
+
     def get_approximate_lengths(self, num: int = NUM):
         """Returns the largest boundary lengths based on a linear path
         discretization algorithm based on num points along the path."""

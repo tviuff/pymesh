@@ -50,7 +50,3 @@ class SweptSurface(Surface):
 
     def get_max_lengths(self) -> tuple[float]:
         return self.curve.length, self.sweeper_curve.length
-
-    @property
-    def mesh_points(self) -> NDArray3xNxN[np.float64]:
-        return self.mesher.generate_mesh_points()

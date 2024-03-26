@@ -93,40 +93,31 @@ class CoonsPatch(Surface):
         curve_u0, curve_u1, curve_0w, curve_1w = self.curves
         fu0, fu1, f0w, f1w = self._flipped_curves
 
-        def cu0(x):
-            func = curve_u0.get_path()
-            return func(x, flip=fu0)
+        def path_u0(x):
+            return curve_u0.path(x, flip=fu0)
 
-        def cu1(x):
-            func = curve_u1.get_path()
-            return func(x, flip=fu1)
+        def path_u1(x):
+            return curve_u1.path(x, flip=fu1)
 
-        def c0w(x):
-            func = curve_0w.get_path()
-            return func(x, flip=f0w)
+        def path_0w(x):
+            return curve_0w.path(x, flip=f0w)
 
-        def c1w(x):
-            func = curve_1w.get_path()
-            return func(x, flip=f1w)
+        def path_1w(x):
+            return curve_1w.path(x, flip=f1w)
 
-        p00, p11, p01, p10 = cu0(0), cu1(1), c0w(1), c1w(0)
-        p1 = (1 - u) * c0w(w) + u * c1w(w)
-        p2 = (1 - w) * cu0(u) + w * cu1(u)
+        p00, p11, p01, p10 = path_u0(0), path_u1(1), path_0w(1), path_1w(0)
+        p1 = (1 - u) * path_0w(w) + u * path_1w(w)
+        p2 = (1 - w) * path_u0(u) + w * path_u1(u)
         p3 = (
             (1 - u) * (1 - w) * p00
             + u * (1 - w) * p10
             + (1 - u) * w * p01
             + u * w * p11
         )
-        p = p1 + p2 - p3
-        return p
+        return p1 + p2 - p3
 
     def get_max_lengths(self) -> tuple[float]:
         curve_u0, curve_u1, curve_0w, curve_1w = self.curves
         max_length_u = max(curve_u0.length, curve_u1.length)
         max_length_w = max(curve_0w.length, curve_1w.length)
         return max_length_u, max_length_w
-
-    @property
-    def mesh_points(self) -> NDArray3xNxN[np.float64]:
-        return self.mesher.generate_mesh_points()

@@ -11,7 +11,7 @@ curve = Arc3P(Point(0, 0, 0), Point(1, 0, 0), Point(1, 0.0001, 0))
 curve.invert_arc = True
 surface = SweptSurface(curve, line)
 surface.num_points_curve = 30
-surface.flip_normal = True
+surface.flip_normal()
 
 surface_selection = surface
 

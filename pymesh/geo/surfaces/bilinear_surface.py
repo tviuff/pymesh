@@ -67,7 +67,3 @@ class BilinearSurface(Surface):
             np.max((length_top_bottom_left, length_top_bottom_right))
         )
         return length_top_bottom, length_left_right
-
-    @property
-    def mesh_points(self) -> NDArray3xNxN[np.float64]:
-        return self.mesher.generate_mesh_points()
