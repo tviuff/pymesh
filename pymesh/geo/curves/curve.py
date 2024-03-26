@@ -6,9 +6,8 @@ from collections.abc import Callable
 
 import numpy as np
 
-from pymesh.geo.point import Point
 from pymesh.utils.typing import NDArray3
-from pymesh.utils.descriptors import AsInstanceOf, AsNDArray
+from pymesh.utils.descriptors import AsNDArray
 
 # ! Consider removing point_start_point_end and only store .length and .path()
 
@@ -18,9 +17,6 @@ class Curve(ABC):
 
     start = AsNDArray(shape=(3,))
     end = AsNDArray(shape=(3,))
-
-    point_start = AsInstanceOf(Point)
-    point_end = AsInstanceOf(Point)
 
     @property
     @abstractmethod

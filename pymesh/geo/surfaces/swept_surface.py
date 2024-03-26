@@ -5,7 +5,7 @@ import numpy as np
 
 from pymesh.geo.curves.curve import Curve
 from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
-from pymesh.utils.typing import NDArray3, NDArray3xNxN
+from pymesh.utils.typing import NDArray3
 from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
 
 

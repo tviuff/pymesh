@@ -13,7 +13,7 @@ def test_init(point1: Point, point2: Point) -> None:
 
 
 def test_init_invalid() -> None:
-    with pytest.raises(TypeError):
+    with pytest.raises(AttributeError):
         Line("point1", "point2")
 
 
@@ -21,16 +21,16 @@ def test_eq(line1) -> None:
     assert line1 == line1
 
 
-def test_point_end(point1: Point, point2: Point) -> None:
-    point_end = Line(point1, point2).point_end
-    assert isinstance(point_end, Point)
-    assert point_end == point2
+def test_end(point1: Point, point2: Point) -> None:
+    end = Line(point1, point2).end
+    assert isinstance(end, np.ndarray)
+    assert np.all(end == point2.xyz)
 
 
-def test_point_start(point1: Point, point2: Point) -> None:
-    point_start = Line(point1, point2).point_start
-    assert isinstance(point_start, Point)
-    assert point_start == point1
+def test_start(point1: Point, point2: Point) -> None:
+    start = Line(point1, point2).start
+    assert isinstance(start, np.ndarray)
+    assert np.all(start == point1.xyz)
 
 
 def test_length(point1: Point, point2: Point, dx, dy, dz) -> None:

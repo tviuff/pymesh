@@ -4,7 +4,7 @@
 import numpy as np
 
 from pymesh.geo.curves.curve import Curve
-from pymesh.utils.typing import NDArray3, NDArray3xNxN
+from pymesh.utils.typing import NDArray3
 from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
 from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
 
@@ -48,8 +48,8 @@ class RuledSurface(Surface):
         1) largest distance along curve paths.
         2) largest distance between opposing curves end points.
         """
-        start_points = [self.curve_1.path(0), self.curve_2.path(0)]
-        end_points = [self.curve_1.path(1), self.curve_2.path(1)]
+        start_points = [self.curve_1.start, self.curve_2.start]
+        end_points = [self.curve_1.end, self.curve_2.end]
         length_1 = max(self.curve_1.length, self.curve_2.length)
         length_2 = max(
             float(np.sqrt(np.sum((start_points[0] - start_points[1]) ** 2))),

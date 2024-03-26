@@ -20,19 +20,22 @@ def validate_length_of_line(point1: Point, point2: Point) -> None:
 class Line(Curve):
     """Line generated from two points in space"""
 
-    def __init__(self, point_start: Point, point_end: Point):
-        self.point_start = point_start
-        self.point_end = point_end
-        validate_length_of_line(point_start, point_end)
-        self.start = point_start.xyz
-        self.end = point_end.xyz
+    def __init__(self, start: Point, end: Point):
+        validate_length_of_line(start, end)
+        self.start = start.xyz
+        self.end = end.xyz
 
     def __eq__(self, other):
         return np.all(self.start == other.start) and np.all(self.end == other.end)
 
     def __repr__(self):
-        # ! deprecated
-        return f"{type(self).__name__}({self.point_start}, {self.point_end})"
+        txt = (
+            f"{type(self).__name__}(",
+            f"Point({self.start[0]}, {self.start[1]}, {self.start[2]}), ",
+            f"Point({self.end[0]}, {self.end[1]}, {self.end[2]})",
+            ")",
+        )
+        return txt[0]
 
     @property
     def length(self) -> float:

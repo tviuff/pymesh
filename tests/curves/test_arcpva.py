@@ -48,18 +48,11 @@ def test_start(point: Point, axis: Vector3D, angle: float) -> None:
     assert np.all(curve.start == point.xyz)
 
 
-def test_point_start(point: Point, axis: Vector3D, angle: float) -> None:
-    curve = ArcPVA(point, axis, angle)
-    assert isinstance(curve.point_start, Point)
-    assert curve.point_start == point
-
-
-def test_point_end(curve: ArcPVA) -> None:
+def test_end(curve: ArcPVA) -> None:
     path_fn = curve.get_path()
-    xyz = path_fn(1)
-    point_end = Point(xyz[0], xyz[1], xyz[2])
-    assert isinstance(curve.point_end, Point)
-    assert curve.point_end == point_end
+    end = path_fn(1)
+    assert isinstance(curve.end, np.ndarray)
+    assert np.all(curve.end == end)
 
 
 def test_start(point: Point, axis: Vector3D, angle: float) -> None:

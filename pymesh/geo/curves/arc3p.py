@@ -38,16 +38,6 @@ class Arc3P(Curve):
         self.end = end.xyz
         self.inverse_sector = inverse_sector
 
-    @property
-    def point_start(self) -> Point:
-        xyz = self.start
-        return Point(xyz[0], xyz[1], xyz[2])
-
-    @property
-    def point_end(self) -> Point:
-        xyz = self.end
-        return Point(xyz[0], xyz[1], xyz[2])
-
     def __eq__(self, other):
         return (
             np.all(self.centre == other.centre)

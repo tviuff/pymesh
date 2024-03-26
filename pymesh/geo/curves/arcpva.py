@@ -33,16 +33,6 @@ class ArcPVA(Curve):
     def end(self) -> NDArray3[np.float64]:
         return self.path(1)
 
-    @property
-    def point_start(self) -> Point:
-        xyz = self.start
-        return Point(xyz[0], xyz[1], xyz[2])
-
-    @property
-    def point_end(self) -> Point:
-        xyz = self.path(1)
-        return Point(xyz[0], xyz[1], xyz[2])
-
     def __eq__(self, other):
         is_equal = True
         for u in np.linspace(0, 1, num=100, endpoint=True):
