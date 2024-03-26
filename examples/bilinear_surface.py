@@ -8,7 +8,7 @@ from pymesh import (
     Point,
     BilinearSurface,
     LinearDistribution,
-    CosineDistribution,
+    ExponentialDistribution,
     MeshViewer,
 )
 
@@ -24,10 +24,11 @@ surface = BilinearSurface(
     point_top_left=point01,
 )
 
-surface.panel_density_top_bottom = 10
-surface.panel_density_left_right = 5
-surface.distribution_top_bottom = CosineDistribution(flip_direction=False)
-surface.distribution_left_right = LinearDistribution()
+surface.mesher.panel_densities = (5, 10)
+surface.mesher.mesh_distributions = (
+    LinearDistribution(),
+    ExponentialDistribution(flip_direction=False),
+)
 
 surface_selection = BilinearSurface.get_all_surfaces()
 

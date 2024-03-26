@@ -11,6 +11,7 @@ from pymesh import (
     Point,
     Line,
     CoonsPatch,
+    LinearDistribution,
     ExponentialDistribution,
     MeshViewer,
     GDFWriter,
@@ -28,6 +29,16 @@ line4 = Line(point4, point1)
 
 surface = CoonsPatch([line1, line3, line2, line4])
 surface.flip_panel_normals()  # flips surface panel normals
+
+# Setting meshing options for the normalized u and w dimensons
+surface.mesher.panel_densities = (
+    3,  # int specifies number of panels
+    0.2,  # float specifies largest panel length along boundaries
+)
+surface.mesher.mesh_distributions = (
+    ExponentialDistribution(),  # mesh distributed expoentially
+    LinearDistribution(),  # mesh distributed linearly
+)
 
 # Setting meshing options for the normalized u and w dimensons
 surface.panel_density_u = 3  # int specifies number of panels

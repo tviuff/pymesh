@@ -7,6 +7,8 @@ from collections.abc import Callable
 import numpy as np
 
 from pymesh.geo.curves.curve import validate_path_parameter
+from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
+from pymesh.utils.descriptors import AsInstanceOf
 from pymesh.utils.typing import NDArray3, NDArray3xNxN
 
 # ! log fliping of normal :)
@@ -15,7 +17,7 @@ from pymesh.utils.typing import NDArray3, NDArray3xNxN
 class Surface(ABC):
     """Surface abstract class"""
 
-    mesher = None
+    # mesher: AsInstanceOf(SurfaceMeshGenerator) # ! mesher.generate_mesh_points() not working
     _normal_is_flipped: bool = False
     _all_surfaces: list = []  # to contain every surface type instanciated
 

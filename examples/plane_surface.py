@@ -8,7 +8,7 @@ from pymesh import (
     Point,
     PlaneSurface,
     LinearDistribution,
-    CosineDistribution,
+    ExponentialDistribution,
     MeshViewer,
 )
 
@@ -17,10 +17,11 @@ point_1 = Point(1, 0, 0)
 point_2 = Point(0, 1, 0)
 
 surface = PlaneSurface(point_0=point_0, point_1=point_1, point_2=point_2)
-surface.panel_density_01 = 0.2
-surface.panel_density_02 = 0.2
-surface.boundary_distribution_01 = LinearDistribution()
-surface.boundary_distribution_02 = CosineDistribution(flip_direction=True)
+surface.mesher.panel_densities = (0.2, 0.2)
+surface.mesher.mesh_distributions = (
+    LinearDistribution(),
+    ExponentialDistribution(flip_direction=True),
+)
 
 surface_selection = PlaneSurface.get_all_surfaces()
 

@@ -4,10 +4,9 @@
 import numpy as np
 
 from pymesh.geo.point import Point
-from pymesh.utils.constants import MeshConstants
 from pymesh.utils.typing import NDArray3, NDArray3xNxN
-from pymesh.utils.descriptors import AsNumber, AsInstanceOf
-from pymesh.mesh.distributions import MeshDistribution
+from pymesh.utils.descriptors import AsInstanceOf
+from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
 from pymesh.geo.surfaces.surface import Surface, validate_path_parameters
 
 
@@ -20,10 +19,6 @@ class BilinearSurface(Surface):
     point_bottom_right = AsInstanceOf(Point)
     point_top_left = AsInstanceOf(Point)
     point_top_right = AsInstanceOf(Point)
-    distribution_top_bottom = AsInstanceOf(MeshDistribution)
-    distribution_left_right = AsInstanceOf(MeshDistribution)
-    panel_density_top_bottom = AsNumber(minvalue=0)
-    panel_density_left_right = AsNumber(minvalue=0)
 
     def __init__(
         self,
@@ -37,12 +32,18 @@ class BilinearSurface(Surface):
         self.point_bottom_right = point_bottom_right
         self.point_top_right = point_top_right
         self.point_top_left = point_top_left
-        self.distribution_top_bottom = MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
-        self.distribution_left_right = MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
-        self.panel_density_top_bottom = MeshConstants.DEFAULT_DENSITY.value
-        self.panel_density_left_right = MeshConstants.DEFAULT_DENSITY.value
+        self.mesher = SurfaceMeshGenerator(self.get_path(), self.get_max_lengths())
 
-    def _get_lengths(self) -> tuple[float]:
+    def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
+        u, w = validate_path_parameters(u, w)
+        return (
+            (1 - u) * w * self.point_bottom_left.xyz
+            + u * w * self.point_bottom_right.xyz
+            + (1 - u) * (1 - w) * self.point_top_left.xyz
+            + u * (1 - w) * self.point_top_right.xyz
+        )
+
+    def get_max_lengths(self) -> tuple[float]:
         length_left_right_bottom = np.sqrt(
             np.sum((self.point_bottom_left.xyz - self.point_bottom_right.xyz) ** 2)
         )
@@ -56,54 +57,13 @@ class BilinearSurface(Surface):
             np.sum((self.point_bottom_right.xyz - self.point_top_right.xyz) ** 2)
         )
         length_left_right = float(
-            np.max(length_left_right_bottom, length_left_right_top)
+            np.max((length_left_right_bottom, length_left_right_top))
         )
         length_top_bottom = float(
-            np.max(length_top_bottom_left, length_top_bottom_right)
+            np.max((length_top_bottom_left, length_top_bottom_right))
         )
         return length_top_bottom, length_left_right
 
-    def _get_num_points(self) -> tuple[int]:
-        density_top_bottom = self.panel_density_top_bottom
-        density_left_right = self.panel_density_left_right
-        num_points_top_bottom = density_top_bottom + 1
-        num_points_left_right = density_left_right + 1
-        if isinstance(density_top_bottom, float) or isinstance(
-            density_left_right, float
-        ):
-            length_top_bottom, length_left_right = self._get_lengths()
-            if isinstance(density_top_bottom, float):
-                num_points_top_bottom = int(
-                    np.ceil(length_top_bottom / density_top_bottom) + 1
-                )
-            if isinstance(density_left_right, float):
-                num_points_left_right = int(
-                    np.ceil(length_left_right / density_left_right) + 1
-                )
-        return num_points_top_bottom, num_points_left_right
-
-    def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
-        u, w = validate_path_parameters(u, w)
-        return (
-            (1 - u) * w * self.point_bottom_left.xyz
-            + u * w * self.point_bottom_right.xyz
-            + (1 - u) * (1 - w) * self.point_top_left.xyz
-            + u * (1 - w) * self.point_top_right.xyz
-        )
-
     @property
     def mesh_points(self) -> NDArray3xNxN[np.float64]:
-        np_top_bottom, np_left_right = self._get_num_points()
-        dist_tb = self.distribution_top_bottom.get_dist_fn()
-        dist_lr = self.distribution_left_right.get_dist_fn()
-        mp = np.zeros((3, np_left_right, np_top_bottom))
-        for i, u in enumerate(np.linspace(0, 1, num=np_left_right, endpoint=True)):
-            for j, w in enumerate(np.linspace(0, 1, num=np_top_bottom, endpoint=True)):
-                mp[:, i, j] = (
-                    0
-                    + (1 - dist_lr(u)) * dist_tb(w) * self.point_bottom_left.xyz
-                    + dist_lr(u) * dist_tb(w) * self.point_bottom_right.xyz
-                    + (1 - dist_lr(u)) * (1 - dist_tb(w)) * self.point_top_left.xyz
-                    + dist_lr(u) * (1 - dist_tb(w)) * self.point_top_right.xyz
-                )
-        return mp
+        return self.mesher.generate_mesh_points()
