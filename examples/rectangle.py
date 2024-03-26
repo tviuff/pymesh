@@ -12,7 +12,7 @@ from pymesh import (
     Line,
     CoonsPatch,
     ExponentialDistribution,
-    MESHViewer,
+    MeshViewer,
     GDFWriter,
 )
 
@@ -36,9 +36,7 @@ surface.boundary_distribution_u = ExponentialDistribution()  # mesh distribution
 
 surface_selection = CoonsPatch.get_all_surfaces()  # get all instanciated surfaces
 
-viewer = MESHViewer(
-    panel_normal_length=0.5
-)  # specify panel normal length for visualization
+viewer = MeshViewer(panel_normal_length=0.5)  # specify panel normal length
 viewer.add_panels(surface_selection, include_normals=True)  # include panel normals
 viewer.show()  # plot selected surface panels
 

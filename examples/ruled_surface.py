@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
 from pymesh import Point, Line, RuledSurface
 from pymesh import LinearDistribution, ExponentialDistribution
-from pymesh import MESHViewer
+from pymesh import MeshViewer
 
 line_1 = Line(Point(0, 0, 0), Point(1, 0, 0))
 line_2 = Line(Point(0, 1, 0), Point(1, 1, 0))
@@ -20,6 +20,6 @@ surface.mesher.mesh_distributions = (
 
 surface_selection = RuledSurface.get_all_surfaces()
 
-viewer = MESHViewer()
+viewer = MeshViewer()
 viewer.add_panels(surface_selection)
 viewer.show()

@@ -4,7 +4,7 @@ import sys, os
 
 sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
-from pymesh import Point, Line, Arc3P, CoonsPatch, LinearDistribution, MESHViewer
+from pymesh import Point, Line, Arc3P, CoonsPatch, LinearDistribution, MeshViewer
 
 # Points forming an inner rectangle in the circle
 point_ctr = Point(0, 0, 0)
@@ -56,6 +56,6 @@ surface5 = CoonsPatch([line4, line6, line13, line9])
 surface_selection = CoonsPatch.get_all_surfaces()
 
 if __name__ == "__main__":
-    viewer = MESHViewer(panel_normal_length=0.5)
+    viewer = MeshViewer(panel_normal_length=0.5)
     viewer.add_panels(surfaces=surface_selection, include_normals=True)
     viewer.show()

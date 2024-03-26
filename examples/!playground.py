@@ -4,7 +4,7 @@ import sys, os
 
 sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
-from pymesh import Point, Line, Arc3P, SweptSurface, MESHViewer
+from pymesh import Point, Line, Arc3P, SweptSurface, MeshViewer
 
 line = Line(Point(0, 0, 0), Point(0, 0, 1))
 curve = Arc3P(Point(0, 0, 0), Point(1, 0, 0), Point(1, 0.0001, 0))
@@ -15,6 +15,6 @@ surface.flip_normal = True
 
 surface_selection = surface
 
-viewer = MESHViewer(panel_normal_length=0.25)
+viewer = MeshViewer(panel_normal_length=0.25)
 viewer.add_panels(surface_selection, include_normals=True)
 viewer.show()

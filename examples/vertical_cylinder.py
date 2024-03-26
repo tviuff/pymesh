@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
 import math
 
-from pymesh import Point, Vector3D, Line, ArcPVA, SweptSurface, MESHViewer
+from pymesh import Point, Vector3D, Line, ArcPVA, SweptSurface, MeshViewer
 from examples.circle import surface_selection
 
 point_ctr = Point(0, 0, 0)
@@ -25,6 +25,6 @@ surface_selection = list(surface_selection)
 surface_selection.append(surface_cylinder)
 
 if __name__ == "__main__":
-    viewer = MESHViewer(panel_normal_length=0.5)
+    viewer = MeshViewer(panel_normal_length=0.5)
     viewer.add_panels(surfaces=surface_selection, include_normals=True)
     viewer.show()

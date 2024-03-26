@@ -9,7 +9,7 @@ from pymesh import (
     BilinearSurface,
     LinearDistribution,
     CosineDistribution,
-    MESHViewer,
+    MeshViewer,
 )
 
 point00 = Point(0, 0, 0)
@@ -31,6 +31,6 @@ surface.distribution_left_right = LinearDistribution()
 
 surface_selection = BilinearSurface.get_all_surfaces()
 
-viewer = MESHViewer()
+viewer = MeshViewer()
 viewer.add_panels(surface_selection)
 viewer.show()

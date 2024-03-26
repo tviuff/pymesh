@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
 from pymesh import Point, Line, Arc3P, SweptSurface
 from pymesh import LinearDistribution, CosineDistribution
-from pymesh import MESHViewer
+from pymesh import MeshViewer
 
 line = Line(Point(0, 0, 0), Point(0, 0, 1))
 curve = Arc3P(Point(0, 0, 0), Point(1, 0, 0), Point(0, 1, 0))
@@ -21,6 +21,6 @@ surface.mesher.mesh_distributions = (
 
 surface_selection = SweptSurface.get_all_surfaces()
 
-viewer = MESHViewer()
+viewer = MeshViewer()
 viewer.add_panels(surface_selection)
 viewer.show()

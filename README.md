@@ -26,7 +26,7 @@ The package is based on object-oriented programming and the user will be interac
 # examples/rectangle.py
 
 from pathlib import Path
-from pymesh import Point, Line, CoonsPatch, ExponentialDistribution, MESHViewer, GDFWriter
+from pymesh import Point, Line, CoonsPatch, ExponentialDistribution, MeshViewer, GDFWriter
 
 point1 = Point(0, 0, 0)
 point2 = Point(1, 0, 0)
@@ -48,16 +48,16 @@ surface.boundary_distribution_u = ExponentialDistribution() # mesh distribution 
 
 surface_selection = CoonsPatch.get_all_surfaces() # get all instanciated surfaces
 
-viewer = MESHViewer(panel_normal_length=0.5) # specify panel normal length for visualization
+viewer = MeshViewer(panel_normal_length=0.5) # specify panel normal length
 viewer.add_panels(surface_selection, include_normals=True) # include panel normals
 viewer.show() # plot selected surface panels
 ```
 
 ### Inspecting the final geometry
 
-A `MESHViewer`, based on the `matplotlib` package, is used to conveniently plot and inspect the surface panels and their normals as shown in the image below.
+A `MeshViewer`, based on the `matplotlib` package, is used to conveniently plot and inspect the surface panels and their normals as shown in the image below.
 
-![](/images/rectangle.png "Visualization of rectangle surface panels using MESHViewer")
+![](/images/rectangle.png "Visualization of rectangle surface panels using MeshViewer")
 
 ### Writing to a geometric data file
 
