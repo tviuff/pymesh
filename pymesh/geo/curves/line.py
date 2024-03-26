@@ -6,8 +6,7 @@ import numpy as np
 from pymesh.geo.point import Point
 from pymesh.geo.curves.curve import (
     Curve,
-    validate_path_parameter,
-    validate_curve_path_input,
+    validate_curve_path_parameters,
 )
 from pymesh.utils.typing import NDArray3
 
@@ -39,18 +38,6 @@ class Line(Curve):
     def length(self) -> float:
         return np.sqrt(np.sum((self.end - self.start) ** 2))
 
-    def path(self, u: int | float) -> NDArray3[np.float64]:
-        u = validate_path_parameter(u)
+    def path(self, u: int | float, flip: bool = False) -> NDArray3[np.float64]:
+        u = validate_curve_path_parameters(u, flip)
         return self.start + (self.end - self.start) * u
-
-    def get_path_fn(self, flip_direction: bool = False):
-        def fn(
-            u: int | float, flip_direction: bool = flip_direction
-        ) -> NDArray3[np.float64]:
-            """Line path function mapping input float from 0 to 1 to a physical xyz point"""
-            u = validate_curve_path_input(u=u, flip_direction=flip_direction)
-            xyz0 = self.point_start.xyz
-            dxyz = self.point_end.xyz - self.point_start.xyz
-            return xyz0 + dxyz * u
-
-        return fn

@@ -40,8 +40,10 @@ def line1(point1: Point, point2: Point) -> Line:
 
 @pytest.fixture
 def assert_rounded_path_xyz():
-    def fn(curve: Curve, u: int | float, xyz: ndarray, decimals: int = 0) -> None:
-        result = np.round(curve.path(u), decimals=decimals)
+    def fn(
+        curve: Curve, u: int | float, flip: bool, xyz: ndarray, decimals: int = 0
+    ) -> None:
+        result = np.round(curve.path(u, flip), decimals=decimals)
         expected = np.round(xyz, decimals=decimals)
         assert np.all(result == expected)
 

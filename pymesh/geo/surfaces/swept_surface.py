@@ -6,7 +6,7 @@ import numpy as np
 from pymesh.geo.curves.curve import Curve
 from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
 from pymesh.utils.typing import NDArray3, NDArray3xNxN
-from pymesh.geo.surfaces.surface import Surface, validate_path_parameters
+from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
 
 
 class SweptSurface(Surface):
@@ -42,8 +42,10 @@ class SweptSurface(Surface):
             raise TypeError("sweeper_curve must be of type 'Curve'")
         self._sweeper_curve = value
 
-    def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
-        u, w = validate_path_parameters(u, w)
+    def path(
+        self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
+    ) -> NDArray3[np.float64]:
+        u, w = validate_surface_path_parameters(u, w, uflip, wflip)
         return self.curve.path(u) + self.sweeper_curve.path(w)
 
     def get_max_lengths(self) -> tuple[float]:

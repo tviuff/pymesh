@@ -68,10 +68,3 @@ def test_get_all_surfaces(valid_lines) -> None:
 
 def test_panels(valid_lines) -> None:
     CoonsPatch(valid_lines).panels
-
-
-def test__get_num_points(valid_lines) -> None:
-    surface = CoonsPatch(valid_lines)
-    surface.panel_density_u = 0.2
-    surface.panel_density_w = 0.2
-    assert len(surface.panels) == (1 / 0.2) * (1 / 0.2)

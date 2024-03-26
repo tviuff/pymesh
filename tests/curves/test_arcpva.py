@@ -55,7 +55,7 @@ def test_point_start(point: Point, axis: Vector3D, angle: float) -> None:
 
 
 def test_point_end(curve: ArcPVA) -> None:
-    path_fn = curve.get_path_fn()
+    path_fn = curve.get_path()
     xyz = path_fn(1)
     point_end = Point(xyz[0], xyz[1], xyz[2])
     assert isinstance(curve.point_end, Point)
@@ -95,18 +95,20 @@ def test_path(
 ) -> None:
     decimals = 4
     curve1 = ArcPVA(point, axis, angle)
-    assert_rounded_path_xyz(curve1, 0, point.xyz, decimals)
-    assert_rounded_path_xyz(curve1, 1, Point(0, 1, 0).xyz, decimals)
-    assert_rounded_path_xyz(curve1, -1, point.xyz, decimals)
+    assert_rounded_path_xyz(curve1, 0, False, point.xyz, decimals)
+    assert_rounded_path_xyz(curve1, 1, False, Point(0, 1, 0).xyz, decimals)
+    assert_rounded_path_xyz(curve1, 1, True, point.xyz, decimals)
     assert_rounded_path_xyz(
         curve1,
         0.5,
+        False,
         np.array([1 / np.sqrt(2), 1 / np.sqrt(2), 0]),
         decimals,
     )
     assert_rounded_path_xyz(
         curve1,
-        -0.5,
+        0.5,
+        True,
         np.array([1 / np.sqrt(2), 1 / np.sqrt(2), 0]),
         decimals,
     )

@@ -104,18 +104,20 @@ def test_path(
 ) -> None:
     decimals = 4
     curve1 = Arc3P(point1, point2, point3)
-    assert_rounded_path_xyz(curve1, 0, point2.xyz, decimals)
-    assert_rounded_path_xyz(curve1, 1, point3.xyz, decimals)
-    assert_rounded_path_xyz(curve1, -1, point2.xyz, decimals)
+    assert_rounded_path_xyz(curve1, 0, False, point2.xyz, decimals)
+    assert_rounded_path_xyz(curve1, 1, False, point3.xyz, decimals)
+    assert_rounded_path_xyz(curve1, 1, True, point2.xyz, decimals)
     assert_rounded_path_xyz(
         curve1,
         0.5,
+        False,
         np.array([1 / np.sqrt(2), 1 / np.sqrt(2), 0]),
         decimals,
     )
     assert_rounded_path_xyz(
         curve1,
-        -0.5,
+        0.5,
+        True,
         np.array([1 / np.sqrt(2), 1 / np.sqrt(2), 0]),
         decimals,
     )

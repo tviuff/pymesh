@@ -7,7 +7,7 @@ from pymesh.geo.point import Point
 from pymesh.utils.typing import NDArray3, NDArray3xNxN
 from pymesh.utils.descriptors import AsInstanceOf
 from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
-from pymesh.geo.surfaces.surface import Surface, validate_path_parameters
+from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
 
 
 class BilinearSurface(Surface):
@@ -36,8 +36,10 @@ class BilinearSurface(Surface):
             SurfaceMeshGenerator(self.get_path(), self.get_max_lengths()), force=True
         )
 
-    def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
-        u, w = validate_path_parameters(u, w)
+    def path(
+        self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
+    ) -> NDArray3[np.float64]:
+        u, w = validate_surface_path_parameters(u, w, uflip, wflip)
         return (
             (1 - u) * w * self.point_bottom_left.xyz
             + u * w * self.point_bottom_right.xyz

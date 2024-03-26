@@ -6,9 +6,8 @@ from collections.abc import Callable
 
 import numpy as np
 
-from pymesh.geo.curves.curve import validate_path_parameter
+from pymesh.geo.curves.curve import validate_curve_path_parameters
 from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
-from pymesh.utils.descriptors import AsInstanceOf
 from pymesh.utils.typing import NDArray3, NDArray3xNxN
 
 # ! log fliping of normal :)
@@ -49,27 +48,33 @@ class Surface(ABC):
         """Flips all surface panel normals"""
         self._normal_is_flipped = not self._normal_is_flipped
 
+    def get_path(
+        self,
+    ) -> Callable[[int | float, int | float, bool, bool], NDArray3[np.float64]]:
+        """Returns surface path function"""
+        return self.path
+
     @abstractmethod
-    def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
+    def path(
+        self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
+    ) -> NDArray3[np.float64]:
         """Surface path function that returns a point in physical space.
 
         u:
-        Normalized surface dimension parameter between -1 and 1.
-        If positive, u is the percentage of the dimension covered
-        If negative, the value is added to 1, i.e. the direction is flipped
+        Normalized path parameter between 0 and 1
 
         w:
-        Normalized surface dimension parameter between -1 and 1.
-        If positive, u is the percentage of the dimension covered
-        If negative, the value is added to 1, i.e. the direction is flipped
+        Normalized path parameter between 0 and 1
+
+        uflip:
+        Optional, if True then u = (1 - u), i.e. the direction is flipped
+
+        wflip:
+        Optional, if True then u = (1 - u), i.e. the direction is flipped
 
         return:
-        numpy ndarray with shape (3, )
+        u, w
         """
-
-    def get_path(self) -> Callable[[int | float, int | float], NDArray3[np.float64]]:
-        """Returns surface path function"""
-        return self.path
 
     @abstractmethod
     def get_max_lengths(self) -> tuple[float]:
@@ -127,20 +132,26 @@ class Surface(ABC):
         return panels
 
 
-def validate_path_parameters(u: int | float, w: int | float) -> tuple[float, float]:
-    """Validates the normalized surface path parameters.
+def validate_surface_path_parameters(
+    u: int | float, w: int | float, uflip: bool, wflip: bool
+) -> tuple[float, float]:
+    """Validates the normalized surface path parameter.
 
     u:
-    Normalized surface dimension parameter between -1 and 1.
-    If positive, u is the percentage of the dimension covered
-    If negative, the value is added to 1, i.e. the direction is flipped
+    Normalized path parameter between 0 and 1
 
     w:
-    Normalized surface dimension parameter between -1 and 1.
-    If positive, u is the percentage of the dimension covered
-    If negative, the value is added to 1, i.e. the direction is flipped
+    Normalized path parameter between 0 and 1
+
+    uflip:
+    Optional, if True then u = (1 - u), i.e. the direction is flipped
+
+    wflip:
+    Optional, if True then u = (1 - u), i.e. the direction is flipped
 
     return:
-    tuple(u, w)
+    u, w
     """
-    return validate_path_parameter(u), validate_path_parameter(w)
+    return validate_curve_path_parameters(u, uflip), validate_curve_path_parameters(
+        w, wflip
+    )

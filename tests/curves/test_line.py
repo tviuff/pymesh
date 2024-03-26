@@ -39,14 +39,13 @@ def test_length(point1: Point, point2: Point, dx, dy, dz) -> None:
     assert length == math.sqrt(dx**2 + dy**2 + dz**2)
 
 
-def test_get_path_fn(point1: Point, point2: Point) -> None:
-    path_fn = Line(point1, point2).get_path_fn()
-    assert np.all(path_fn(0) == point1.xyz)
-    assert np.all(path_fn(1) == point2.xyz)
-    assert np.all(path_fn(0, flip_direction=True) == point2.xyz)
-    assert np.all(path_fn(1, flip_direction=True) == point1.xyz)
-    assert np.all(path_fn(0.2) == point1.xyz + 0.2 * (point2.xyz - point1.xyz))
+def test_get_path(point1: Point, point2: Point) -> None:
+    path = Line(point1, point2).get_path()
+    assert np.all(path(0) == point1.xyz)
+    assert np.all(path(1) == point2.xyz)
+    assert np.all(path(0, flip=True) == point2.xyz)
+    assert np.all(path(1, flip=True) == point1.xyz)
+    assert np.all(path(0.2) == point1.xyz + 0.2 * (point2.xyz - point1.xyz))
     assert np.all(
-        path_fn(0.2, flip_direction=True)
-        == point1.xyz + (1.0 - 0.2) * (point2.xyz - point1.xyz)
+        path(0.2, flip=True) == point1.xyz + (1.0 - 0.2) * (point2.xyz - point1.xyz)
     )

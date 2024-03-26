@@ -6,7 +6,7 @@ import numpy as np
 from pymesh.geo.curves.curve import Curve
 from pymesh.utils.typing import NDArray3, NDArray3xNxN
 from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
-from pymesh.geo.surfaces.surface import Surface, validate_path_parameters
+from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
 
 
 class RuledSurface(Surface):
@@ -58,8 +58,10 @@ class RuledSurface(Surface):
         length_2 = max(length_2_start, length_2_end)
         return length_1, length_2
 
-    def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
-        u, w = validate_path_parameters(u, w)
+    def path(
+        self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
+    ) -> NDArray3[np.float64]:
+        u, w = validate_surface_path_parameters(u, w, uflip, wflip)
         return (1 - w) * self.curve_1.path(u) + w * self.curve_2.path(u)
 
     @property

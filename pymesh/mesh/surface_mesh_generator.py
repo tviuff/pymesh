@@ -1,7 +1,6 @@
 """Module containing surface mesher class"""
 
 from collections.abc import Callable
-from typing import Self
 
 import numpy as np
 
@@ -87,5 +86,6 @@ class SurfaceMeshGenerator:
         mp = np.zeros((3, num_points_u, num_points_w))
         for i, u in enumerate(np.linspace(0, 1, num=num_points_u, endpoint=True)):
             for j, w in enumerate(np.linspace(0, 1, num=num_points_w, endpoint=True)):
+                print(i, j)
                 mp[:, i, j] = self.surface_fn(ufn(u), wfn(w))
         return mp

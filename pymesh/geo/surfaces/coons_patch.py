@@ -4,13 +4,10 @@
 import numpy as np
 
 from pymesh.geo.curves.curve import Curve
-from pymesh.utils.constants import MeshConstants
 from pymesh.utils.typing import NDArray3, NDArray3xNxN
-from pymesh.utils.descriptors import AsNumber, AsInstanceOf
 from pymesh.utils.exceptions import CurveIntersectionError
-from pymesh.mesh.distributions import MeshDistribution
 from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
-from pymesh.geo.surfaces.surface import Surface, validate_path_parameters
+from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
 
 # ! Consider using sets instead of list|tuple: enforcing uniquenes !
 
@@ -20,22 +17,12 @@ class CoonsPatch(Surface):
     and creates mesh points for generating panels.
     """
 
-    boundary_distribution_u = AsInstanceOf(MeshDistribution)
-    boundary_distribution_w = AsInstanceOf(MeshDistribution)
-    panel_density_u = AsNumber(minvalue=0)
-    panel_density_w = AsNumber(minvalue=0)
-
     def __init__(self, curves: list[Curve] | tuple[Curve]):
         self._all_surfaces.append(self)
         self.curves = curves  # also sets self._flipped_curves
         self._set_mesh_generator(
             SurfaceMeshGenerator(self.get_path(), self.get_max_lengths()), force=True
         )
-
-        self.boundary_distribution_u = MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
-        self.boundary_distribution_w = MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
-        self.panel_density_u = MeshConstants.DEFAULT_DENSITY.value
-        self.panel_density_w = MeshConstants.DEFAULT_DENSITY.value
 
     @property
     def curves(self) -> tuple[Curve]:
@@ -99,22 +86,40 @@ class CoonsPatch(Surface):
             cflip[index] = not cflip[index]
         return cflip, cselect
 
-    def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
-        u, w = validate_path_parameters(u, w)
-        flip = [-1 if flipped else 1 for flipped in self._flipped_curves]
-        p00 = self.curves[0].path(flip[0] * 0)
-        p11 = self.curves[1].path(flip[1] * 1)
-        p01 = self.curves[2].path(flip[2] * 1)
-        p10 = self.curves[3].path(flip[3] * 0)
-        p1 = (1 - u) * w + u * w
-        p2 = (1 - w) * u + w * u
+    def path(
+        self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
+    ) -> NDArray3[np.float64]:
+        u, w = validate_surface_path_parameters(u, w, uflip, wflip)
+        curve_u0, curve_u1, curve_0w, curve_1w = self.curves
+        fu0, fu1, f0w, f1w = self._flipped_curves
+
+        def cu0(x):
+            func = curve_u0.get_path()
+            return func(x, flip=fu0)
+
+        def cu1(x):
+            func = curve_u1.get_path()
+            return func(x, flip=fu1)
+
+        def c0w(x):
+            func = curve_0w.get_path()
+            return func(x, flip=f0w)
+
+        def c1w(x):
+            func = curve_1w.get_path()
+            return func(x, flip=f1w)
+
+        p00, p11, p01, p10 = cu0(0), cu1(1), c0w(1), c1w(0)
+        p1 = (1 - u) * c0w(w) + u * c1w(w)
+        p2 = (1 - w) * cu0(u) + w * cu1(u)
         p3 = (
             (1 - u) * (1 - w) * p00
             + u * (1 - w) * p10
             + (1 - u) * w * p01
             + u * w * p11
         )
-        return p1 + p2 - p3
+        p = p1 + p2 - p3
+        return p
 
     def get_max_lengths(self) -> tuple[float]:
         curve_u0, curve_u1, curve_0w, curve_1w = self.curves
@@ -122,45 +127,6 @@ class CoonsPatch(Surface):
         max_length_w = max(curve_0w.length, curve_1w.length)
         return max_length_u, max_length_w
 
-    def _get_num_points(self) -> tuple[int]:
-        density_u, density_w = self.panel_density_u, self.panel_density_w
-        num_points_u, num_points_w = density_u + 1, density_w + 1
-        if isinstance(density_u, float) or isinstance(density_w, float):
-            curve_u0, curve_u1, curve_0w, curve_1w = self.curves
-            if isinstance(density_u, float):
-                u_length = max(curve_u0.length, curve_u1.length)
-                num_points_u = int(np.ceil(u_length / density_u) + 1)
-            if isinstance(density_w, float):
-                w_length = max(curve_0w.length, curve_1w.length)
-                num_points_w = int(np.ceil(w_length / density_w) + 1)
-        return num_points_u, num_points_w
-
     @property
     def mesh_points(self) -> NDArray3xNxN[np.float64]:
-        # return self.mesher.generate_mesh_points()
-        npu, npw = self._get_num_points()
-        du1 = self.boundary_distribution_u.get_dist_fn()
-        d0w = self.boundary_distribution_w.get_dist_fn()
-        du0 = self.boundary_distribution_u.get_dist_fn()
-        d1w = self.boundary_distribution_w.get_dist_fn()
-        path_fns = []
-        for curve, flip in zip(self.curves, self._flipped_curves):
-            path_fns.append(curve.get_path_fn(flip_direction=flip))
-        pu0, pu1, p0w, p1w = path_fns
-        p00 = pu0(du0(0))
-        p11 = pu1(du1(1))
-        p01 = p0w(d0w(1))
-        p10 = p1w(d1w(0))
-        mp = np.zeros((3, npu, npw))
-        for i, u in enumerate(np.linspace(0, 1, num=npu, endpoint=True)):
-            for j, w in enumerate(np.linspace(0, 1, num=npw, endpoint=True)):
-                p1 = (1 - u) * p0w(d0w(w)) + u * p1w(d1w(w))
-                p2 = (1 - w) * pu0(du0(u)) + w * pu1(du1(u))
-                p3 = (
-                    (1 - u) * (1 - w) * p00
-                    + u * (1 - w) * p10
-                    + (1 - u) * w * p01
-                    + u * w * p11
-                )
-                mp[:, i, j] = p1 + p2 - p3
-        return mp
+        return self.mesher.generate_mesh_points()
