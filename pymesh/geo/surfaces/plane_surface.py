@@ -3,12 +3,12 @@
 
 import numpy as np
 
-from pymesh.auxiliary.point import Point
+from pymesh.geo.point import Point
 from pymesh.utils.constants import MeshConstants
 from pymesh.utils.typing import NDArray3, NDArray3xNxN
 from pymesh.utils.descriptors import AsNumber, AsInstanceOf
 from pymesh.mesh.distributions import MeshDistribution
-from pymesh.surfaces.surface import Surface, validate_path_parameters
+from pymesh.geo.surfaces.surface import Surface, validate_path_parameters
 
 
 class PlaneSurface(Surface):

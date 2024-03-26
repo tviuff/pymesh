@@ -6,7 +6,7 @@ from collections.abc import Callable
 
 import numpy as np
 
-from pymesh.curves.curve import validate_path_parameter
+from pymesh.geo.curves.curve import validate_path_parameter
 from pymesh.utils.typing import NDArray3, NDArray3xNxN
 
 # ! log fliping of normal :)

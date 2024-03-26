@@ -3,13 +3,13 @@
 
 import numpy as np
 
-from pymesh.curves.curve import Curve
+from pymesh.geo.curves.curve import Curve
 from pymesh.utils.constants import MeshConstants
 from pymesh.utils.typing import NDArray3, NDArray3xNxN
 from pymesh.utils.descriptors import AsNumber, AsInstanceOf
 from pymesh.utils.exceptions import CurveIntersectionError
 from pymesh.mesh.distributions import MeshDistribution
-from pymesh.surfaces.surface import Surface, validate_path_parameters
+from pymesh.geo.surfaces.surface import Surface, validate_path_parameters
 
 # ! Consider using sets instead of list|tuple: enforcing uniquenes !
 

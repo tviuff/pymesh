@@ -3,8 +3,8 @@
 
 import numpy as np
 
-from pymesh.auxiliary.point import Point
-from pymesh.curves.curve import (
+from pymesh.geo.point import Point
+from pymesh.geo.curves.curve import (
     Curve,
     validate_path_parameter,
     validate_curve_path_input,
