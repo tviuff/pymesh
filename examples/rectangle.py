@@ -33,7 +33,7 @@ surface.flip_panel_normals()  # flips surface panel normals
 # Setting meshing options for the normalized u and w dimensons
 surface.mesher.panel_densities = (
     3,  # int specifies number of panels
-    3,  # float specifies largest panel length along boundaries
+    0.2,  # float specifies largest panel length along boundaries
 )
 surface.mesher.mesh_distributions = (
     ExponentialDistribution(),  # mesh distributed expoentially
@@ -46,5 +46,5 @@ viewer = MeshViewer(panel_normal_length=0.5)  # specify panel normal length
 viewer.add_panels(surface_selection, include_normals=True)  # include panel normals
 viewer.show()  # plot selected surface panels
 
-# writer = GDFWriter()
-# writer.write(surface_selection, filename=Path("output", "rectangle.gdf"))
+writer = GDFWriter()
+writer.write(surface_selection, filename=Path("output", "rectangle.gdf"))

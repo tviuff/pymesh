@@ -42,9 +42,14 @@ surface = CoonsPatch([line1, line3, line2, line4])
 surface.flip_panel_normals() # flips surface panel normals
 
 # Setting meshing options for the normalized u and w dimensons
-surface.panel_density_u = 3 # int specifies number of panels
-surface.panel_density_w = 0.2 # float specifies largest panel length along boundaries
-surface.boundary_distribution_u = ExponentialDistribution() # mesh distribution type
+surface.mesher.panel_densities = (
+    3,  # int specifies number of panels
+    0.2,  # float specifies largest panel length along boundaries
+)
+surface.mesher.mesh_distributions = (
+    ExponentialDistribution(),  # mesh distributed expoentially
+    LinearDistribution(),  # mesh distributed linearly
+)
 
 surface_selection = CoonsPatch.get_all_surfaces() # get all instanciated surfaces
 
