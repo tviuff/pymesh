@@ -52,7 +52,20 @@ class SurfaceMeshGenerator:
     def set_u_parameters(
         self, panel_density: int | float = None, distribution: MeshDistribution = None
     ) -> None:
-        """Sets surface mesh parameters for the u dimension"""
+        """Sets surface mesh parameters for the u dimension.
+
+        panel_density:
+        Optional, can be either an int or a float.
+        If an int, the value specifies the number of panels along the dimension.
+        If a float, the value represents the number of panels per dimension unit.
+
+        distribution:
+        Optional, can be set to various instances of MeshDistribution subclasses.
+        Default is LinearDistribution. Other options are:
+          * ExponentialDistribution
+          * CosineDistribution
+          * PowerDistribution
+        """
         index = 0
         if panel_density is not None:
             self._set_panel_density_index(panel_density, index)
@@ -62,7 +75,20 @@ class SurfaceMeshGenerator:
     def set_w_parameters(
         self, panel_density: int | float = None, distribution: MeshDistribution = None
     ) -> None:
-        """Sets surface mesh parameters for the w dimension"""
+        """Sets surface mesh parameters for the w dimension.
+
+        panel_density:
+        Optional, can be either an int or a float.
+        If an int, the value specifies the number of panels along the dimension.
+        If a float, the value represents the number of panels per dimension unit.
+
+        distribution:
+        Optional, can be set to various instances of MeshDistribution subclasses.
+        Default is LinearDistribution. Other options are:
+          * ExponentialDistribution
+          * CosineDistribution
+          * PowerDistribution
+        """
         index = 1
         if panel_density is not None:
             self._set_panel_density_index(panel_density, index)
