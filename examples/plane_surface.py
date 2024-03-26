@@ -9,7 +9,7 @@ from pymesh import (
     PlaneSurface,
     LinearDistribution,
     CosineDistribution,
-    GDFViewer,
+    MESHViewer,
 )
 
 point_0 = Point(0, 0, 0)
@@ -24,6 +24,6 @@ surface.boundary_distribution_02 = CosineDistribution(flip_direction=True)
 
 surface_selection = PlaneSurface.get_all_surfaces()
 
-viewer = GDFViewer()
+viewer = MESHViewer()
 viewer.add_panels(surface_selection, include_normals=True)
 viewer.show()

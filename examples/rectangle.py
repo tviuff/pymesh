@@ -12,7 +12,7 @@ from pymesh import (
     Line,
     CoonsPatch,
     ExponentialDistribution,
-    GDFViewer,
+    MESHViewer,
     GDFWriter,
 )
 
@@ -36,7 +36,7 @@ surface.boundary_distribution_u = ExponentialDistribution()  # mesh distribution
 
 surface_selection = CoonsPatch.get_all_surfaces()  # get all instanciated surfaces
 
-viewer = GDFViewer(
+viewer = MESHViewer(
     panel_normal_length=0.5
 )  # specify panel normal length for visualization
 viewer.add_panels(surface_selection, include_normals=True)  # include panel normals

@@ -8,7 +8,7 @@ from pymesh.curves.arcpva import ArcPVA
 from pymesh.curves.line import Line
 from pymesh.mesh.distributions import LinearDistribution, ExponentialDistribution
 from pymesh.mesh.distributions import PowerDistribution, CosineDistribution
-from pymesh.gdf_viewer import GDFViewer
+from pymesh.mesh_viewer import MESHViewer
 from pymesh.gdf_writer import GDFWriter
 from pymesh.surfaces.bilinear_surface import BilinearSurface
 from pymesh.surfaces.coons_patch import CoonsPatch

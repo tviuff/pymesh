@@ -1,6 +1,6 @@
-# PYGDF geometry package overview
+# PYMESH geometry package overview
 
-The `pygdf` package handles basic geometry and facilitates the creation of 3-dimensional surface panels. These surface panels are converted into a low-order geometric data file for import and use in [WAMIT](https://www.wamit.com/).
+The `pymesh` package handles basic geometry and facilitates the creation of 3-dimensional surface panels. These surface panels are converted into a low-order geometric data file for import and use in [WAMIT](https://www.wamit.com/).
 
 > *Sections on installation coming soon.*
 
@@ -26,7 +26,7 @@ The package is based on object-oriented programming and the user will be interac
 # examples/rectangle.py
 
 from pathlib import Path
-from pygdf import Point, Line, CoonsPatch, ExponentialDistribution, GDFViewer, GDFWriter
+from pymesh import Point, Line, CoonsPatch, ExponentialDistribution, MESHViewer, GDFWriter
 
 point1 = Point(0, 0, 0)
 point2 = Point(1, 0, 0)
@@ -48,16 +48,16 @@ surface.boundary_distribution_u = ExponentialDistribution() # mesh distribution 
 
 surface_selection = CoonsPatch.get_all_surfaces() # get all instanciated surfaces
 
-viewer = GDFViewer(panel_normal_length=0.5) # specify panel normal length for visualization
+viewer = MESHViewer(panel_normal_length=0.5) # specify panel normal length for visualization
 viewer.add_panels(surface_selection, include_normals=True) # include panel normals
 viewer.show() # plot selected surface panels
 ```
 
 ### Inspecting the final geometry
 
-A `GDFViewer`, based on the `matplotlib` package, is used to conveniently plot and inspect the surface panels and their normals as shown in the image below.
+A `MESHViewer`, based on the `matplotlib` package, is used to conveniently plot and inspect the surface panels and their normals as shown in the image below.
 
-![](/images/rectangle.png "Visualization of rectangle surface panels using GDFViewer")
+![](/images/rectangle.png "Visualization of rectangle surface panels using MESHViewer")
 
 ### Writing to a geometric data file
 

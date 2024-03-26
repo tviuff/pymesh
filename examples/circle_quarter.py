@@ -5,7 +5,7 @@ import sys, os
 sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
 import math
-from pymesh import Point, Line, Arc3P, PlaneSurface, RuledSurface, GDFViewer
+from pymesh import Point, Line, Arc3P, PlaneSurface, RuledSurface, MESHViewer
 
 # Points forming an inner rectangle in the circle
 square_size = 0.8
@@ -35,6 +35,6 @@ surface_circle01 = RuledSurface(line01, arc01)
 surface_selection = RuledSurface.get_all_surfaces()
 
 if __name__ == "__main__":
-    viewer = GDFViewer(panel_normal_length=0.5)
+    viewer = MESHViewer(panel_normal_length=0.5)
     viewer.add_panels(surfaces=surface_selection, include_normals=True)
     viewer.show()

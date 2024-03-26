@@ -11,7 +11,7 @@ from pymesh.surfaces.surface import Surface
 # ! fix typing of NDArray cases
 
 
-class GDFViewer:
+class MESHViewer:
     """Plots surface panels and normals using matplotlib with seaborn-v0_8 style"""
 
     def __init__(self, panel_normal_length: float = 1.0) -> None:
