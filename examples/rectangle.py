@@ -11,7 +11,6 @@ from pymesh import (
     Point,
     Line,
     CoonsPatch,
-    LinearDistribution,
     ExponentialDistribution,
     MeshViewer,
     GDFWriter,

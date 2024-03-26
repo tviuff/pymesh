@@ -48,14 +48,13 @@ class RuledSurface(Surface):
         1) largest distance along curve paths.
         2) largest distance between opposing curves end points.
         """
+        start_points = [self.curve_1.path(0), self.curve_2.path(0)]
+        end_points = [self.curve_1.path(1), self.curve_2.path(1)]
         length_1 = max(self.curve_1.length, self.curve_2.length)
-        start_points = (self.curve_1.point_start.xyz, self.curve_2.point_start.xyz)
-        end_points = (self.curve_1.point_end.xyz, self.curve_2.point_end.xyz)
-        length_2_start = float(
-            np.sqrt(np.sum((start_points[0] - start_points[1]) ** 2))
+        length_2 = max(
+            float(np.sqrt(np.sum((start_points[0] - start_points[1]) ** 2))),
+            float(np.sqrt(np.sum((end_points[0] - end_points[1]) ** 2))),
         )
-        length_2_end = float(np.sqrt(np.sum((end_points[0] - end_points[1]) ** 2)))
-        length_2 = max(length_2_start, length_2_end)
         return length_1, length_2
 
     def path(
