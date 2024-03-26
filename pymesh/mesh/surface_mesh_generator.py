@@ -57,7 +57,7 @@ class SurfaceMeshGenerator:
         panel_density:
         Optional, can be either an int or a float.
         If an int, the value specifies the number of panels along the dimension.
-        If a float, the value represents the number of panels per dimension unit.
+        If a float, the value represents the largest panel length along the boundaries.
 
         distribution:
         Optional, can be set to various instances of MeshDistribution subclasses.
@@ -80,7 +80,7 @@ class SurfaceMeshGenerator:
         panel_density:
         Optional, can be either an int or a float.
         If an int, the value specifies the number of panels along the dimension.
-        If a float, the value represents the number of panels per dimension unit.
+        If a float, the value represents the largest panel length along the boundaries.
 
         distribution:
         Optional, can be set to various instances of MeshDistribution subclasses.
