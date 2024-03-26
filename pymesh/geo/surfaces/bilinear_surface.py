@@ -32,7 +32,9 @@ class BilinearSurface(Surface):
         self.point_bottom_right = point_bottom_right
         self.point_top_right = point_top_right
         self.point_top_left = point_top_left
-        self.mesher = SurfaceMeshGenerator(self.get_path(), self.get_max_lengths())
+        self._set_mesh_generator(
+            SurfaceMeshGenerator(self.get_path(), self.get_max_lengths()), force=True
+        )
 
     def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
         u, w = validate_path_parameters(u, w)

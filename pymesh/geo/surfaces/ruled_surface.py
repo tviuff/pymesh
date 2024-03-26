@@ -18,7 +18,9 @@ class RuledSurface(Surface):
         self._all_surfaces.append(self)
         self.curve_1 = curve_1
         self.curve_2 = curve_2
-        self.mesher = SurfaceMeshGenerator(self.get_path(), self.get_max_lengths())
+        self._set_mesh_generator(
+            SurfaceMeshGenerator(self.get_path(), self.get_max_lengths()), force=True
+        )
 
     @property
     def curve_1(self) -> Curve:

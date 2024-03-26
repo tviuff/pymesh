@@ -17,14 +17,37 @@ from pymesh.utils.typing import NDArray3, NDArray3xNxN
 class Surface(ABC):
     """Surface abstract class"""
 
-    # mesher: AsInstanceOf(SurfaceMeshGenerator) # ! mesher.generate_mesh_points() not working
+    _mesher: SurfaceMeshGenerator | None = None
     _normal_is_flipped: bool = False
     _all_surfaces: list = []  # to contain every surface type instanciated
+
+    @property
+    def mesher(self) -> SurfaceMeshGenerator:
+        if self._mesher is None:
+            raise AttributeError(
+                "The mesher property is None. Try using ._set_mesh_generator()."
+            )
+        return self._mesher
+
+    def _set_mesh_generator(self, mesher: SurfaceMeshGenerator, force=False):
+        """Sets a surface mesh generator if force=True"""
+        if force:
+            if not isinstance(mesher, SurfaceMeshGenerator):
+                raise TypeError(
+                    f"Expected {mesher!r} to an instance of {SurfaceMeshGenerator!r}"
+                )
+            self._mesher = mesher
+        else:
+            raise AttributeError("Not possible to set a mesher attribute")
 
     @classmethod
     def get_all_surfaces(cls) -> list:
         """Returns a list of all generated surfaces, independent of surface class name"""
         return cls._all_surfaces
+
+    def flip_panel_normals(self) -> None:
+        """Flips all surface panel normals"""
+        self._normal_is_flipped = not self._normal_is_flipped
 
     @abstractmethod
     def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
@@ -66,10 +89,6 @@ class Surface(ABC):
         are the number of panels along each of the two surface
         dimensions.
         """
-
-    def flip_panel_normals(self) -> None:
-        """Flips all surface panel normals"""
-        self._normal_is_flipped = not self._normal_is_flipped
 
     @property
     def panels(self) -> list[list[float]]:

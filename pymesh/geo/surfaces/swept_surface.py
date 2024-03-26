@@ -18,7 +18,9 @@ class SweptSurface(Surface):
         self._all_surfaces.append(self)
         self.curve = curve
         self.sweeper_curve = sweeper_curve
-        self.mesher = SurfaceMeshGenerator(self.get_path(), self.get_max_lengths())
+        self._set_mesh_generator(
+            SurfaceMeshGenerator(self.get_path(), self.get_max_lengths()), force=True
+        )
 
     @property
     def curve(self) -> Curve:

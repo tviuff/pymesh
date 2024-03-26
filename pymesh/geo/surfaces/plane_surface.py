@@ -24,7 +24,9 @@ class PlaneSurface(Surface):
         self.point_0 = point_0
         self.point_1 = point_1
         self.point_2 = point_2
-        self.mesher = SurfaceMeshGenerator(self.get_path(), self.get_max_lengths())
+        self._set_mesh_generator(
+            SurfaceMeshGenerator(self.get_path(), self.get_max_lengths()), force=True
+        )
 
     def path(self, u: int | float, w: int | float) -> NDArray3[np.float64]:
         u, w = validate_path_parameters(u, w)

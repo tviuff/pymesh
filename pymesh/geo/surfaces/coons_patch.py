@@ -28,7 +28,9 @@ class CoonsPatch(Surface):
     def __init__(self, curves: list[Curve] | tuple[Curve]):
         self._all_surfaces.append(self)
         self.curves = curves  # also sets self._flipped_curves
-        self.mesher = SurfaceMeshGenerator(self.get_path(), self.get_max_lengths())
+        self._set_mesh_generator(
+            SurfaceMeshGenerator(self.get_path(), self.get_max_lengths()), force=True
+        )
 
         self.boundary_distribution_u = MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
         self.boundary_distribution_w = MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value()
