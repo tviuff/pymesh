@@ -6,7 +6,7 @@ import numpy as np
 from pymesh.geo.point import Point
 from pymesh.typing import NDArray3
 from pymesh.descriptors import AsInstanceOf, AsNDArray
-from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
+from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
 
 
@@ -25,7 +25,7 @@ class PlaneSurface(Surface):
         self.vector_01 = point_1.xyz - point_0.xyz
         self.vector_02 = point_2.xyz - point_0.xyz
         self._set_mesh_generator(
-            SurfaceMeshGenerator(self.get_path(), self.get_max_lengths()), force=True
+            MeshGenerator(self.get_path(), self.get_max_lengths()), force=True
         )
 
     def path(

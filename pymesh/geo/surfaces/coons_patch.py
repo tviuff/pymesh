@@ -6,7 +6,7 @@ import numpy as np
 from pymesh.geo.curves.curve import Curve
 from pymesh.typing import NDArray3
 from pymesh.exceptions import CurveIntersectionError
-from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
+from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
 
 # ! Consider using sets instead of list|tuple: enforcing uniquenes !
@@ -21,7 +21,7 @@ class CoonsPatch(Surface):
         self._all_surfaces.append(self)
         self.curves = curves  # also sets self._flipped_curves
         self._set_mesh_generator(
-            SurfaceMeshGenerator(self.get_path(), self.get_max_lengths()), force=True
+            MeshGenerator(self.get_path(), self.get_max_lengths()), force=True
         )
 
     @property

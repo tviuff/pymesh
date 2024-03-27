@@ -6,7 +6,7 @@ import numpy as np
 from pymesh.geo.point import Point
 from pymesh.typing import NDArray3
 from pymesh.descriptors import AsNDArray
-from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
+from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
 
 
@@ -33,7 +33,7 @@ class BilinearSurface(Surface):
         self.top_right = top_right.xyz
         self.top_left = top_left.xyz
         self._set_mesh_generator(
-            SurfaceMeshGenerator(self.get_path(), self.get_max_lengths()), force=True
+            MeshGenerator(self.get_path(), self.get_max_lengths()), force=True
         )
 
     def path(

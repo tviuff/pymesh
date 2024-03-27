@@ -6,8 +6,8 @@ from pymesh.geo.vector3d import Vector3D
 from pymesh.geo.curves.arc3p import Arc3P
 from pymesh.geo.curves.arcpva import ArcPVA
 from pymesh.geo.curves.line import Line
-from pymesh.mesh.distributions import LinearDistribution, ExponentialDistribution
-from pymesh.mesh.distributions import PowerDistribution, CosineDistribution
+from pymesh.mesh.mesh_distributions import LinearDistribution, ExponentialDistribution
+from pymesh.mesh.mesh_distributions import PowerDistribution, CosineDistribution
 from pymesh.mesh_viewer import MeshViewer
 from pymesh.gdf_writer import GDFWriter
 from pymesh.geo.surfaces.bilinear_surface import BilinearSurface

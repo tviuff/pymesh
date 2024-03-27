@@ -6,7 +6,7 @@ import numpy as np
 
 from pymesh.constants import MeshConstants
 from pymesh.descriptors import AsContainerOf
-from pymesh.mesh.distributions import MeshDistribution
+from pymesh.mesh.mesh_distributions import MeshDistribution
 from pymesh.typing import NDArray3xNxN
 
 
@@ -14,7 +14,7 @@ LENGTH: int = 2
 NUM: int = 100
 
 
-class SurfaceMeshGenerator:
+class MeshGenerator:
     """Surface mesh generator"""
 
     mesh_distributions = AsContainerOf(

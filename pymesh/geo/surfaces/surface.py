@@ -7,7 +7,7 @@ from collections.abc import Callable
 import numpy as np
 
 from pymesh.geo.curves.curve import validate_curve_path_parameters
-from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
+from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.typing import NDArray3, NDArray3xNxN
 
 # ! log fliping of normal :)
@@ -20,23 +20,21 @@ class Surface(ABC):
     _all_surfaces: list = []  # to contain every surface type instanciated
 
     @property
-    def mesher(self) -> SurfaceMeshGenerator:
+    def mesher(self) -> MeshGenerator:
         return self._mesher
 
     @mesher.setter
     def mesher(self, value) -> None:
-        if not isinstance(value, SurfaceMeshGenerator):
-            raise TypeError(
-                f"Expected {value!r} to be an instance of SurfaceMeshGenerator"
-            )
+        if not isinstance(value, MeshGenerator):
+            raise TypeError(f"Expected {value!r} to be an instance of MeshGenerator")
         self._mesher = value
 
-    def _set_mesh_generator(self, mesher: SurfaceMeshGenerator, force=False):
+    def _set_mesh_generator(self, mesher: MeshGenerator, force=False):
         """Sets a surface mesh generator if force=True"""
         if force:
-            if not isinstance(mesher, SurfaceMeshGenerator):
+            if not isinstance(mesher, MeshGenerator):
                 raise TypeError(
-                    f"Expected {mesher!r} to an instance of {SurfaceMeshGenerator!r}"
+                    f"Expected {mesher!r} to an instance of {MeshGenerator!r}"
                 )
             self._mesher = mesher
         else:

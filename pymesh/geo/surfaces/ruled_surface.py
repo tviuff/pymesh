@@ -5,7 +5,7 @@ import numpy as np
 
 from pymesh.geo.curves.curve import Curve
 from pymesh.typing import NDArray3
-from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
+from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
 
 
@@ -19,7 +19,7 @@ class RuledSurface(Surface):
         self.curve_1 = curve_1
         self.curve_2 = curve_2
         self._set_mesh_generator(
-            SurfaceMeshGenerator(self.get_path(), self.get_max_lengths()), force=True
+            MeshGenerator(self.get_path(), self.get_max_lengths()), force=True
         )
 
     @property
