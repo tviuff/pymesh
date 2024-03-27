@@ -1,7 +1,5 @@
 # conftest.py
 
-from collections.abc import Callable
-
 import pytest
 import numpy as np
 from numpy import ndarray
@@ -9,7 +7,9 @@ from numpy import ndarray
 from pymesh import Point, Line
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.surfaces.surface import Surface
-from pymesh.typing import NDArray3
+
+
+DECIMALS = 4
 
 
 @pytest.fixture
@@ -25,6 +25,26 @@ def dy() -> float:
 @pytest.fixture
 def dz() -> float:
     return 4.0
+
+
+@pytest.fixture
+def p00() -> Point:
+    return Point(0, 0, 0)
+
+
+@pytest.fixture
+def p01() -> Point:
+    return Point(0, 1, 0)
+
+
+@pytest.fixture
+def p10() -> Point:
+    return Point(1, 0, 0)
+
+
+@pytest.fixture
+def p11() -> Point:
+    return Point(1, 1, 0)
 
 
 @pytest.fixture
@@ -52,7 +72,7 @@ def line2(point1: Point, point2: Point) -> Line:  # pylint: disable=redefined-ou
 @pytest.fixture
 def assert_curve_path_rounded():
     def fn(
-        curve: Curve, u: int | float, flip: bool, xyz: ndarray, decimals: int = 0
+        curve: Curve, u: int | float, flip: bool, xyz: ndarray, decimals: int = DECIMALS
     ) -> None:
         result = np.round(curve.path(u, flip), decimals=decimals)
         expected = np.round(xyz, decimals=decimals)
@@ -70,7 +90,7 @@ def assert_surface_path_rounded():
         uflip: bool,
         wflip: bool,
         xyz: ndarray,
-        decimals: int = 0,
+        decimals: int = DECIMALS,
     ) -> None:
         result = np.round(surface.path(u, w, uflip, wflip), decimals=decimals)
         expected = np.round(xyz, decimals=decimals)
@@ -89,7 +109,7 @@ def test_surface_path(assert_surface_path_rounded) -> None:
         p01: Point,
         p10: Point,
         p11: Point,
-        decimals: int = 4,
+        decimals: int = DECIMALS,
     ):
 
         def assert_point(surf, u, w, uflip, wflip, point, d=decimals):

@@ -8,17 +8,7 @@ from pymesh.geo.surfaces.surface import Surface
 
 
 @pytest.fixture
-def valid_points() -> tuple[Point]:
-    p00 = Point(0, 0, 0)
-    p11 = Point(1, 1, 0)
-    p01 = Point(0, 1, 0)
-    p10 = Point(1, 0, 0)
-    return p00, p01, p10, p11
-
-
-@pytest.fixture
-def valid_lines(valid_points) -> tuple[Line]:
-    p00, p01, p10, p11 = valid_points
+def valid_lines(p00, p01, p10, p11) -> tuple[Line]:
     line_u0 = Line(p00, p10)
     line_u1 = Line(p11, p01)
     line_0w = Line(p01, p00)
@@ -27,11 +17,7 @@ def valid_lines(valid_points) -> tuple[Line]:
 
 
 @pytest.fixture
-def lines_not_connected() -> tuple[Line]:
-    p00 = Point(0, 0, 0)
-    p11 = Point(1, 1, 0)
-    p01 = Point(0, 1, 0)
-    p10 = Point(1, 0, 0)
+def lines_not_connected(p00, p01, p10, p11) -> tuple[Line]:
     p10_invalid = Point(2, 0, 0)
     line_u0 = Line(p00, p10)
     line_u1 = Line(p11, p01)
@@ -75,7 +61,6 @@ def test_get_max_lengths(valid_lines) -> None:
         assert length == 1.0
 
 
-def test_path(valid_points, valid_lines, test_surface_path) -> None:
-    p00, p01, p10, p11 = valid_points
+def test_path(p00, p01, p10, p11, valid_lines, test_surface_path) -> None:
     surface = CoonsPatch(valid_lines)
     test_surface_path(surface, p00, p01, p10, p11)

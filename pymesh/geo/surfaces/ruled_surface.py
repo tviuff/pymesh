@@ -45,17 +45,17 @@ class RuledSurface(Surface):
     def get_max_lengths(self) -> tuple[float]:
         """Returns longest boundary length along the u and w dimensions.
 
-        1) largest distance along curve paths.
-        2) largest distance between opposing curves end points.
+        u: largest distance along curve paths.
+        w: largest distance between opposing curves end points.
         """
         start_points = [self.curve_1.start, self.curve_2.start]
         end_points = [self.curve_1.end, self.curve_2.end]
-        length_1 = max(self.curve_1.length, self.curve_2.length)
-        length_2 = max(
+        length_u = max(self.curve_1.length, self.curve_2.length)
+        length_w = max(
             float(np.sqrt(np.sum((start_points[0] - start_points[1]) ** 2))),
             float(np.sqrt(np.sum((end_points[0] - end_points[1]) ** 2))),
         )
-        return length_1, length_2
+        return length_u, length_w
 
     def path(
         self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False

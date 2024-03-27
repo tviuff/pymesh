@@ -7,38 +7,26 @@ from pymesh.geo.surfaces.surface import Surface
 
 
 @pytest.fixture
-def valid_points() -> tuple[Point]:
-    p0 = Point(0, 0, 0)
-    p1 = Point(1, 0, 0)
-    p2 = Point(0, 1, 0)
-    return p0, p1, p2
+def curve(p00, p10) -> Line:
+    return Line(p00, p10)
 
 
 @pytest.fixture
-def valid_lines(valid_points) -> tuple[Line]:
-    p0, p1, p2 = valid_points
-    curve = Line(p0, p1)
-    sweeper = Line(p0, p2)
-    return curve, sweeper
+def sweeper(p00, p01) -> Line:
+    return Line(p00, p01)
 
 
 @pytest.fixture
-def lines_not_connected(valid_points) -> tuple[Line]:
-    p0, p1, p2 = valid_points
+def lines_not_connected(p00, p10, p01) -> tuple[Line]:
     p0_invalid = Point(2, 0, 0)
-    curve = Line(p0, p1)
-    sweeper = Line(p0_invalid, p2)
+    curve = Line(p00, p10)
+    sweeper = Line(p0_invalid, p01)
     return curve, sweeper
-
-
-def test_init(valid_lines) -> None:
-    curve, sweeper = valid_lines
-    SweptSurface(curve, sweeper)
 
 
 def test_init_invalid() -> None:
     with pytest.raises(TypeError):
-        SweptSurface("line_collection")  # pylint: disable=no-value-for-parameter
+        SweptSurface("", "")
 
 
 def test_init_lines_not_connected(lines_not_connected):
@@ -46,9 +34,8 @@ def test_init_lines_not_connected(lines_not_connected):
     SweptSurface(curve, sweeper)
 
 
-def test_get_all_surfaces(valid_lines) -> None:
+def test_get_all_surfaces(curve, sweeper) -> None:
     Surface._all_surfaces = []
-    curve, sweeper = valid_lines
     SweptSurface(curve, sweeper)
     SweptSurface(curve, sweeper)
     SweptSurface(curve, sweeper)
@@ -56,16 +43,12 @@ def test_get_all_surfaces(valid_lines) -> None:
     assert len(surfaces) == 3
 
 
-def test_get_max_lengths(valid_lines) -> None:
-    curve, sweeper = valid_lines
+def test_get_max_lengths(curve, sweeper) -> None:
     lengths = SweptSurface(curve, sweeper).get_max_lengths()
     for length in lengths:
         assert length == 1.0
 
 
-def test_path(valid_points, valid_lines, test_surface_path) -> None:
-    p00, p10, p01 = valid_points
-    p11 = Point(1, 1, 0)
-    curve, sweeper = valid_lines
+def test_path(p00, p10, p01, p11, curve, sweeper, test_surface_path) -> None:
     surface = SweptSurface(curve, sweeper)
     test_surface_path(surface, p00, p01, p10, p11)

@@ -22,16 +22,16 @@ class BilinearSurface(Surface):
 
     def __init__(
         self,
-        point_bottom_left: Point,
-        point_bottom_right: Point,
-        point_top_right: Point,
-        point_top_left: Point,
+        bottom_left: Point,
+        bottom_right: Point,
+        top_right: Point,
+        top_left: Point,
     ):
         self._all_surfaces.append(self)
-        self.bottom_left = point_bottom_left.xyz
-        self.bottom_right = point_bottom_right.xyz
-        self.top_right = point_top_right.xyz
-        self.top_left = point_top_left.xyz
+        self.bottom_left = bottom_left.xyz
+        self.bottom_right = bottom_right.xyz
+        self.top_right = top_right.xyz
+        self.top_left = top_left.xyz
         self._set_mesh_generator(
             SurfaceMeshGenerator(self.get_path(), self.get_max_lengths()), force=True
         )
