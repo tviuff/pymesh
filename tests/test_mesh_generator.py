@@ -42,7 +42,7 @@ def test_lengths(mesher) -> None:
 def test_get_num_points(mesher) -> None:
     mesher.set_u_parameters(panel_density=3)
     mesher.set_w_parameters(panel_density=0.2)
-    num_points = mesher.get_num_points()
+    num_points = mesher._get_num_points()
     assert len(num_points) == 2
     assert num_points[0] == 4
     assert num_points[1] == 6

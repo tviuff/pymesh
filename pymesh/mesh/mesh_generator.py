@@ -128,7 +128,7 @@ class MeshGenerator:
         length_w = np.max(np.sum(np.diff(arr_w, axis=1), axis=1), axis=0)
         return (length_u, length_w)
 
-    def get_num_points(self) -> tuple[int]:
+    def _get_num_points(self) -> tuple[int]:
         """Returns number of points along the u and w dimensions"""
         density_u, density_w = self.panel_densities
         num_points_u = density_u + 1
@@ -143,7 +143,7 @@ class MeshGenerator:
 
     def generate_mesh_points(self) -> NDArray3xNxN[np.float64]:
         """Generates 3-dimensional surface mesh points."""
-        num_points_u, num_points_w = self.get_num_points()
+        num_points_u, num_points_w = self._get_num_points()
         distribution_u, distribution_w = self.mesh_distributions
         ufn = distribution_u.get_dist_fn()
         wfn = distribution_w.get_dist_fn()

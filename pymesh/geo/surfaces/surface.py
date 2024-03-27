@@ -10,8 +10,6 @@ from pymesh.geo.curves.curve import validate_curve_path_parameters
 from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.typing import NDArray3, NDArray3xNxN
 
-# ! log fliping of normal :)
-
 
 class Surface(ABC):
     """Surface abstract class"""
@@ -21,6 +19,7 @@ class Surface(ABC):
 
     @property
     def mesher(self) -> MeshGenerator:
+        """Used for setting mesh properties"""
         return self._mesher
 
     @mesher.setter
