@@ -17,8 +17,20 @@ def test_init_invalid() -> None:
         Line("point1", "point2")
 
 
-def test_eq(line1) -> None:
+def test_eq(line1, line2) -> None:
     assert line1 == line1
+    assert line2 == line2
+
+
+def test_ne(line1, line2) -> None:
+    assert line1 != line2
+
+
+def test_repr(line1) -> None:
+    assert (
+        f"{line1!r}"
+        == "Line(start=Point(x=0.00, y=0.00, z=0.00), end=Point(x=0.00, y=-3.00, z=4.00))"
+    )
 
 
 def test_end(point1: Point, point2: Point) -> None:

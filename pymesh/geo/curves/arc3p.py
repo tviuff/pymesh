@@ -9,8 +9,8 @@ from pymesh.geo.curves.curve import (
     Curve,
     validate_curve_path_parameters,
 )
-from pymesh.utils.typing import NDArray3
-from pymesh.utils.descriptors import AsInstanceOf, AsNDArray
+from pymesh.typing import NDArray3
+from pymesh.descriptors import AsInstanceOf, AsNDArray
 
 TOLERANCE = 0.000001
 
@@ -43,6 +43,13 @@ class Arc3P(Curve):
             np.all(self.centre == other.centre)
             and np.all(self.start == other.start)
             and np.all(self.end == other.end)
+        )
+
+    def __ne__(self, other):
+        return (
+            np.any(self.centre != other.centre)
+            or np.any(self.start != other.start)
+            or np.any(self.end != other.end)
         )
 
     def __repr__(self):

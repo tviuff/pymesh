@@ -4,8 +4,8 @@
 import numpy as np
 
 from pymesh.geo.curves.curve import Curve
-from pymesh.utils.typing import NDArray3
-from pymesh.utils.exceptions import CurveIntersectionError
+from pymesh.typing import NDArray3
+from pymesh.exceptions import CurveIntersectionError
 from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
 from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
 
@@ -74,14 +74,12 @@ class CoonsPatch(Surface):
             raise CurveIntersectionError(
                 "Selected curves does not share intersection points"
             )
-        cflip, cselect = self._set_coons_patch_curve_order(
-            flipped_curves, curve_selection
-        )
+        cflip, cselect = self._set__curve_order(flipped_curves, curve_selection)
         self._flipped_curves = tuple(cflip)
         self._curves = tuple(cselect)
 
     @staticmethod
-    def _set_coons_patch_curve_order(cflip, cselect) -> tuple[list]:
+    def _set__curve_order(cflip, cselect) -> tuple[list]:
         """Sets the order u0, u1, 0w, 1w where u0 = first item in cselect"""
         cselect = [cselect[0], cselect[2], cselect[3], cselect[1]]
         cflip = [cflip[0], cflip[2], cflip[3], cflip[1]]

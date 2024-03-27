@@ -4,10 +4,10 @@ from collections.abc import Callable
 
 import numpy as np
 
-from pymesh.utils.constants import MeshConstants
-from pymesh.utils.descriptors import AsContainerOf
+from pymesh.constants import MeshConstants
+from pymesh.descriptors import AsContainerOf
 from pymesh.mesh.distributions import MeshDistribution
-from pymesh.utils.typing import NDArray3xNxN
+from pymesh.typing import NDArray3xNxN
 
 
 LENGTH: int = 2

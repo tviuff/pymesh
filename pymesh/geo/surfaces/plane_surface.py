@@ -4,8 +4,8 @@
 import numpy as np
 
 from pymesh.geo.point import Point
-from pymesh.utils.typing import NDArray3
-from pymesh.utils.descriptors import AsInstanceOf, AsNDArray
+from pymesh.typing import NDArray3
+from pymesh.descriptors import AsInstanceOf, AsNDArray
 from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
 from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
 

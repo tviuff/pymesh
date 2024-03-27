@@ -4,8 +4,8 @@
 import numpy as np
 
 from pymesh.geo.point import Point
-from pymesh.utils.typing import NDArray3
-from pymesh.utils.descriptors import AsNDArray
+from pymesh.typing import NDArray3
+from pymesh.descriptors import AsNDArray
 
 # ! add vector math operations for easy use in the rest of the code
 
@@ -27,10 +27,9 @@ class Vector3D:
         )
 
     def __repr__(self):
-        # ! might not work properly
         cls = type(self).__name__
         vector = self.unit_vector * self.length
-        txt = f"{cls}(dx={vector[0]}, " f"dy={vector[1]}, dz={vector[1]})"
+        txt = f"{cls}(dx={vector[0]:.2f}, " f"dy={vector[1]:.2f}, dz={vector[1]:.2f})"
         return txt
 
     @property

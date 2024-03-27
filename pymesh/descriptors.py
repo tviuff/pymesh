@@ -6,7 +6,7 @@ from collections.abc import Callable
 
 import numpy as np
 
-from pymesh.utils.typing import NDArray3
+from pymesh.typing import NDArray3
 
 
 class Validator(ABC):
@@ -77,7 +77,10 @@ class AsInstanceOf(Validator):
 class AsNDArray(Validator):
     """Descriptor validating that object is an instance of a numpy ndarray."""
 
-    def __init__(self, shape: tuple[int]):
+    def __init__(
+        self,
+        shape: tuple[int],
+    ):
         self.shape = shape
 
     def __set__(self, obj, value: NDArray3[np.float64]):
@@ -120,3 +123,90 @@ class AsContainerOf(Validator):
         for item in value:
             if not isinstance(item, self.item_type):
                 raise TypeError(f"Expected {item!r} to be {self.item_type!r}")
+
+
+###############################################
+### OTHER DESCRIPTORS THAT DOES NOT WORK... ###
+###############################################
+
+
+class Property(ABC):
+    """Emulate PyProperty_Type() in Objects/descrobject.c
+
+    Copied from https://docs.python.org/3/howto/descriptor.html#properties
+    """
+
+    return_type: Callable | None = None
+
+    def __init__(self, fget=None, fset=None, fdel=None, doc=None):
+        self.fget = fget
+        self.fset = fset
+        self.fdel = fdel
+        if doc is None and fget is not None:
+            doc = fget.__doc__
+        self.__doc__ = doc
+        self._name = ""
+
+    def __set_name__(self, owner, name):
+        self._name = name
+
+    def __get__(self, obj, objtype=None):
+        if obj is None:
+            return self
+        if self.fget is None:
+            raise AttributeError(
+                f"property {self._name!r} of {type(obj).__name__!r} object has no getter"
+            )
+        return self.fget(obj)
+
+    def __set__(self, obj, value):
+        if self.fset is None:
+            raise AttributeError(
+                f"property {self._name!r} of {type(obj).__name__!r} object has no setter"
+            )
+        self.validate(value)
+        value_of_type = self.convert_to_type(value)
+        self.fset(obj, value_of_type)
+
+    def __delete__(self, obj):
+        if self.fdel is None:
+            raise AttributeError(
+                f"property {self._name!r} of {type(obj).__name__!r} object has no deleter"
+            )
+        self.fdel(obj)
+
+    def getter(self, fget):
+        prop = type(self)(fget, self.fset, self.fdel, self.__doc__)
+        prop._name = self._name
+        return prop
+
+    def setter(self, fset):
+        prop = type(self)(self.fget, fset, self.fdel, self.__doc__)
+        prop._name = self._name
+        return prop
+
+    def deleter(self, fdel):
+        prop = type(self)(self.fget, self.fset, fdel, self.__doc__)
+        prop._name = self._name
+        return prop
+
+    def convert_to_type(self, value):
+        if self.return_type is None:
+            return value
+        if not callable(self.return_type):
+            raise TypeError(f"Expected {self.return_type:!r} to be callable")
+        return self.return_type(value)  # pylint: disable=not-callable
+
+    @abstractmethod
+    def validate(self, value):
+        """Validates value based on various relevant criteria"""
+
+
+class MyProperty(Property):
+    """Copy of AsInstanceOf"""
+
+    def __init__(self, fget=None, fset=None, fdel=None, doc=None):
+        super().__init__(fget, fset, fdel, doc)
+
+    def validate(self, value):
+        pass

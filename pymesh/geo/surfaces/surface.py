@@ -8,7 +8,7 @@ import numpy as np
 
 from pymesh.geo.curves.curve import validate_curve_path_parameters
 from pymesh.mesh.surface_mesh_generator import SurfaceMeshGenerator
-from pymesh.utils.typing import NDArray3, NDArray3xNxN
+from pymesh.typing import NDArray3, NDArray3xNxN
 
 # ! log fliping of normal :)
 
@@ -16,17 +16,20 @@ from pymesh.utils.typing import NDArray3, NDArray3xNxN
 class Surface(ABC):
     """Surface abstract class"""
 
-    _mesher: SurfaceMeshGenerator | None = None
-    _normal_is_flipped: bool = False
+    __normal_is_flipped: bool = False
     _all_surfaces: list = []  # to contain every surface type instanciated
 
     @property
     def mesher(self) -> SurfaceMeshGenerator:
-        if self._mesher is None:
-            raise AttributeError(
-                "The mesher property is None. Try using ._set_mesh_generator()."
-            )
         return self._mesher
+
+    @mesher.setter
+    def mesher(self, value) -> None:
+        if not isinstance(value, SurfaceMeshGenerator):
+            raise TypeError(
+                f"Expected {value!r} to be an instance of SurfaceMeshGenerator"
+            )
+        self._mesher = value
 
     def _set_mesh_generator(self, mesher: SurfaceMeshGenerator, force=False):
         """Sets a surface mesh generator if force=True"""
@@ -46,7 +49,7 @@ class Surface(ABC):
 
     def flip_normal(self) -> None:
         """Flips surface normal"""
-        self._normal_is_flipped = not self._normal_is_flipped
+        self.__normal_is_flipped = not self.__normal_is_flipped
 
     def get_path(
         self,
@@ -111,7 +114,7 @@ class Surface(ABC):
                 xyz2 = mp[:, i + 1, j]
                 xyz3 = mp[:, i + 1, j + 1]
                 xyz4 = mp[:, i, j + 1]
-                if self._normal_is_flipped:
+                if self.__normal_is_flipped:
                     xyz1, xyz2, xyz3, xyz4 = xyz4, xyz3, xyz2, xyz1
                 panels.append(
                     [

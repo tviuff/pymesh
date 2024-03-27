@@ -19,7 +19,15 @@ def test_init_invalid() -> None:
 
 def test_eq(point1, point2) -> None:
     assert point1 == point1
+    assert point2 == point2
+
+
+def test_ne(point1, point2) -> None:
     assert point1 != point2
+
+
+def test_repr(point1) -> None:
+    assert f"{point1!r}" == "Point(x=0.00, y=0.00, z=0.00)"
 
 
 def test_x(point2: Point, dx: float) -> None:

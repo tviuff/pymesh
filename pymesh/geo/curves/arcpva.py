@@ -10,8 +10,8 @@ from pymesh.geo.curves.curve import (
     Curve,
     validate_curve_path_parameters,
 )
-from pymesh.utils.typing import NDArray3
-from pymesh.utils.descriptors import AsInstanceOf, AsNumber
+from pymesh.typing import NDArray3
+from pymesh.descriptors import AsInstanceOf, AsNumber
 
 # ! Keep constructor as is for now
 
@@ -41,10 +41,18 @@ class ArcPVA(Curve):
                 break
         return is_equal
 
+    def __ne__(self, other):
+        is_equal = False
+        for u in np.linspace(0, 1, num=100, endpoint=True):
+            if np.all(self.path(u) == other.path(u)):
+                is_equal = True
+                break
+        return is_equal
+
     def __repr__(self):
         cls = type(self).__name__
         point = Point(self.start[0], self.start[1], self.start[2])
-        txt = f"{cls}(start={point}, " f"axis={self.axis}, angle={self.angle})"
+        txt = f"{cls}(start={point}, " f"axis={self.axis}, angle={self.angle:.2f})"
         return txt
 
     @property

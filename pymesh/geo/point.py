@@ -6,15 +6,12 @@ from typing import Self
 
 import numpy as np
 
-from pymesh.utils.descriptors import AsNumber
-from pymesh.utils.typing import NDArray3
+from pymesh.descriptors import AsNumber
+from pymesh.typing import NDArray3
 
 
 class Point:
-    """Point class.
-
-    Takes positional arguments x, y, z as either type 'int' or 'float'.
-    """
+    """Takes positional arguments x, y, z as either type 'int' or 'float'."""
 
     x = AsNumber(return_type=float)
     y = AsNumber(return_type=float)
@@ -29,6 +26,9 @@ class Point:
 
     def __eq__(self, other):
         return np.all(self.xyz == other.xyz)
+
+    def __ne__(self, other: object) -> bool:
+        return np.any(self.xyz != other.xyz)
 
     def __repr__(self):
         return f"{type(self).__name__}(x={self.x:.2f}, y={self.y:.2f}, z={self.z:.2f})"

@@ -6,8 +6,8 @@ from collections.abc import Callable
 
 import numpy as np
 
-from pymesh.utils.typing import NDArray3
-from pymesh.utils.descriptors import AsNDArray
+from pymesh.typing import NDArray3
+from pymesh.descriptors import AsNDArray
 
 # ! Consider removing point_start_point_end and only store .length and .path()
 

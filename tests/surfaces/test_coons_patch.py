@@ -1,11 +1,11 @@
 """Module for testing the Point class functionality"""
 
+import numpy as np
 import pytest
 
-from pymesh import Point, Line, Arc3P, ArcPVA, CoonsPatch
-from pymesh.utils.exceptions import CurveIntersectionError
-
-# ! Include flipped_curves in tests
+from pymesh import Point, Line, CoonsPatch
+from pymesh.exceptions import CurveIntersectionError
+from pymesh.geo.surfaces.surface import Surface
 
 
 @pytest.fixture
@@ -62,9 +62,36 @@ def test_curves(valid_lines) -> None:
 
 
 def test_get_all_surfaces(valid_lines) -> None:
-    curves = CoonsPatch(valid_lines).curves
-    assert curves == valid_lines
+    Surface._all_surfaces = []
+    CoonsPatch(valid_lines)
+    CoonsPatch(valid_lines)
+    CoonsPatch(valid_lines)
+    surfaces = CoonsPatch.get_all_surfaces()
+    assert len(surfaces) == 3
 
 
-def test_panels(valid_lines) -> None:
-    CoonsPatch(valid_lines).panels
+def test_get_max_lengths(valid_lines) -> None:
+    lengths = CoonsPatch(valid_lines).get_max_lengths()
+    for length in lengths:
+        assert length == 1.0
+
+
+def test_path(valid_lines, assert_surface_rounded_path_xyz) -> None:
+    surface = CoonsPatch(valid_lines)
+    assert np.all(surface.path(0, 0, False, False) == np.array([0, 0, 0]))
+    assert np.all(surface.path(1, 1, True, True) == np.array([0, 0, 0]))
+    assert np.all(surface.path(0, 1, False, True) == np.array([0, 0, 0]))
+    assert np.all(surface.path(1, 0, True, False) == np.array([0, 0, 0]))
+
+    assert np.all(surface.path(1, 1, False, False) == np.array([1, 1, 0]))
+    assert np.all(surface.path(0, 0, True, True) == np.array([1, 1, 0]))
+    assert np.all(surface.path(1, 0, False, True) == np.array([1, 1, 0]))
+    assert np.all(surface.path(0, 1, True, False) == np.array([1, 1, 0]))
+
+    decimals = 4
+    assert_surface_rounded_path_xyz(
+        surface, 0.2, 0.2, False, False, np.array([0.2, 0.2, 0]), decimals
+    )
+    assert_surface_rounded_path_xyz(
+        surface, 0.2, 0.2, True, True, np.array([0.8, 0.8, 0]), decimals
+    )
