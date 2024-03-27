@@ -3,6 +3,7 @@
 
 import math
 import numpy as np
+from typing import Self
 
 from pymesh.geo.point import Point
 from pymesh.geo.curves.curve import (
@@ -59,6 +60,23 @@ class Arc3P(Curve):
         s = Point(s[0], s[1], s[2])
         e = Point(e[0], e[1], e[2])
         return f"{cls}(centre={c}, start={s}, end={e}, inverse_sector={i})"
+
+    def copy(self) -> Self:
+        centre = Point(self.centre[0], self.centre[1], self.centre[2])
+        start = Point(self.start[0], self.start[1], self.start[2])
+        end = Point(self.end[0], self.end[1], self.end[2])
+        return Arc3P(centre, start, end, inverse_sector=self.inverse_sector)
+
+    def move(
+        self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
+    ) -> None:
+        for val in (dx, dy, dz):
+            if not isinstance(val, (int, float)):
+                raise TypeError(f"Expected {val!r} to be an int or float")
+        dxyz = np.array([dx, dy, dz])
+        self.centre += dxyz
+        self.start += dxyz
+        self.end += dxyz
 
     @property
     def radius(self) -> float:

@@ -2,11 +2,8 @@
 
 import pytest
 import numpy as np
-from numpy import ndarray
 
 from pymesh import Point, Line
-from pymesh.geo.curves.curve import Curve
-from pymesh.geo.surfaces.surface import Surface
 
 
 DECIMALS = 4
@@ -53,27 +50,24 @@ def point1() -> Point:
 
 
 @pytest.fixture
-def point2(
-    dx: int | float, dy: int | float, dz: int | float
-) -> Point:  # pylint: disable=redefined-outer-name
+def point2(dx, dy, dz):
     return Point(dx, dy, dz)
 
 
 @pytest.fixture
-def line1(point1: Point, point2: Point) -> Line:  # pylint: disable=redefined-outer-name
+def line1(point1, point2) -> Line:
     return Line(point1, point2)
 
 
 @pytest.fixture
-def line2(point1: Point, point2: Point) -> Line:  # pylint: disable=redefined-outer-name
+def line2(point1, point2) -> Line:
     return Line(point2, point1)
 
 
 @pytest.fixture
 def assert_curve_path_rounded():
-    def fn(
-        curve: Curve, u: int | float, flip: bool, xyz: ndarray, decimals: int = DECIMALS
-    ) -> None:
+
+    def fn(curve, u, flip, xyz, decimals=DECIMALS) -> None:
         result = np.round(curve.path(u, flip), decimals=decimals)
         expected = np.round(xyz, decimals=decimals)
         assert np.all(result == expected)
@@ -83,15 +77,8 @@ def assert_curve_path_rounded():
 
 @pytest.fixture
 def assert_surface_path_rounded():
-    def fn(
-        surface: Surface,
-        u: int | float,
-        w: int | float,
-        uflip: bool,
-        wflip: bool,
-        xyz: ndarray,
-        decimals: int = DECIMALS,
-    ) -> None:
+
+    def fn(surface, u, w, uflip, wflip, xyz, decimals=DECIMALS) -> None:
         result = np.round(surface.path(u, w, uflip, wflip), decimals=decimals)
         expected = np.round(xyz, decimals=decimals)
         assert np.all(result == expected)
@@ -100,17 +87,10 @@ def assert_surface_path_rounded():
 
 
 @pytest.fixture
-def test_surface_path(assert_surface_path_rounded) -> None:
+def test_surface_path(assert_surface_path_rounded):
     """Works for all surfaces as long as they generate a plane surface"""
 
-    def func(
-        surface: Surface,
-        p00: Point,
-        p01: Point,
-        p10: Point,
-        p11: Point,
-        decimals: int = DECIMALS,
-    ):
+    def func(surface, p00, p01, p10, p11, decimals=DECIMALS):
 
         def assert_point(surf, u, w, uflip, wflip, point, d=decimals):
             assert_surface_path_rounded(surf, u, w, uflip, wflip, point.xyz, d)

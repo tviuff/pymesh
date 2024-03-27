@@ -7,6 +7,8 @@ from typing import Self
 import numpy as np
 
 from pymesh.descriptors import AsNumber
+
+# from pymesh.geo.vector3d import Vector3D
 from pymesh.typing import NDArray3
 
 
@@ -32,6 +34,24 @@ class Point:
 
     def __repr__(self):
         return f"{type(self).__name__}(x={self.x:.2f}, y={self.y:.2f}, z={self.z:.2f})"
+
+    def copy(self) -> Self:
+        return Point(self.x, self.y, self.z)
+
+    def move(self, dx: int | float, dy: int | float, dz: int | float) -> None:
+        for val in (dx, dy, dz):
+            if not isinstance(val, (int, float)):
+                raise TypeError(f"Expected {val!r} to be an int or float")
+        self.x += float(dx)
+        self.y += float(dy)
+        self.z += float(dz)
+
+    # ! Uot-comment due to circular import (Vector3D file has "import Point")
+    # def rotate(self, axis: Vector3D, angle: int | float) -> None:
+    #     pass
+
+    # def mirror(self, plane: Vector3D) -> None:
+    #     pass
 
     def get_distance(self, point: Self) -> float:
         """Returns the shortest distance between point instance and another point"""

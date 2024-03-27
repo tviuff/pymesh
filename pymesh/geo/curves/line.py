@@ -1,6 +1,8 @@
 """Module including line class
 """
 
+from typing import Self
+
 import numpy as np
 
 from pymesh.geo.point import Point
@@ -41,6 +43,21 @@ class Line(Curve):
     def path(self, u: int | float, flip: bool = False) -> NDArray3[np.float64]:
         u = validate_curve_path_parameters(u, flip)
         return self.start + (self.end - self.start) * u
+
+    def copy(self) -> Self:
+        point0 = Point(self.start[0], self.start[1], self.start[2])
+        point1 = Point(self.end[0], self.end[1], self.end[2])
+        return Line(point0, point1)
+
+    def move(
+        self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
+    ) -> None:
+        for val in (dx, dy, dz):
+            if not isinstance(val, (int, float)):
+                raise TypeError(f"Expected {val!r} to be an int or float")
+        dxyz = np.array([dx, dy, dz])
+        self.start += dxyz
+        self.end += dxyz
 
 
 def validate_length_of_line(point1: Point, point2: Point) -> None:

@@ -3,6 +3,7 @@
 
 from abc import ABC, abstractmethod
 from collections.abc import Callable
+from typing import Self
 
 import numpy as np
 
@@ -47,6 +48,16 @@ class Surface(ABC):
     def flip_normal(self) -> None:
         """Flips surface normal"""
         self.__normal_is_flipped = not self.__normal_is_flipped
+
+    @abstractmethod
+    def copy(self) -> Self:
+        """Returns a copy of the surface object"""
+
+    @abstractmethod
+    def move(
+        self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
+    ) -> None:
+        """Moves the surface a given relative position"""
 
     def get_path(
         self,
@@ -152,6 +163,7 @@ def validate_surface_path_parameters(
     return:
     u, w
     """
-    return validate_curve_path_parameters(u, uflip), validate_curve_path_parameters(
-        w, wflip
+    return (
+        validate_curve_path_parameters(u, uflip),
+        validate_curve_path_parameters(w, wflip),
     )

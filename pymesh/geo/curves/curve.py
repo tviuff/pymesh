@@ -3,9 +3,11 @@
 
 from abc import ABC, abstractmethod
 from collections.abc import Callable
+from typing import Self
 
 import numpy as np
 
+from pymesh.geo.point import Point
 from pymesh.typing import NDArray3
 from pymesh.descriptors import AsNDArray
 
@@ -18,14 +20,20 @@ class Curve(ABC):
     start = AsNDArray(shape=(3,))
     end = AsNDArray(shape=(3,))
 
+    @abstractmethod
+    def copy(self) -> Self:
+        """Returns a copy of the curve object"""
+
+    @abstractmethod
+    def move(
+        self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
+    ) -> None:
+        """Moves the curve a given relative position"""
+
     @property
     @abstractmethod
     def length(self) -> float:
         """Returns the curve path length"""
-
-    def get_path(self) -> Callable[[int | float, bool], NDArray3[np.float64]]:
-        """Returns surface path function"""
-        return self.path
 
     @abstractmethod
     def path(self, u: int | float, flip: bool = False) -> NDArray3[np.float64]:
@@ -40,6 +48,10 @@ class Curve(ABC):
         return:
         numpy ndarray with shape (3, )
         """
+
+    def get_path(self) -> Callable[[int | float, bool], NDArray3[np.float64]]:
+        """Returns surface path function"""
+        return self.path
 
 
 def validate_curve_path_parameters(u: int | float, flip: bool = False) -> float:

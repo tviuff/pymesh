@@ -1,6 +1,8 @@
 """Module including line class
 """
 
+from typing import Self
+
 import numpy as np
 
 from pymesh.geo.point import Point
@@ -21,16 +23,26 @@ class Vector3D:
         self.end = end.xyz
 
     def __eq__(self, other):
-        return (
-            np.all(self.unit_vector == other.unit_vector)
-            and self.length == other.length
-        )
+        return np.all(self.start == other.start) and np.all(self.end == other.end)
 
     def __repr__(self):
         cls = type(self).__name__
         vector = self.unit_vector * self.length
-        txt = f"{cls}(dx={vector[0]:.2f}, " f"dy={vector[1]:.2f}, dz={vector[1]:.2f})"
+        txt = f"{cls}(dx={vector[0]:.2f}, " f"dy={vector[1]:.2f}, dz={vector[2]:.2f})"
         return txt
+
+    def copy(self) -> Self:
+        start = Point(self.start[0], self.start[1], self.start[2])
+        end = Point(self.end[0], self.end[1], self.end[2])
+        return Vector3D(start, end)
+
+    def move(self, dx: int | float, dy: int | float, dz: int | float) -> None:
+        for val in (dx, dy, dz):
+            if not isinstance(val, (int, float)):
+                raise TypeError(f"Expected {val!r} to be an int or float")
+        dxyz = np.array([dx, dy, dz])
+        self.start += dxyz
+        self.end += dxyz
 
     @property
     def length(self) -> float:

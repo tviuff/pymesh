@@ -3,6 +3,7 @@
 
 import math
 import numpy as np
+from typing import Self
 
 from pymesh.geo.point import Point
 from pymesh.geo.vector3d import Vector3D
@@ -54,6 +55,21 @@ class ArcPVA(Curve):
         point = Point(self.start[0], self.start[1], self.start[2])
         txt = f"{cls}(start={point}, " f"axis={self.axis}, angle={self.angle:.2f})"
         return txt
+
+    def copy(self) -> Self:
+        start = Point(self.start[0], self.start[1], self.start[2])
+        return ArcPVA(start, axis=self.axis, angle=self.angle)
+
+    def move(
+        self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
+    ) -> None:
+        for val in (dx, dy, dz):
+            if not isinstance(val, (int, float)):
+                raise TypeError(f"Expected {val!r} to be an int or float")
+        dxyz = np.array([dx, dy, dz])
+        self.centre += dxyz
+        self.start += dxyz
+        self.end += dxyz
 
     @property
     def radius(self) -> float:
