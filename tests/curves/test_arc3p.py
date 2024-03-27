@@ -105,21 +105,21 @@ def test_plane_unit_normal(point1: Point, point2: Point, point3: Point) -> None:
 
 
 def test_path(
-    assert_curve_rounded_path_xyz, point1: Point, point2: Point, point3: Point
+    assert_curve_path_rounded, point1: Point, point2: Point, point3: Point
 ) -> None:
     decimals = 4
     curve = Arc3P(point1, point2, point3)
-    assert_curve_rounded_path_xyz(curve, 0, False, point2.xyz, decimals)
-    assert_curve_rounded_path_xyz(curve, 1, False, point3.xyz, decimals)
-    assert_curve_rounded_path_xyz(curve, 1, True, point2.xyz, decimals)
-    assert_curve_rounded_path_xyz(
+    assert_curve_path_rounded(curve, 0, False, point2.xyz, decimals)
+    assert_curve_path_rounded(curve, 1, False, point3.xyz, decimals)
+    assert_curve_path_rounded(curve, 1, True, point2.xyz, decimals)
+    assert_curve_path_rounded(
         curve,
         0.5,
         False,
         np.array([1 / np.sqrt(2), 1 / np.sqrt(2), 0]),
         decimals,
     )
-    assert_curve_rounded_path_xyz(
+    assert_curve_path_rounded(
         curve,
         0.5,
         True,

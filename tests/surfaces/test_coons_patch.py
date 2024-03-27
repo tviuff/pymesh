@@ -1,6 +1,5 @@
 """Module for testing the Point class functionality"""
 
-import numpy as np
 import pytest
 
 from pymesh import Point, Line, CoonsPatch
@@ -76,22 +75,7 @@ def test_get_max_lengths(valid_lines) -> None:
         assert length == 1.0
 
 
-def test_path(valid_lines, assert_surface_rounded_path_xyz) -> None:
+def test_path(valid_points, valid_lines, test_surface_path) -> None:
+    p00, p01, p10, p11 = valid_points
     surface = CoonsPatch(valid_lines)
-    assert np.all(surface.path(0, 0, False, False) == np.array([0, 0, 0]))
-    assert np.all(surface.path(1, 1, True, True) == np.array([0, 0, 0]))
-    assert np.all(surface.path(0, 1, False, True) == np.array([0, 0, 0]))
-    assert np.all(surface.path(1, 0, True, False) == np.array([0, 0, 0]))
-
-    assert np.all(surface.path(1, 1, False, False) == np.array([1, 1, 0]))
-    assert np.all(surface.path(0, 0, True, True) == np.array([1, 1, 0]))
-    assert np.all(surface.path(1, 0, False, True) == np.array([1, 1, 0]))
-    assert np.all(surface.path(0, 1, True, False) == np.array([1, 1, 0]))
-
-    decimals = 4
-    assert_surface_rounded_path_xyz(
-        surface, 0.2, 0.2, False, False, np.array([0.2, 0.2, 0]), decimals
-    )
-    assert_surface_rounded_path_xyz(
-        surface, 0.2, 0.2, True, True, np.array([0.8, 0.8, 0]), decimals
-    )
+    test_surface_path(surface, p00, p01, p10, p11)

@@ -63,21 +63,9 @@ def test_get_max_lengths(valid_lines) -> None:
         assert length == 1.0
 
 
-def test_path_corners(valid_points, valid_lines, assert_surface_corner_points) -> None:
+def test_path(valid_points, valid_lines, test_surface_path) -> None:
     p00, p10, p01 = valid_points
     p11 = Point(1, 1, 0)
     curve, sweeper = valid_lines
     surface = SweptSurface(curve, sweeper)
-    assert_surface_corner_points(surface, p00.xyz, p01.xyz, p10.xyz, p11.xyz)
-
-
-# def test_plane_internal_points(
-#     valid_points, valid_lines, assert_plane_surface_internal_points
-# ) -> None:
-#     p00, p10, p01 = valid_points
-#     p11 = Point(1, 1, 0)
-#     curve, sweeper = valid_lines
-#     surface = SweptSurface(curve, sweeper)
-#     assert_plane_surface_internal_points(
-#         surface, p00.xyz, p01.xyz, p10.xyz, p11.xyz, decimals=4
-#     )
+    test_surface_path(surface, p00, p01, p10, p11)

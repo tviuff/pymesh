@@ -28,11 +28,6 @@ def surface1(valid_points) -> None:
     return PlaneSurface(point0, point1, point2)
 
 
-def test_init(valid_points) -> None:
-    point0, point1, point2 = valid_points
-    PlaneSurface(point0, point1, point2)
-
-
 def test_init_invalid() -> None:
     with pytest.raises(TypeError):
         PlaneSurface("random")  # pylint: disable=no-value-for-parameter
@@ -72,21 +67,9 @@ def test_get_max_lengths(surface1) -> None:
         assert length == 1.0
 
 
-def test_path(surface1, assert_surface_rounded_path_xyz) -> None:
-    assert np.all(surface1.path(0, 0, False, False) == np.array([0, 0, 0]))
-    assert np.all(surface1.path(1, 1, True, True) == np.array([0, 0, 0]))
-    assert np.all(surface1.path(0, 1, False, True) == np.array([0, 0, 0]))
-    assert np.all(surface1.path(1, 0, True, False) == np.array([0, 0, 0]))
-
-    assert np.all(surface1.path(1, 1, False, False) == np.array([1, 1, 0]))
-    assert np.all(surface1.path(0, 0, True, True) == np.array([1, 1, 0]))
-    assert np.all(surface1.path(1, 0, False, True) == np.array([1, 1, 0]))
-    assert np.all(surface1.path(0, 1, True, False) == np.array([1, 1, 0]))
-
-    decimals = 4
-    assert_surface_rounded_path_xyz(
-        surface1, 0.2, 0.2, False, False, np.array([0.2, 0.2, 0]), decimals
-    )
-    assert_surface_rounded_path_xyz(
-        surface1, 0.2, 0.2, True, True, np.array([0.8, 0.8, 0]), decimals
-    )
+def test_path(valid_points, test_surface_path) -> None:
+    point0, point1, point2 = valid_points
+    p00, p10, p01 = point0, point1, point2
+    p11 = Point(1, 1, 0)
+    surface = PlaneSurface(point0, point1, point2)
+    test_surface_path(surface, p00, p01, p10, p11)

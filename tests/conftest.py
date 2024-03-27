@@ -50,7 +50,7 @@ def line2(point1: Point, point2: Point) -> Line:  # pylint: disable=redefined-ou
 
 
 @pytest.fixture
-def assert_curve_rounded_path_xyz():
+def assert_curve_path_rounded():
     def fn(
         curve: Curve, u: int | float, flip: bool, xyz: ndarray, decimals: int = 0
     ) -> None:
@@ -62,7 +62,7 @@ def assert_curve_rounded_path_xyz():
 
 
 @pytest.fixture
-def assert_surface_rounded_path_xyz():
+def assert_surface_path_rounded():
     def fn(
         surface: Surface,
         u: int | float,
@@ -80,67 +80,40 @@ def assert_surface_rounded_path_xyz():
 
 
 @pytest.fixture
-def assert_surface_corner_points() -> (
-    Callable[[Surface, NDArray3, NDArray3, NDArray3, NDArray3], None]
-):
-    def fn(
+def test_surface_path(assert_surface_path_rounded) -> None:
+    """Works for all surfaces as long as they generate a plane surface"""
+
+    def func(
         surface: Surface,
-        p00: NDArray3,
-        p01: NDArray3,
-        p10: NDArray3,
-        p11: NDArray3,
+        p00: Point,
+        p01: Point,
+        p10: Point,
+        p11: Point,
+        decimals: int = 4,
     ):
-        assert np.all(surface.path(0, 0, False, False) == p00)
-        assert np.all(surface.path(1, 1, True, True) == p00)
-        assert np.all(surface.path(0, 1, False, True) == p00)
-        assert np.all(surface.path(1, 0, True, False) == p00)
 
-        assert np.all(surface.path(0, 1, False, False) == p01)
-        assert np.all(surface.path(1, 0, True, True) == p01)
-        assert np.all(surface.path(0, 0, False, True) == p01)
-        assert np.all(surface.path(1, 1, True, False) == p01)
+        def assert_point(surf, u, w, uflip, wflip, point, d=decimals):
+            assert_surface_path_rounded(surf, u, w, uflip, wflip, point.xyz, d)
 
-        assert np.all(surface.path(1, 0, False, False) == p10)
-        assert np.all(surface.path(0, 1, True, True) == p10)
-        assert np.all(surface.path(1, 1, False, True) == p10)
-        assert np.all(surface.path(0, 0, True, False) == p10)
+        # corner p00
+        assert_point(surface, 0, 0, False, False, p00)
+        assert_point(surface, 1, 1, True, True, p00)
+        assert_point(surface, 0, 1, False, True, p00)
+        assert_point(surface, 1, 0, True, False, p00)
+        # corner p01
+        assert_point(surface, 0, 1, False, False, p01)
+        assert_point(surface, 1, 0, True, True, p01)
+        assert_point(surface, 0, 0, False, True, p01)
+        assert_point(surface, 1, 1, True, False, p01)
+        # corner p10
+        assert_point(surface, 1, 0, False, False, p10)
+        assert_point(surface, 0, 1, True, True, p10)
+        assert_point(surface, 1, 1, False, True, p10)
+        assert_point(surface, 0, 0, True, False, p10)
+        # corner p11
+        assert_point(surface, 1, 1, False, False, p11)
+        assert_point(surface, 0, 0, True, True, p11)
+        assert_point(surface, 1, 0, False, True, p11)
+        assert_point(surface, 0, 1, True, False, p11)
 
-        assert np.all(surface.path(1, 1, False, False) == p11)
-        assert np.all(surface.path(0, 0, True, True) == p11)
-        assert np.all(surface.path(1, 0, False, True) == p11)
-        assert np.all(surface.path(0, 1, True, False) == p11)
-
-    return fn
-
-
-# @pytest.fixture
-# def assert_plane_surface_internal_points(
-#     assert_surface_rounded_path_xyz,
-# ) -> Callable[[Surface, NDArray3, NDArray3, NDArray3, NDArray3, int], None]:
-#     def func(
-#         surface: Surface,
-#         p00: NDArray3,
-#         p01: NDArray3,
-#         p10: NDArray3,
-#         p11: NDArray3,
-#         decimals=4,
-#     ):
-#         def calculate_internal_point_xyz(u, w):
-#             p1 = (1 - u) * w + u * w
-#             p2 = (1 - w) * u + w * u
-#             p3 = (
-#                 (1 - u) * (1 - w) * p00
-#                 + u * (1 - w) * p10
-#                 + (1 - u) * w * p01
-#                 + u * w * p11
-#             )
-#             return p1 + p2 - p3
-
-#         for u in np.linspace(0, 1, num=10, endpoint=True):
-#             for w in np.linspace(0, 1, num=10, endpoint=True):
-#                 xyz = calculate_internal_point_xyz(u, w)
-#                 assert_surface_rounded_path_xyz(
-#                     surface, u, w, False, False, xyz, decimals
-#                 )
-
-#     return func
+    return func
