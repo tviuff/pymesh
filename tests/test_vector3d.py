@@ -16,7 +16,7 @@ def vector2(point1, point2) -> None:
     return Vector3D(point2, point1)
 
 
-@pytest.mark.skip(reason="Not yet implemeted how to raise a TypeError")
+@pytest.mark.skip(reason="not implemeted correct")
 def test_init_invalid() -> None:
     with pytest.raises(TypeError):
         Vector3D("", "")

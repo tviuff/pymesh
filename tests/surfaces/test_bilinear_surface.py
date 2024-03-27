@@ -12,7 +12,7 @@ def surface1(p00, p01, p10, p11) -> None:
     return BilinearSurface(p00, p10, p11, p01)
 
 
-@pytest.mark.skip(reason="not yet implemented raise TypeError")
+@pytest.mark.skip(reason="not implemented correct")
 def test_init_invalid() -> None:
     with pytest.raises(TypeError):
         BilinearSurface("", "", "", "")

@@ -10,6 +10,7 @@ from pymesh.descriptors import AsNumber
 
 # from pymesh.geo.vector3d import Vector3D
 from pymesh.typing import NDArray3
+from pymesh.utils import validate_move_parameters
 
 
 class Point:
@@ -39,9 +40,7 @@ class Point:
         return Point(self.x, self.y, self.z)
 
     def move(self, dx: int | float, dy: int | float, dz: int | float) -> None:
-        for val in (dx, dy, dz):
-            if not isinstance(val, (int, float)):
-                raise TypeError(f"Expected {val!r} to be an int or float")
+        validate_move_parameters(dx, dy, dz)
         self.x += float(dx)
         self.y += float(dy)
         self.z += float(dz)

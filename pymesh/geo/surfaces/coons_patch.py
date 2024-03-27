@@ -1,13 +1,16 @@
 """Module including the coons patch class
 """
 
+from typing import Self
+
 import numpy as np
 
-from pymesh.geo.curves.curve import Curve
-from pymesh.typing import NDArray3
 from pymesh.exceptions import CurveIntersectionError
+from pymesh.geo.curves.curve import Curve
+from pymesh.geo.surfaces.surface import Surface
 from pymesh.mesh.mesh_generator import MeshGenerator
-from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
+from pymesh.typing import NDArray3
+from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
 
 # ! Consider using sets instead of list|tuple: enforcing uniquenes !
 
@@ -122,3 +125,20 @@ class CoonsPatch(Surface):
         max_length_u = max(curve_u0.length, curve_u1.length)
         max_length_w = max(curve_0w.length, curve_1w.length)
         return max_length_u, max_length_w
+
+    def copy(self) -> Self:
+        curve_u0, curve_u1, curve_0w, curve_1w = self.curves
+        new_curves = (
+            curve_u0.copy(),
+            curve_u1.copy(),
+            curve_0w.copy(),
+            curve_1w.copy(),
+        )
+        return CoonsPatch(new_curves)
+
+    def move(
+        self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
+    ) -> None:
+        validate_move_parameters(dx, dy, dz)
+        for curve in self.curves:
+            curve.move(dx, dy, dz)

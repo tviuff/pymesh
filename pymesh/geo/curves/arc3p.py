@@ -5,13 +5,12 @@ import math
 import numpy as np
 from typing import Self
 
-from pymesh.geo.point import Point
-from pymesh.geo.curves.curve import (
-    Curve,
-    validate_curve_path_parameters,
-)
-from pymesh.typing import NDArray3
 from pymesh.descriptors import AsInstanceOf, AsNDArray
+from pymesh.geo.curves.curve import Curve
+from pymesh.geo.point import Point
+from pymesh.typing import NDArray3
+from pymesh.utils import validate_move_parameters, validate_curve_path_parameters
+
 
 TOLERANCE = 0.000001
 
@@ -70,9 +69,7 @@ class Arc3P(Curve):
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
     ) -> None:
-        for val in (dx, dy, dz):
-            if not isinstance(val, (int, float)):
-                raise TypeError(f"Expected {val!r} to be an int or float")
+        validate_move_parameters(dx, dy, dz)
         dxyz = np.array([dx, dy, dz])
         self.centre += dxyz
         self.start += dxyz

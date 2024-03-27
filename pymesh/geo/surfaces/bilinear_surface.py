@@ -1,13 +1,16 @@
 """Module including the bilinear surface class
 """
 
+from typing import Self
+
 import numpy as np
 
-from pymesh.geo.point import Point
-from pymesh.typing import NDArray3
 from pymesh.descriptors import AsNDArray
+from pymesh.geo.point import Point
+from pymesh.geo.surfaces.surface import Surface
 from pymesh.mesh.mesh_generator import MeshGenerator
-from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
+from pymesh.typing import NDArray3
+from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
 
 
 class BilinearSurface(Surface):
@@ -65,3 +68,24 @@ class BilinearSurface(Surface):
             np.max((length_top_bottom_left, length_top_bottom_right))
         )
         return length_top_bottom, length_left_right
+
+    def copy(self) -> Self:
+        bottom_left = Point(
+            self.bottom_left[0], self.bottom_left[1], self.bottom_left[2]
+        )
+        bottom_right = Point(
+            self.bottom_right[0], self.bottom_right[1], self.bottom_right[2]
+        )
+        top_right = Point(self.top_right[0], self.top_right[1], self.top_right[2])
+        top_left = Point(self.top_left[0], self.top_left[1], self.top_left[2])
+        return BilinearSurface(bottom_left, bottom_right, top_right, top_left)
+
+    def move(
+        self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
+    ) -> None:
+        validate_move_parameters(dx, dy, dz)
+        dxyz = np.array([dx, dy, dz])
+        self.bottom_left += dxyz
+        self.bottom_right += dxyz
+        self.top_right += dxyz
+        self.top_left += dxyz

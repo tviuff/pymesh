@@ -1,12 +1,15 @@
 """Module including the ruled surface class
 """
 
+from typing import Self
+
 import numpy as np
 
 from pymesh.geo.curves.curve import Curve
-from pymesh.typing import NDArray3
+from pymesh.geo.surfaces.surface import Surface
 from pymesh.mesh.mesh_generator import MeshGenerator
-from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
+from pymesh.typing import NDArray3
+from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
 
 
 class RuledSurface(Surface):
@@ -62,3 +65,15 @@ class RuledSurface(Surface):
     ) -> NDArray3[np.float64]:
         u, w = validate_surface_path_parameters(u, w, uflip, wflip)
         return (1 - w) * self.curve_1.path(u) + w * self.curve_2.path(u)
+
+    def copy(self) -> Self:
+        curve1 = self.curve_1.copy()
+        curve2 = self.curve_2.copy()
+        return RuledSurface(curve1, curve2)
+
+    def move(
+        self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
+    ) -> None:
+        validate_move_parameters(dx, dy, dz)
+        self.curve_1.move(dx, dy, dz)
+        self.curve_2.move(dx, dy, dz)

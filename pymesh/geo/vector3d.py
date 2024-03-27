@@ -5,9 +5,10 @@ from typing import Self
 
 import numpy as np
 
+from pymesh.descriptors import AsNDArray
 from pymesh.geo.point import Point
 from pymesh.typing import NDArray3
-from pymesh.descriptors import AsNDArray
+from pymesh.utils import validate_move_parameters
 
 # ! add vector math operations for easy use in the rest of the code
 
@@ -37,9 +38,7 @@ class Vector3D:
         return Vector3D(start, end)
 
     def move(self, dx: int | float, dy: int | float, dz: int | float) -> None:
-        for val in (dx, dy, dz):
-            if not isinstance(val, (int, float)):
-                raise TypeError(f"Expected {val!r} to be an int or float")
+        validate_move_parameters(dx, dy, dz)
         dxyz = np.array([dx, dy, dz])
         self.start += dxyz
         self.end += dxyz

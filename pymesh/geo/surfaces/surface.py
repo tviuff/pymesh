@@ -7,7 +7,6 @@ from typing import Self
 
 import numpy as np
 
-from pymesh.geo.curves.curve import validate_curve_path_parameters
 from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.typing import NDArray3, NDArray3xNxN
 
@@ -141,29 +140,3 @@ class Surface(ABC):
                     ]
                 )
         return panels
-
-
-def validate_surface_path_parameters(
-    u: int | float, w: int | float, uflip: bool, wflip: bool
-) -> tuple[float, float]:
-    """Validates the normalized surface path parameter.
-
-    u:
-    Normalized path parameter between 0 and 1
-
-    w:
-    Normalized path parameter between 0 and 1
-
-    uflip:
-    Optional, if True then u = (1 - u), i.e. the direction is flipped
-
-    wflip:
-    Optional, if True then u = (1 - u), i.e. the direction is flipped
-
-    return:
-    u, w
-    """
-    return (
-        validate_curve_path_parameters(u, uflip),
-        validate_curve_path_parameters(w, wflip),
-    )

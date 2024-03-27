@@ -44,3 +44,59 @@ def time_it(func):
         return result
 
     return wrapper
+
+
+def validate_move_parameters(dx: int | float, dy: int | float, dz: int | float) -> None:
+    """Validates parameters for the move method"""
+    for val in (dx, dy, dz):
+        if not isinstance(val, (int, float)):
+            raise TypeError(f"Expected {val!r} to be an int or float")
+
+
+def validate_curve_path_parameters(u: int | float, flip: bool = False) -> float:
+    """Validates the normalized curve path parameter.
+
+    u:
+    Normalized path parameter between 0 and 1
+
+    flip:
+    Optional, if True then u = (1 - u), i.e. the direction is flipped
+
+    return:
+    u
+    """
+    if not isinstance(u, (int, float)):
+        raise TypeError(f"Expected an int or float number, but got {u!r}")
+    if isinstance(u, int):
+        u = float(u)
+    if u < 0 or 1 < u:
+        raise ValueError(f"Expected a value between 0 and 1 but got {u!r}")
+    if flip:
+        u = 1 - u
+    return u
+
+
+def validate_surface_path_parameters(
+    u: int | float, w: int | float, uflip: bool, wflip: bool
+) -> tuple[float, float]:
+    """Validates the normalized surface path parameter.
+
+    u:
+    Normalized path parameter between 0 and 1
+
+    w:
+    Normalized path parameter between 0 and 1
+
+    uflip:
+    Optional, if True then u = (1 - u), i.e. the direction is flipped
+
+    wflip:
+    Optional, if True then u = (1 - u), i.e. the direction is flipped
+
+    return:
+    u, w
+    """
+    return (
+        validate_curve_path_parameters(u, uflip),
+        validate_curve_path_parameters(w, wflip),
+    )

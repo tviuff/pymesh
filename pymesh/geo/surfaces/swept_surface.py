@@ -1,12 +1,15 @@
 """Module including the swept surface class
 """
 
+from typing import Self
+
 import numpy as np
 
 from pymesh.geo.curves.curve import Curve
+from pymesh.geo.surfaces.surface import Surface
 from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.typing import NDArray3
-from pymesh.geo.surfaces.surface import Surface, validate_surface_path_parameters
+from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
 
 
 class SweptSurface(Surface):
@@ -50,3 +53,15 @@ class SweptSurface(Surface):
 
     def get_max_lengths(self) -> tuple[float]:
         return self.curve.length, self.sweeper_curve.length
+
+    def copy(self) -> Self:
+        curve = self.curve.copy()
+        sweeper = self.sweeper_curve.copy()
+        return SweptSurface(curve, sweeper)
+
+    def move(
+        self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
+    ) -> None:
+        validate_move_parameters(dx, dy, dz)
+        self.curve.move(dx, dy, dz)
+        self.sweeper_curve.move(dx, dy, dz)
