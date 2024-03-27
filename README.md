@@ -111,6 +111,8 @@ The `/examples` folder contain various code use examples of the package. Notewor
 
 The various surface algorithms are based on lectures 48 and 49 from the [Lecture Series on Computer Aided Design](https://www.youtube.com/playlist?list=PLC3EE33F27CF14A06) by Dr. Anoop Chawla and P.V. Madhusudan Rao at the Department of Mechanical Engineering, IIT Delhi.
 
+The `ArcPVA` curve path algotihm (re-used in the `rotate` method) allows for rotation of a point or vector around a given axis. The implementation is based on [WikiPedia](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula).
+
 ## Other resources
 
 - The [Seven Rules](https://cbea.ms/git-commit/#seven-rules) of a great Git Commit message:
