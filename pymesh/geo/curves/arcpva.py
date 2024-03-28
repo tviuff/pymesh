@@ -32,14 +32,8 @@ class ArcPVA(Curve):
     def end(self) -> NDArray3[np.float64]:
         return self.path(1)
 
-    # def __eq__(self, other):
-    #     eq_start = np.all(self.start == other.start)
-    #     eq_end = np.all(self.end == other.end)
-    #     eq_axis = np.all(self.axis.start == other.axis.start)
-    #     eq_angle = self.angle == other.angle
-    #     return eq_start and eq_end and eq_axis and eq_angle
-
     def __eq__(self, other):
+        # ! Tricky to test if equal / not equal. Refer to path or attributes ??
         DECIMALS = 4
         is_equal = True
         for u in np.linspace(0, 1, num=100, endpoint=True):
@@ -50,8 +44,15 @@ class ArcPVA(Curve):
                 break
         return is_equal
 
-    def __ne__(self, other):
-        return not self.__eq__(other)
+    # def __eq__(self, other):
+    #     eq_start = np.all(self.start == other.start)
+    #     eq_end = np.all(self.end == other.end)
+    #     eq_axis = np.all(self.axis.start == other.axis.start)
+    #     eq_angle = self.angle == other.angle
+    #     return eq_start and eq_end and eq_axis and eq_angle
+
+    # def __ne__(self, other):
+    #     return not self.__eq__(other)
 
     def __repr__(self):
         cls = type(self).__name__
