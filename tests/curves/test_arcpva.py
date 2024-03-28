@@ -1,9 +1,8 @@
-"""Module for testing the Point class functionality"""
+"""Module for testing the ArcPVA class functionality"""
 
 import math
 
 import numpy as np
-from numpy import ndarray
 import pytest
 
 from pymesh import Point, Vector3D, ArcPVA
@@ -29,8 +28,12 @@ def curve1(point, axis, angle) -> ArcPVA:
     return ArcPVA(point, axis, angle)
 
 
-def test_init(point, axis, angle) -> None:
-    ArcPVA(point, axis, angle)
+@pytest.fixture
+def curve1_moved(dx, dy, dz):
+    point = Point(1 + dx, 0 + dy, 0 + dz)
+    axis = Vector3D(Point(0 + dx, 0 + dy, 0 + dz), Point(0 + dx, 0 + dy, 1 + dz))
+    angle = math.pi / 2
+    return ArcPVA(point, axis, angle)
 
 
 def test_init_invalid() -> None:
@@ -38,15 +41,15 @@ def test_init_invalid() -> None:
         ArcPVA(Point(0, 0, 0), "point2", None)
 
 
-def test_eq(curve1: ArcPVA) -> None:
+def test_eq(curve1) -> None:
     assert curve1 == curve1
 
 
-def test_ne(curve1: ArcPVA) -> None:
-    assert curve1 != curve1
+def test_ne(curve1, curve1_moved) -> None:
+    assert curve1 != curve1_moved
 
 
-def test_repr(curve1, point, axis, angle) -> None:
+def test_repr(curve1) -> None:
     print("Curve.__repr__ =", f"{curve1!r}")
     assert (
         f"{curve1!r}"
@@ -65,12 +68,6 @@ def test_end(curve1: ArcPVA) -> None:
     end = path_fn(1)
     assert isinstance(curve1.end, np.ndarray)
     assert np.all(curve1.end == end)
-
-
-def test_start(point: Point, axis: Vector3D, angle: float) -> None:
-    curve = ArcPVA(point, axis, angle)
-    assert isinstance(curve.start, ndarray)
-    assert np.all(curve.start == point.xyz)
 
 
 def test_axis(point: Point, axis: Vector3D, angle: float) -> None:
@@ -117,3 +114,11 @@ def test_path(
         np.array([1 / np.sqrt(2), 1 / np.sqrt(2), 0]),
         decimals,
     )
+
+
+def test_copy(assert_copy, curve1) -> None:
+    assert_copy(curve1)
+
+
+def test_move(assert_move, curve1, curve1_moved, dx, dy, dz) -> None:
+    assert_move(curve1, curve1_moved, dx, dy, dz)

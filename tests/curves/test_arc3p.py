@@ -126,3 +126,15 @@ def test_path(
         np.array([1 / np.sqrt(2), 1 / np.sqrt(2), 0]),
         decimals,
     )
+
+
+def test_copy(assert_copy, curve1) -> None:
+    assert_copy(curve1)
+
+
+def test_move(assert_move, curve1, dx, dy, dz) -> None:
+    p1 = Point(0 + dx, 0 + dy, 0 + dz)
+    p2 = Point(1 + dx, 0 + dy, 0 + dz)
+    p3 = Point(0 + dx, 1 + dy, 0 + dz)
+    curve1_moved = Arc3P(p1, p2, p3)
+    assert_move(curve1, curve1_moved, dx, dy, dz)

@@ -71,12 +71,9 @@ def test_create_relative_point_invalid(point1: Point) -> None:
         point1.create_relative_point("", "", "")
 
 
-def test_move(point1, point2, dx, dy, dz) -> None:
-    point1.move(dx, dy, dz)
-    assert point1 == point2
+def test_move(assert_move, point1, point2, dx, dy, dz) -> None:
+    assert_move(point1, point2, dx, dy, dz)
 
 
-def test_copy(point1) -> None:
-    point = point1.copy()
-    point1.x += 1
-    assert point1 != point
+def test_copy(assert_copy, point1) -> None:
+    assert_copy(point1)

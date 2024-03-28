@@ -55,8 +55,18 @@ def point2(dx, dy, dz):
 
 
 @pytest.fixture
+def point3(dx, dy, dz):
+    return Point(2 * dx, 2 * dy, 2 * dz)
+
+
+@pytest.fixture
 def line1(point1, point2) -> Line:
     return Line(point1, point2)
+
+
+@pytest.fixture
+def line1_moved(point2, point3) -> Line:
+    return Line(point2, point3)
 
 
 @pytest.fixture
@@ -115,5 +125,26 @@ def test_surface_path(assert_surface_path_rounded):
         assert_point(surface, 0, 0, True, True, p11)
         assert_point(surface, 1, 0, False, True, p11)
         assert_point(surface, 0, 1, True, False, p11)
+
+    return func
+
+
+@pytest.fixture
+def assert_move():
+
+    def func(self, other, dx=1, dy=1, dz=1):
+        self.move(dx, dy, dz)
+        assert self == other, "They are not the same, check both .move() and other"
+
+    return func
+
+
+@pytest.fixture
+def assert_copy():
+
+    def func(old, dx=1, dy=1, dz=1):
+        new = old.copy()
+        new.move(dx, dy, dz)
+        assert new != old, "They both still reference the same data"
 
     return func

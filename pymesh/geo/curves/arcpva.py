@@ -32,21 +32,26 @@ class ArcPVA(Curve):
     def end(self) -> NDArray3[np.float64]:
         return self.path(1)
 
+    # def __eq__(self, other):
+    #     eq_start = np.all(self.start == other.start)
+    #     eq_end = np.all(self.end == other.end)
+    #     eq_axis = np.all(self.axis.start == other.axis.start)
+    #     eq_angle = self.angle == other.angle
+    #     return eq_start and eq_end and eq_axis and eq_angle
+
     def __eq__(self, other):
+        DECIMALS = 4
         is_equal = True
         for u in np.linspace(0, 1, num=100, endpoint=True):
-            if np.all(self.path(u) != other.path(u)):
+            u_self = np.all(np.round(self.path(u), decimals=DECIMALS))
+            u_other = np.all(np.round(other.path(u), decimals=DECIMALS))
+            if u_self != u_other:
                 is_equal = False
                 break
         return is_equal
 
     def __ne__(self, other):
-        is_equal = False
-        for u in np.linspace(0, 1, num=100, endpoint=True):
-            if np.all(self.path(u) == other.path(u)):
-                is_equal = True
-                break
-        return is_equal
+        return not self.__eq__(other)
 
     def __repr__(self):
         cls = type(self).__name__
@@ -56,16 +61,15 @@ class ArcPVA(Curve):
 
     def copy(self) -> Self:
         start = Point(self.start[0], self.start[1], self.start[2])
-        return ArcPVA(start, axis=self.axis, angle=self.angle)
+        return ArcPVA(start, self.axis.copy(), self.angle)  # ! how to copy float ??
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
     ) -> None:
         validate_move_parameters(dx, dy, dz)
         dxyz = np.array([dx, dy, dz])
-        self.centre += dxyz
-        self.start += dxyz
-        self.end += dxyz
+        self.start += dxyz  # self.end is a derrived property and is not moved
+        self.axis.move(dx, dy, dz)
 
     @property
     def radius(self) -> float:

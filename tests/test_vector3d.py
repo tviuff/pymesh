@@ -12,8 +12,10 @@ def vector1(point1, point2) -> None:
 
 
 @pytest.fixture
-def vector2(point1, point2) -> None:
-    return Vector3D(point2, point1)
+def vector2(point1, point2, dx, dy, dz) -> None:
+    point1.move(dx, dy, dz)
+    point2.move(dx, dy, dz)
+    return Vector3D(point1, point2)
 
 
 @pytest.mark.skip(reason="not implemeted correct")
@@ -61,13 +63,9 @@ def test_unit_vector(point1, point2) -> None:
     assert np.all(vector.unit_vector == unit_vector)
 
 
-def test_copy(vector1) -> None:
-    vector = vector1.copy()
-    vector1.start += np.array([1, 1, 1])
-    assert vector1 != vector
+def test_copy(assert_copy, vector1) -> None:
+    assert_copy(vector1)
 
 
-def test_move(p00, p01, dx, dy, dz) -> None:
-    vector = Vector3D(p00, p01)
-    vector.move(dx, dy, dz)
-    assert vector != Vector3D(p00, p01)
+def test_move(assert_move, vector1, vector2, dx, dy, dz) -> None:
+    assert_move(vector1, vector2, dx, dy, dz)

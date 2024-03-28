@@ -61,3 +61,11 @@ def test_get_path(point1: Point, point2: Point) -> None:
     assert np.all(
         path(0.2, flip=True) == point1.xyz + (1.0 - 0.2) * (point2.xyz - point1.xyz)
     )
+
+
+def test_copy(assert_copy, line1) -> None:
+    assert_copy(line1)
+
+
+def test_move(assert_move, line1, line1_moved, dx, dy, dz) -> None:
+    assert_move(line1, line1_moved, dx, dy, dz)
