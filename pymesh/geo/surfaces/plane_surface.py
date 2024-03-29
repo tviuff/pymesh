@@ -11,8 +11,6 @@ from pymesh.geo.surfaces.surface import Surface
 from pymesh.typing import NDArray3
 from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
 
-# ! OK to add Point with np.ndarray ?? <-- critical for path algorithm!
-
 
 class PlaneSurface(Surface):
     """Creates a plane surface based on three points in space
@@ -38,6 +36,7 @@ class PlaneSurface(Surface):
     def path(
         self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
     ) -> NDArray3[np.float64]:
+        # ! find a way to add np.ndarray to Point using __add__
         u, w = validate_surface_path_parameters(u, w, uflip, wflip)
         u_point = self.point0.xyz + (self.point1 - self.point0) * u
         w_point = self.point0.xyz + (self.point2 - self.point0) * w

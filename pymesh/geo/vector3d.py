@@ -1,4 +1,4 @@
-"""Module including line class
+"""Module containing Point classes.
 """
 
 from typing import Self
@@ -10,9 +10,8 @@ from pymesh.geo.point import Point
 from pymesh.typing import NDArray3
 from pymesh.utils import validate_move_parameters
 
+
 # ! add vector math operations for easy use in the rest of the code
-
-
 class Vector3D:
     """3d vector generated from two points in space"""
 

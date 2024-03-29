@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from pymesh import Point, Line, RuledSurface
+from pymesh import Line, RuledSurface
 from pymesh.geo.surfaces.surface import Surface
 
 

@@ -23,7 +23,7 @@ class SweptSurface(Surface):
     def __init__(self, curve: Curve, sweeper: Curve):
         """Creates a swept surface using a curve and a sweeper curve.
 
-        curve: defining the path to be swept
+        curve: defines the path to be swept
 
         sweper: defines the path curve is swept along
         """
@@ -42,9 +42,7 @@ class SweptSurface(Surface):
         return self.curve.path(u) + self.sweeper.path(w)
 
     def copy(self) -> Self:
-        curve = self.curve.copy()
-        sweeper = self.sweeper.copy()
-        return SweptSurface(curve, sweeper)
+        return SweptSurface(self.curve.copy(), self.sweeper.copy())
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0

@@ -8,7 +8,6 @@ import numpy as np
 from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.point import Point
 from pymesh.geo.surfaces.surface import Surface
-from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.typing import NDArray3
 from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
 

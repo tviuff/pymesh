@@ -7,8 +7,6 @@ from typing import Self
 import numpy as np
 
 from pymesh.descriptors import AsNumber
-
-# from pymesh.geo.vector3d import Vector3D
 from pymesh.typing import NDArray3
 from pymesh.utils import validate_move_parameters
 
@@ -51,7 +49,6 @@ class Point:
         self.y += float(dy)
         self.z += float(dz)
 
-    # ! Commented out due to circular import (Vector3D file has "import Point")
     # def rotate(self, axis: Vector3D, angle: int | float) -> None:
     #     pass
 

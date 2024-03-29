@@ -7,8 +7,8 @@ from typing import Self
 
 from pymesh.descriptors import AsInstanceOf, AsNumber
 from pymesh.geo.point import Point
-from pymesh.geo.curves.curve import Curve
 from pymesh.geo.vector3d import Vector3D
+from pymesh.geo.curves.curve import Curve
 from pymesh.typing import NDArray3
 from pymesh.utils import validate_move_parameters, validate_curve_path_parameters
 

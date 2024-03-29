@@ -11,6 +11,7 @@ from pymesh.geo.point import Point
 from pymesh.typing import NDArray3
 from pymesh.utils import validate_move_parameters, validate_curve_path_parameters
 
+
 TOLERANCE = 0.000001
 
 
