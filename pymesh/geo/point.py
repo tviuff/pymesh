@@ -39,9 +39,17 @@ class Point:
     def __repr__(self):
         return f"{type(self).__name__}(x={self.x:.2f}, y={self.y:.2f}, z={self.z:.2f})"
 
-    def copy(self) -> Self:
-        """Alias for deepcopy"""
-        return self.deepcopy()
+    def copy(self, deepcopy: bool = False) -> Self:
+        """Copies object using the shallowcopy method.
+
+        If deepcopy = True, then the deepcopy method is used.
+
+        Current implementation does not destinquish between shallow
+        and deep copying.
+        """
+        if deepcopy:
+            return self.deepcopy()
+        return self.shallowcopy()
 
     def shallowcopy(self) -> Self:
         """Alias for deepcopy"""

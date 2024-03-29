@@ -42,7 +42,7 @@ class Line(Curve):
         return self.start.xyz + (self.end - self.start) * u
 
     def shallowcopy(self) -> Self:
-        return Line(self.start.shallowcopy(), self.end.shallowcopy())
+        return Line(self.start, self.end)
 
     def deepcopy(self) -> Self:
         return Line(self.start.deepcopy(), self.end.deepcopy())

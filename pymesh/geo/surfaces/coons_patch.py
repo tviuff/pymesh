@@ -115,24 +115,17 @@ class CoonsPatch(Surface):
         return max_length_u, max_length_w
 
     def shallowcopy(self) -> Self:
-        curve_u0, curve_u1, curve_0w, curve_1w = self.curves
-        curves_coopy = (
-            curve_u0.shallowcopy(),
-            curve_u1.shallowcopy(),
-            curve_0w.shallowcopy(),
-            curve_1w.shallowcopy(),
-        )
-        return CoonsPatch(curves_coopy)
+        return CoonsPatch(self.curves)
 
     def deepcopy(self) -> Self:
         curve_u0, curve_u1, curve_0w, curve_1w = self.curves
-        curves_coopy = (
+        curves_copy = (
             curve_u0.deepcopy(),
             curve_u1.deepcopy(),
             curve_0w.deepcopy(),
             curve_1w.deepcopy(),
         )
-        return CoonsPatch(curves_coopy)
+        return CoonsPatch(curves_copy)
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0

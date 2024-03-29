@@ -42,9 +42,10 @@ class PlaneSurface(Surface):
     ) -> NDArray3[np.float64]:
         # ! find a way to add np.ndarray to Point using __add__
         u, w = validate_surface_path_parameters(u, w, uflip, wflip)
-        u_point = self.point0.xyz + (self.point1 - self.point0) * u
-        w_point = self.point0.xyz + (self.point2 - self.point0) * w
-        return u_point + w_point
+        xyz0 = self.point0.xyz
+        u_point = (self.point1 - self.point0) * u
+        w_point = (self.point2 - self.point0) * w
+        return xyz0 + u_point + w_point
 
     def get_max_lengths(self) -> tuple[float]:
         length_u = float(np.sqrt(np.sum((self.point1 - self.point0) ** 2)))
@@ -52,11 +53,7 @@ class PlaneSurface(Surface):
         return length_u, length_w
 
     def shallowcopy(self) -> Self:
-        return PlaneSurface(
-            self.point0.shallowcopy(),
-            self.point1.shallowcopy(),
-            self.point2.shallowcopy(),
-        )
+        return PlaneSurface(self.point0, self.point1, self.point2)
 
     def deepcopy(self) -> Self:
         return PlaneSurface(

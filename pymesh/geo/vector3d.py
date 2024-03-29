@@ -40,7 +40,7 @@ class Vector3D:
         Constructing a new collection object and then populating it with
         references to the child objects found in the original.
         """
-        return Vector3D(self.start.shallowcopy(), self.end.shallowcopy())
+        return Vector3D(self.start, self.end)
 
     def deepcopy(self) -> Self:
         """Recursive copy.

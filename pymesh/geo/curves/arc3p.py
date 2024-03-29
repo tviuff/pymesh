@@ -57,12 +57,7 @@ class Arc3P(Curve):
         return f"{cls}(centre={c}, start={s}, end={e}, inverse_sector={i})"
 
     def shallowcopy(self) -> Self:
-        return Arc3P(
-            self.centre.shallowcopy(),
-            self.start.shallowcopy(),
-            self.end.shallowcopy(),
-            self.inverse_sector,
-        )
+        return Arc3P(self.centre, self.start, self.end, self.inverse_sector)
 
     def deepcopy(self) -> Self:
         return Arc3P(

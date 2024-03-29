@@ -45,7 +45,7 @@ class RuledSurface(Surface):
         return (1 - w) * self.curve1.path(u) + w * self.curve2.path(u)
 
     def shallowcopy(self) -> Self:
-        return RuledSurface(self.curve1.shallowcopy(), self.curve2.shallowcopy())
+        return RuledSurface(self.curve1, self.curve2)
 
     def deepcopy(self) -> Self:
         return RuledSurface(self.curve1.deepcopy(), self.curve2.deepcopy())

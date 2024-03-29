@@ -38,6 +38,9 @@ surface.mesher.set_w_parameters(
     panel_density=0.2,  # float specifies largest panel length along boundaries
 )
 
+surface_copy = surface.copy()
+surface_copy.move()
+
 surface_selection = CoonsPatch.get_all_surfaces()  # get all instanciated surfaces
 
 viewer = MeshViewer(panel_normal_length=0.5)  # specify panel normal length

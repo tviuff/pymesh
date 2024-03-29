@@ -61,12 +61,7 @@ class BilinearSurface(Surface):
         return length_u, length_w
 
     def shallowcopy(self) -> Self:
-        return BilinearSurface(
-            self.p00.shallowcopy(),
-            self.p10.shallowcopy(),
-            self.p11.shallowcopy(),
-            self.p01.shallowcopy(),
-        )
+        return BilinearSurface(self.p00, self.p10, self.p11, self.p01)
 
     def deepcopy(self) -> Self:
         return BilinearSurface(

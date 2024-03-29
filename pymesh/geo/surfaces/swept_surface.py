@@ -44,10 +44,11 @@ class SweptSurface(Surface):
         self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
     ) -> NDArray3[np.float64]:
         u, w = validate_surface_path_parameters(u, w, uflip, wflip)
-        return self.curve.path(u) + self.sweeper.path(w)
+        sweep = self.sweeper.path(w) - self.sweeper.path(0)
+        return self.curve.path(u) + sweep
 
     def shallowcopy(self) -> Self:
-        return SweptSurface(self.curve.shallowcopy(), self.sweeper.shallowcopy())
+        return SweptSurface(self.curve, self.sweeper)
 
     def deepcopy(self) -> Self:
         return SweptSurface(self.curve.deepcopy(), self.sweeper.deepcopy())

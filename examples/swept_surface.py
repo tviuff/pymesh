@@ -13,14 +13,15 @@ curve = Arc3P(Point(0, 0, 0), Point(1, 0, 0), Point(0, 1, 0))
 curve.invert_arc = True
 
 surface = SweptSurface(curve, sweeper)
-surface_copy = surface.copy(deepcopy=False)
-surface_copy.sweeper.end = Point(0, 0, 2)
-surface_copy.move(dx=-1, dy=-1)
+
 surface.mesher.panel_densities = (0.2, 3)
 surface.mesher.mesh_distributions = (
     LinearDistribution(),
     CosineDistribution(flip_direction=False),
 )
+
+surface_copy = surface.copy(deepcopy=True)
+surface_copy.move(dx=-1, dy=-1)
 
 surface_selection = SweptSurface.get_all_surfaces()
 
