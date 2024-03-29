@@ -6,9 +6,11 @@ sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
 # examples/rectangle.py
 
+import math
 from pathlib import Path
 from pymesh import (
     Point,
+    Vector3D,
     Line,
     CoonsPatch,
     ExponentialDistribution,
@@ -36,6 +38,12 @@ surface.mesher.set_u_parameters(
 )
 surface.mesher.set_w_parameters(
     panel_density=0.2,  # float specifies largest panel length along boundaries
+)
+
+surface_copy = surface.copy()
+# surface_copy.move(dx=-1, dy=-1)
+surface_copy.rotate(
+    axis=Vector3D(Point(0, 0, 0), Point(0, 0, 1)), angle=180 * math.pi / 180
 )
 
 surface_selection = CoonsPatch.get_all_surfaces()  # get all instanciated surfaces

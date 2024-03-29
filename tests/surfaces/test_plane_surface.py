@@ -73,3 +73,10 @@ def test_path(point0, point1, point2, test_surface_path) -> None:
     p00, p10, p01, p11 = point0, point1, point2, Point(1, 1, 0)
     surface = PlaneSurface(point0, point1, point2)
     test_surface_path(surface, p00, p01, p10, p11)
+
+
+@pytest.mark.skip(reason="Not yet implemented")
+def test_rotate(point0, point1, point2, axis, angle) -> None:
+    surface = PlaneSurface(point0, point1, point2)
+    surface_copy = surface.copy()
+    surface_copy.rotate(axis, angle)

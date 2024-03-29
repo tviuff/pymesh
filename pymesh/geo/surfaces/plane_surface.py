@@ -1,5 +1,4 @@
-"""Module including the plane surface class
-"""
+"""Module containing the PlaneSurface class"""
 
 from typing import Self
 
@@ -7,11 +6,14 @@ import numpy as np
 
 from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.point import Point
+from pymesh.geo.vector3d import Vector3D
 from pymesh.geo.surfaces.surface import Surface
 from pymesh.typing import NDArray3
-from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
-
-# ! OK to add Point with np.ndarray ?? <-- critical for path algorithm!
+from pymesh.utils import (
+    validate_move_parameters,
+    validate_rotate_parameters,
+    validate_surface_path_parameters,
+)
 
 
 class PlaneSurface(Surface):
@@ -38,10 +40,12 @@ class PlaneSurface(Surface):
     def path(
         self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
     ) -> NDArray3[np.float64]:
+        # ! find a way to add np.ndarray to Point using __add__
         u, w = validate_surface_path_parameters(u, w, uflip, wflip)
-        u_point = self.point0.xyz + (self.point1 - self.point0) * u
-        w_point = self.point0.xyz + (self.point2 - self.point0) * w
-        return u_point + w_point
+        xyz0 = self.point0.xyz
+        u_point = (self.point1 - self.point0) * u
+        w_point = (self.point2 - self.point0) * w
+        return xyz0 + u_point + w_point
 
     def get_max_lengths(self) -> tuple[float]:
         length_u = float(np.sqrt(np.sum((self.point1 - self.point0) ** 2)))
@@ -58,3 +62,9 @@ class PlaneSurface(Surface):
         self.point0.move(dx, dy, dz)
         self.point1.move(dx, dy, dz)
         self.point2.move(dx, dy, dz)
+
+    def rotate(self, axis: Vector3D, angle: int | float) -> None:
+        validate_rotate_parameters(axis, angle)
+        self.point0.rotate(axis, angle)
+        self.point1.rotate(axis, angle)
+        self.point2.rotate(axis, angle)

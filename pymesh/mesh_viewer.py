@@ -1,4 +1,4 @@
-"""Module containing gdf viewer class"""
+"""Module containing MshViewer class"""
 
 import numpy as np
 

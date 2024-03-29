@@ -52,3 +52,18 @@ def test_get_max_lengths(surface1) -> None:
 def test_path(p00, p01, p10, p11, test_surface_path) -> None:
     surface = BilinearSurface(p00, p10, p11, p01)
     test_surface_path(surface, p00, p01, p10, p11)
+
+
+@pytest.mark.skip(reason="not found a way to test it yet")
+def test_rotate(assert_rotate, p00, p01, p10, p11, axis, angle) -> None:
+    surface = BilinearSurface(p00, p10, p11, p01)
+    point00 = p00.copy()
+    point10 = p10.copy()
+    point11 = p11.copy()
+    point01 = p01.copy()
+    point00.rotate(axis, angle)
+    point10.rotate(axis, angle)
+    point11.rotate(axis, angle)
+    point01.rotate(axis, angle)
+    surface_rotated = BilinearSurface(point00, point10, point11, point01)
+    assert_rotate(surface, surface_rotated, axis, angle)

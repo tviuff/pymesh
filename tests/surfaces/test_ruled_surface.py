@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from pymesh import Point, Line, RuledSurface
+from pymesh import Line, RuledSurface
 from pymesh.geo.surfaces.surface import Surface
 
 
@@ -59,3 +59,8 @@ def test_path(p00, p01, p10, p11, test_surface_path) -> None:
     line2 = Line(p10, p11)
     surface = RuledSurface(line1, line2)
     test_surface_path(surface, p00, p01, p10, p11)
+
+
+@pytest.mark.skip(reason="Not yet implemented")
+def test_rotate() -> None:
+    pass

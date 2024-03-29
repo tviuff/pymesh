@@ -36,6 +36,14 @@ def curve1_moved(dx, dy, dz):
     return ArcPVA(point, axis, angle)
 
 
+@pytest.fixture
+def curve1_rotated():
+    point = Point(0, 1, 0)
+    axis = Vector3D(Point(0, 0, 0), Point(0, 0, 1))
+    angle = math.pi / 2
+    return ArcPVA(point, axis, angle)
+
+
 def test_init_invalid() -> None:
     with pytest.raises(TypeError):
         ArcPVA(Point(0, 0, 0), "point2", None)
@@ -122,3 +130,8 @@ def test_copy(assert_copy, curve1) -> None:
 
 def test_move(assert_move, curve1, curve1_moved, dx, dy, dz) -> None:
     assert_move(curve1, curve1_moved, dx, dy, dz)
+
+
+def test_rotate(assert_rotate, curve1, curve1_rotated, axis, angle) -> None:
+    print(curve1, curve1_rotated)
+    assert_rotate(curve1, curve1_rotated, axis, angle)

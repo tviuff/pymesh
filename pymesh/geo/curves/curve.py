@@ -1,5 +1,4 @@
-"""Module including abstract curve class
-"""
+"""Module containing theCurve class"""
 
 from abc import ABC, abstractmethod
 from collections.abc import Callable
@@ -8,6 +7,7 @@ from typing import Self
 import numpy as np
 
 from pymesh.geo.point import Point
+from pymesh.geo.vector3d import Vector3D
 from pymesh.descriptors import AsInstanceOf
 from pymesh.typing import NDArray3
 
@@ -20,13 +20,23 @@ class Curve(ABC):
 
     @abstractmethod
     def copy(self) -> Self:
-        """Returns a copy of the curve object"""
+        """Returns a recursive copy of curve instance"""
 
     @abstractmethod
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
     ) -> None:
         """Moves the curve a given relative position"""
+
+    @abstractmethod
+    def rotate(self, axis: Vector3D, angle: int | float) -> None:
+        """Rotates the curve around an axis.
+
+        axis: vector axis the rotation is performed around
+
+        angle: defined in radians with poitive diriction being
+        counter-clockwise, based on the right-hand rule
+        """
 
     @property
     @abstractmethod

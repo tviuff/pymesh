@@ -1,5 +1,4 @@
-"""Module including the bilinear surface class
-"""
+"""Module containing the BilinearSurface class"""
 
 from typing import Self
 
@@ -7,12 +6,14 @@ import numpy as np
 
 from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.point import Point
+from pymesh.geo.vector3d import Vector3D
 from pymesh.geo.surfaces.surface import Surface
-from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.typing import NDArray3
-from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
-
-# ! use point name convention point00, point01, point10 and point11
+from pymesh.utils import (
+    validate_move_parameters,
+    validate_rotate_parameters,
+    validate_surface_path_parameters,
+)
 
 
 class BilinearSurface(Surface):
@@ -61,7 +62,10 @@ class BilinearSurface(Surface):
 
     def copy(self) -> Self:
         return BilinearSurface(
-            self.p00.copy(), self.p10.copy(), self.p11.copy(), self.p01.copy()
+            self.p00.copy(),
+            self.p10.copy(),
+            self.p11.copy(),
+            self.p01.copy(),
         )
 
     def move(
@@ -72,3 +76,10 @@ class BilinearSurface(Surface):
         self.p10.move(dx, dy, dz)
         self.p11.move(dx, dy, dz)
         self.p01.move(dx, dy, dz)
+
+    def rotate(self, axis: Vector3D, angle: int | float) -> None:
+        validate_rotate_parameters(axis, angle)
+        self.p00.rotate(axis, angle)
+        self.p10.rotate(axis, angle)
+        self.p11.rotate(axis, angle)
+        self.p01.rotate(axis, angle)

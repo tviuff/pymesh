@@ -1,4 +1,4 @@
-"""Module initializer (constructor)"""
+"""Module containing mesh distribution classes"""
 
 import math
 from abc import ABC, abstractmethod

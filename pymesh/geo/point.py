@@ -1,5 +1,4 @@
-"""Module containing Point classes.
-"""
+"""Module containing the Point class"""
 
 import math
 from typing import Self
@@ -7,10 +6,8 @@ from typing import Self
 import numpy as np
 
 from pymesh.descriptors import AsNumber
-
-# from pymesh.geo.vector3d import Vector3D
 from pymesh.typing import NDArray3
-from pymesh.utils import validate_move_parameters
+from pymesh.utils import validate_move_parameters, validate_rotate_parameters
 
 
 class Point:
@@ -28,7 +25,11 @@ class Point:
         return np.array([self.x, self.y, self.z])
 
     def __eq__(self, other) -> bool:
-        return np.all(self.xyz == other.xyz)
+        DECIMALS = 10
+        return np.all(
+            np.round(self.xyz, decimals=DECIMALS)
+            == np.round(other.xyz, decimals=DECIMALS)
+        )
 
     def __ne__(self, other: object) -> bool:
         return not self.__eq__(other)
@@ -43,6 +44,7 @@ class Point:
         return f"{type(self).__name__}(x={self.x:.2f}, y={self.y:.2f}, z={self.z:.2f})"
 
     def copy(self) -> Self:
+        """Returns a copy of point instance"""
         return Point(self.x, self.y, self.z)
 
     def move(self, dx: int | float, dy: int | float, dz: int | float) -> None:
@@ -51,12 +53,29 @@ class Point:
         self.y += float(dy)
         self.z += float(dz)
 
-    # ! Commented out due to circular import (Vector3D file has "import Point")
-    # def rotate(self, axis: Vector3D, angle: int | float) -> None:
-    #     pass
+    def rotate(self, axis, angle: int | float) -> None:
+        """Rotates point around an axis.
 
-    # def mirror(self, plane_norrmal: Vector3D) -> None:
-    #     pass
+        axis: a Vector3D type
+
+        angle: defined in radians with poitive diriction being
+        counter-clockwise, based on the right-hand rule
+        """
+        # ! axis is expected to be a Vector3D
+        # ! although importing module results in a circular import error
+        validate_rotate_parameters(axis, angle)
+        pvec = self - axis.start
+        avec = axis.end - axis.start
+        xyz0 = axis.start.xyz
+        part1 = pvec * math.cos(angle)
+        part2 = np.cross(avec, pvec) * math.sin(angle)
+        part3 = avec * np.dot(avec, pvec) * (1 - math.cos(angle))
+        xyz_rotated = xyz0 + part1 + part2 + part3
+        xyz_diff = xyz_rotated - self.xyz
+        self.move(xyz_diff[0], xyz_diff[1], xyz_diff[2])
+
+    # def mirror(self, point_in_plane: Self, plane_norrmal) -> Self:
+    #     """Passed"""
 
     def get_distance_to(self, point: Self) -> float:
         """Returns the shortest distance between point instance and another point"""

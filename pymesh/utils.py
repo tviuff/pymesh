@@ -4,9 +4,10 @@
 import time
 from typing import Callable, TypeVar, ParamSpec
 
-
 T = TypeVar("T")
 P = ParamSpec("P")
+
+# ! validate_rotate_parameters not working properly !
 
 
 def copy_doc(wrapper: Callable[P, T]):
@@ -51,6 +52,12 @@ def validate_move_parameters(dx: int | float, dy: int | float, dz: int | float) 
     for val in (dx, dy, dz):
         if not isinstance(val, (int, float)):
             raise TypeError(f"Expected {val!r} to be an int or float")
+
+
+def validate_rotate_parameters(axis, angle: int | float) -> None:
+    """Validates parameters for the rotate method"""
+    if not isinstance(angle, (int, float)):
+        raise TypeError(f"Expected {angle!r} to be an int or float")
 
 
 def validate_curve_path_parameters(u: int | float, flip: bool = False) -> float:

@@ -1,4 +1,4 @@
-"""Module including the swept surface class
+"""Module including the SweptSurface class
 """
 
 from typing import Self
@@ -8,8 +8,13 @@ import numpy as np
 from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.surfaces.surface import Surface
+from pymesh.geo.vector3d import Vector3D
 from pymesh.typing import NDArray3
-from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
+from pymesh.utils import (
+    validate_move_parameters,
+    validate_rotate_parameters,
+    validate_surface_path_parameters,
+)
 
 
 class SweptSurface(Surface):
@@ -23,7 +28,7 @@ class SweptSurface(Surface):
     def __init__(self, curve: Curve, sweeper: Curve):
         """Creates a swept surface using a curve and a sweeper curve.
 
-        curve: defining the path to be swept
+        curve: defines the path to be swept
 
         sweper: defines the path curve is swept along
         """
@@ -39,12 +44,11 @@ class SweptSurface(Surface):
         self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
     ) -> NDArray3[np.float64]:
         u, w = validate_surface_path_parameters(u, w, uflip, wflip)
-        return self.curve.path(u) + self.sweeper.path(w)
+        sweep = self.sweeper.path(w) - self.sweeper.path(0)
+        return self.curve.path(u) + sweep
 
     def copy(self) -> Self:
-        curve = self.curve.copy()
-        sweeper = self.sweeper.copy()
-        return SweptSurface(curve, sweeper)
+        return SweptSurface(self.curve.copy(), self.sweeper.copy())
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
@@ -52,3 +56,8 @@ class SweptSurface(Surface):
         validate_move_parameters(dx, dy, dz)
         self.curve.move(dx, dy, dz)
         self.sweeper.move(dx, dy, dz)
+
+    def rotate(self, axis: Vector3D, angle: int | float) -> None:
+        validate_rotate_parameters(axis, angle)
+        self.curve.rotate(axis, angle)
+        self.sweeper.rotate(axis, angle)

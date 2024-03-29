@@ -8,16 +8,20 @@ from pymesh import Point, Line, Arc3P, SweptSurface
 from pymesh import LinearDistribution, CosineDistribution
 from pymesh import MeshViewer
 
-line = Line(Point(0, 0, 0), Point(0, 0, 1))
+sweeper = Line(Point(0, 0, 0), Point(0, 0, 1))
 curve = Arc3P(Point(0, 0, 0), Point(1, 0, 0), Point(0, 1, 0))
 curve.invert_arc = True
 
-surface = SweptSurface(curve=curve, sweeper_curve=line)
+surface = SweptSurface(curve, sweeper)
+
 surface.mesher.panel_densities = (0.2, 3)
 surface.mesher.mesh_distributions = (
     LinearDistribution(),
     CosineDistribution(flip_direction=False),
 )
+
+surface_copy = surface.copy()
+surface_copy.move(dx=-1, dy=-1)
 
 surface_selection = SweptSurface.get_all_surfaces()
 
