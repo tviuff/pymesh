@@ -12,8 +12,6 @@ from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.typing import NDArray3
 from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
 
-# ! use point name convention point00, point01, point10 and point11
-
 
 class BilinearSurface(Surface):
     """Creates a bilinear surface based on four points in space
