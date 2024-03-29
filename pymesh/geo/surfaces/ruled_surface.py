@@ -5,9 +5,9 @@ from typing import Self
 
 import numpy as np
 
+from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.surfaces.surface import Surface
-from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.typing import NDArray3
 from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
 
@@ -17,46 +17,20 @@ class RuledSurface(Surface):
     and creates mesh points for generating panels.
     """
 
-    def __init__(self, curve_1: Curve, curve_2: Curve):
+    curve1 = AsInstanceOf(Curve)
+    curve2 = AsInstanceOf(Curve)
+
+    def __init__(self, curve1: Curve, curve2: Curve):
         self._all_surfaces.append(self)
-        self.curve_1 = curve_1
-        self.curve_2 = curve_2
-        self._set_mesh_generator(
-            MeshGenerator(self.get_path(), self.get_max_lengths()), force=True
-        )
-
-    @property
-    def curve_1(self) -> Curve:
-        return self._curve_1
-
-    @curve_1.setter
-    def curve_1(self, value) -> None:
-        if not isinstance(value, Curve):
-            raise TypeError("curve_1 must be of type 'Curve'")
-        self._curve_1 = value
-
-    @property
-    def curve_2(self) -> Curve:
-        return self._curve_2
-
-    @curve_2.setter
-    def curve_2(self, value) -> None:
-        if not isinstance(value, Curve):
-            raise TypeError("curve_2 must be of type 'Curve'")
-        self._curve_2 = value
+        self.curve1 = curve1
+        self.curve2 = curve2
+        super().__init__()
 
     def get_max_lengths(self) -> tuple[float]:
-        """Returns longest boundary length along the u and w dimensions.
-
-        u: largest distance along curve paths.
-        w: largest distance between opposing curves end points.
-        """
-        start_points = [self.curve_1.start, self.curve_2.start]
-        end_points = [self.curve_1.end, self.curve_2.end]
-        length_u = max(self.curve_1.length, self.curve_2.length)
+        length_u = max(self.curve1.length, self.curve2.length)
         length_w = max(
-            float(np.sqrt(np.sum((start_points[0] - start_points[1]) ** 2))),
-            float(np.sqrt(np.sum((end_points[0] - end_points[1]) ** 2))),
+            float(np.sqrt(np.sum((self.curve1.start - self.curve2.start) ** 2))),
+            float(np.sqrt(np.sum((self.curve1.end - self.curve2.end) ** 2))),
         )
         return length_u, length_w
 
@@ -64,16 +38,14 @@ class RuledSurface(Surface):
         self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
     ) -> NDArray3[np.float64]:
         u, w = validate_surface_path_parameters(u, w, uflip, wflip)
-        return (1 - w) * self.curve_1.path(u) + w * self.curve_2.path(u)
+        return (1 - w) * self.curve1.path(u) + w * self.curve2.path(u)
 
     def copy(self) -> Self:
-        curve1 = self.curve_1.copy()
-        curve2 = self.curve_2.copy()
-        return RuledSurface(curve1, curve2)
+        return RuledSurface(self.curve1.copy(), self.curve2.copy())
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
     ) -> None:
         validate_move_parameters(dx, dy, dz)
-        self.curve_1.move(dx, dy, dz)
-        self.curve_2.move(dx, dy, dz)
+        self.curve1.move(dx, dy, dz)
+        self.curve2.move(dx, dy, dz)

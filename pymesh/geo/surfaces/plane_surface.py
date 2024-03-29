@@ -5,12 +5,13 @@ from typing import Self
 
 import numpy as np
 
-from pymesh.descriptors import AsNDArray
+from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.point import Point
 from pymesh.geo.surfaces.surface import Surface
-from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.typing import NDArray3
 from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
+
+# ! OK to add Point with np.ndarray ?? <-- critical for path algorithm!
 
 
 class PlaneSurface(Surface):
@@ -18,43 +19,42 @@ class PlaneSurface(Surface):
     and creates mesh points for generating panels.
     """
 
-    point_0 = AsNDArray(shape=(3,))
-    vector_01 = AsNDArray(shape=(3,))
-    vector_02 = AsNDArray(shape=(3,))
+    point0 = AsInstanceOf(Point)
+    point1 = AsInstanceOf(Point)
+    point2 = AsInstanceOf(Point)
 
-    def __init__(self, point_0: Point, point_1: Point, point_2: Point):
+    def __init__(self, point0: Point, point1: Point, point2: Point):
+        """Creates a plane surface from three points in space.
+
+        The plane is drawn from the vectors |point1-poin0| and
+        |point2-poin0|, where point0 is shared between the vectors.
+        """
         self._all_surfaces.append(self)
-        self.point_0 = point_0.xyz
-        self.vector_01 = point_1.xyz - point_0.xyz
-        self.vector_02 = point_2.xyz - point_0.xyz
-        self._set_mesh_generator(
-            MeshGenerator(self.get_path(), self.get_max_lengths()), force=True
-        )
+        self.point0 = point0
+        self.point1 = point1
+        self.point2 = point2
+        super().__init__()
 
     def path(
         self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
     ) -> NDArray3[np.float64]:
         u, w = validate_surface_path_parameters(u, w, uflip, wflip)
-        pu = self.point_0 + self.vector_01 * u
-        pw = self.point_0 + self.vector_02 * w
-        return pu + pw
+        u_point = self.point0.xyz + (self.point1 - self.point0) * u
+        w_point = self.point0.xyz + (self.point2 - self.point0) * w
+        return u_point + w_point
 
     def get_max_lengths(self) -> tuple[float]:
-        length_01 = float(np.sqrt(np.sum(self.vector_01**2)))
-        length_02 = float(np.sqrt(np.sum(self.vector_02**2)))
-        return length_01, length_02
+        length_u = float(np.sqrt(np.sum((self.point1 - self.point0) ** 2)))
+        length_w = float(np.sqrt(np.sum((self.point2 - self.point0) ** 2)))
+        return length_u, length_w
 
     def copy(self) -> Self:
-        point_0 = Point(self.point_0[0], self.point_0[1], self.point_0[2])
-        point_1 = self.vector_01 + self.point_0
-        point_1 = Point(point_1[0], point_1[1], point_1[2])
-        point_2 = self.vector_02 + self.point_0
-        point_2 = Point(point_2[0], point_2[1], point_2[2])
-        return PlaneSurface(point_0, point_1, point_2)
+        return PlaneSurface(self.point0.copy(), self.point1.copy(), self.point2.copy())
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
     ) -> None:
         validate_move_parameters(dx, dy, dz)
-        dxyz = np.array([dx, dy, dz])
-        self.point_0 += dxyz  # vectors are relative to point_0
+        self.point0.move(dx, dy, dz)
+        self.point1.move(dx, dy, dz)
+        self.point2.move(dx, dy, dz)

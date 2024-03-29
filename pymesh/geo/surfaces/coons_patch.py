@@ -23,9 +23,7 @@ class CoonsPatch(Surface):
     def __init__(self, curves: list[Curve] | tuple[Curve]):
         self._all_surfaces.append(self)
         self.curves = curves  # also sets self._flipped_curves
-        self._set_mesh_generator(
-            MeshGenerator(self.get_path(), self.get_max_lengths()), force=True
-        )
+        super().__init__()
 
     @property
     def curves(self) -> tuple[Curve]:
@@ -56,9 +54,7 @@ class CoonsPatch(Surface):
                 initial_selection[index].end,
             )
             print(ref_point, next_curve_points)
-            if np.all(ref_point == next_curve_points[0]) or np.all(
-                ref_point == next_curve_points[1]
-            ):
+            if ref_point == next_curve_points[0] or ref_point == next_curve_points[1]:
                 if np.all(ref_point == next_curve_points[0]):
                     # next curve has matching starting point
                     flipped_curves.append(False)
@@ -71,15 +67,63 @@ class CoonsPatch(Surface):
                 index = 0
                 continue
             index += 1
-        if np.any(ref_point != curve_selection[0].start) or index > len(
-            initial_selection
-        ):
+        if ref_point != curve_selection[0].start or index > len(initial_selection):
             raise CurveIntersectionError(
                 "Selected curves does not share intersection points"
             )
         cflip, cselect = self._set__curve_order(flipped_curves, curve_selection)
         self._flipped_curves = tuple(cflip)
         self._curves = tuple(cselect)
+
+    # @curves.setter
+    # def curves(self, curves) -> None:
+    #     pname = "curves"
+    #     if not isinstance(curves, (list, tuple)):
+    #         raise TypeError(f"{pname} must receive a list or tuple input")
+    #     if len(curves) != 4:
+    #         raise ValueError(f"{pname} must containing exactly 4 items.")
+    #     for curve in curves:
+    #         if not isinstance(curve, Curve):
+    #             raise TypeError(f"{pname} items must be of type 'Curve'.")
+    #     initial_selection = list(curves)
+    #     curve_selection = [initial_selection.pop(0)]
+    #     ref_point = curve_selection[-1].end
+    #     flipped_curves = [False]
+    #     index = 0
+    #     while (
+    #         len(curve_selection) <= 4
+    #         and len(initial_selection) >= 1
+    #         and index < len(initial_selection)
+    #     ):
+    #         next_curve_points = (
+    #             initial_selection[index].start,
+    #             initial_selection[index].end,
+    #         )
+    #         print(ref_point, next_curve_points)
+    #         if np.all(ref_point == next_curve_points[0]) or np.all(
+    #             ref_point == next_curve_points[1]
+    #         ):
+    #             if np.all(ref_point == next_curve_points[0]):
+    #                 # next curve has matching starting point
+    #                 flipped_curves.append(False)
+    #                 ref_point = next_curve_points[1]
+    #             else:
+    #                 # next curve has matching ending point
+    #                 flipped_curves.append(True)
+    #                 ref_point = next_curve_points[0]
+    #             curve_selection.append(initial_selection.pop(index))
+    #             index = 0
+    #             continue
+    #         index += 1
+    #     if np.any(ref_point != curve_selection[0].start) or index > len(
+    #         initial_selection
+    #     ):
+    #         raise CurveIntersectionError(
+    #             "Selected curves does not share intersection points"
+    #         )
+    #     cflip, cselect = self._set__curve_order(flipped_curves, curve_selection)
+    #     self._flipped_curves = tuple(cflip)
+    #     self._curves = tuple(cselect)
 
     @staticmethod
     def _set__curve_order(cflip, cselect) -> tuple[list]:

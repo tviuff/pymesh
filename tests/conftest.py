@@ -55,7 +55,12 @@ def point2(dx, dy, dz):
 
 
 @pytest.fixture
-def point3(dx, dy, dz):
+def point1_moved(dx, dy, dz) -> Point:
+    return Point(dx, dy, dz)
+
+
+@pytest.fixture
+def point2_moved(dx, dy, dz):
     return Point(2 * dx, 2 * dy, 2 * dz)
 
 
@@ -65,8 +70,8 @@ def line1(point1, point2) -> Line:
 
 
 @pytest.fixture
-def line1_moved(point2, point3) -> Line:
-    return Line(point2, point3)
+def line1_moved(point1_moved, point2_moved) -> Line:
+    return Line(point1_moved, point2_moved)
 
 
 @pytest.fixture

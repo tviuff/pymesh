@@ -27,11 +27,17 @@ class Point:
     def xyz(self) -> NDArray3[np.float64]:
         return np.array([self.x, self.y, self.z])
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return np.all(self.xyz == other.xyz)
 
     def __ne__(self, other: object) -> bool:
-        return np.any(self.xyz != other.xyz)
+        return not self.__eq__(other)
+
+    def __add__(self, other):
+        return self.xyz + other.xyz
+
+    def __sub__(self, other):
+        return self.xyz - other.xyz
 
     def __repr__(self):
         return f"{type(self).__name__}(x={self.x:.2f}, y={self.y:.2f}, z={self.z:.2f})"

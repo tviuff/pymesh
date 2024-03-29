@@ -5,9 +5,9 @@ from typing import Self
 
 import numpy as np
 
+from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.surfaces.surface import Surface
-from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.typing import NDArray3
 from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
 
@@ -17,46 +17,33 @@ class SweptSurface(Surface):
     and creates mesh points for generating panels.
     """
 
-    def __init__(self, curve: Curve, sweeper_curve: Curve):
+    curve = AsInstanceOf(Curve)
+    sweeper = AsInstanceOf(Curve)
+
+    def __init__(self, curve: Curve, sweeper: Curve):
+        """Creates a swept surface using a curve and a sweeper curve.
+
+        curve: defining the path to be swept
+
+        sweper: defines the path curve is swept along
+        """
         self._all_surfaces.append(self)
         self.curve = curve
-        self.sweeper_curve = sweeper_curve
-        self._set_mesh_generator(
-            MeshGenerator(self.get_path(), self.get_max_lengths()), force=True
-        )
+        self.sweeper = sweeper
+        super().__init__()
 
-    @property
-    def curve(self) -> Curve:
-        return self._curve
-
-    @curve.setter
-    def curve(self, curve: Curve) -> None:
-        if not isinstance(curve, Curve):
-            raise TypeError("curve must be of type 'Curve'")
-        self._curve = curve
-
-    @property
-    def sweeper_curve(self) -> Curve:
-        return self._sweeper_curve
-
-    @sweeper_curve.setter
-    def sweeper_curve(self, value: Curve) -> None:
-        if not isinstance(value, Curve):
-            raise TypeError("sweeper_curve must be of type 'Curve'")
-        self._sweeper_curve = value
+    def get_max_lengths(self) -> tuple[float]:
+        return self.curve.length, self.sweeper.length
 
     def path(
         self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
     ) -> NDArray3[np.float64]:
         u, w = validate_surface_path_parameters(u, w, uflip, wflip)
-        return self.curve.path(u) + self.sweeper_curve.path(w)
-
-    def get_max_lengths(self) -> tuple[float]:
-        return self.curve.length, self.sweeper_curve.length
+        return self.curve.path(u) + self.sweeper.path(w)
 
     def copy(self) -> Self:
         curve = self.curve.copy()
-        sweeper = self.sweeper_curve.copy()
+        sweeper = self.sweeper.copy()
         return SweptSurface(curve, sweeper)
 
     def move(
@@ -64,4 +51,4 @@ class SweptSurface(Surface):
     ) -> None:
         validate_move_parameters(dx, dy, dz)
         self.curve.move(dx, dy, dz)
-        self.sweeper_curve.move(dx, dy, dz)
+        self.sweeper.move(dx, dy, dz)

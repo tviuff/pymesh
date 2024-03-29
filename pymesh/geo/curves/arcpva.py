@@ -12,8 +12,6 @@ from pymesh.geo.vector3d import Vector3D
 from pymesh.typing import NDArray3
 from pymesh.utils import validate_move_parameters, validate_curve_path_parameters
 
-# ! Keep constructor as is for now
-
 
 class ArcPVA(Curve):
     """Circular arc generated from a point, an axis of rotation and an angle (rad).
@@ -24,16 +22,16 @@ class ArcPVA(Curve):
     angle = AsNumber(return_type=float)
 
     def __init__(self, point: Point, axis: Vector3D, angle: int | float):
-        self.start = point.xyz
+        self.start = point
         self.axis = axis
         self.angle = angle
 
     @property
     def end(self) -> NDArray3[np.float64]:
-        return self.path(1)
+        end_xyz = self.path(1)
+        return Point(end_xyz[0], end_xyz[1], end_xyz[2])
 
     def __eq__(self, other):
-        # ! Tricky to test if equal / not equal. Refer to path or attributes ??
         DECIMALS = 4
         is_equal = True
         for u in np.linspace(0, 1, num=100, endpoint=True):
@@ -44,32 +42,25 @@ class ArcPVA(Curve):
                 break
         return is_equal
 
-    # def __eq__(self, other):
-    #     eq_start = np.all(self.start == other.start)
-    #     eq_end = np.all(self.end == other.end)
-    #     eq_axis = np.all(self.axis.start == other.axis.start)
-    #     eq_angle = self.angle == other.angle
-    #     return eq_start and eq_end and eq_axis and eq_angle
-
-    # def __ne__(self, other):
-    #     return not self.__eq__(other)
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     def __repr__(self):
         cls = type(self).__name__
-        point = Point(self.start[0], self.start[1], self.start[2])
-        txt = f"{cls}(start={point}, " f"axis={self.axis}, angle={self.angle:.2f})"
+        txt = (
+            f"{cls}(start={self.start!r}, "
+            f"axis={self.axis!r}, angle={self.angle:.2f})"
+        )
         return txt
 
     def copy(self) -> Self:
-        start = Point(self.start[0], self.start[1], self.start[2])
-        return ArcPVA(start, self.axis.copy(), self.angle)  # ! how to copy float ??
+        return ArcPVA(self.start.copy(), self.axis.copy(), self.angle)
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
     ) -> None:
         validate_move_parameters(dx, dy, dz)
-        dxyz = np.array([dx, dy, dz])
-        self.start += dxyz  # self.end is a derrived property and is not moved
+        self.start.move(dx, dy, dz)
         self.axis.move(dx, dy, dz)
 
     @property
@@ -88,7 +79,7 @@ class ArcPVA(Curve):
         pvec = self.start - self.axis.start
         avec = self.axis.end - self.axis.start
         angle = self.angle
-        xyz0 = self.axis.start
+        xyz0 = self.axis.start.xyz
         part1 = pvec * math.cos(angle * u)
         part2 = np.cross(avec, pvec) * math.sin(angle * u)
         part3 = avec * np.dot(avec, pvec) * (1 - math.cos(angle * u))
