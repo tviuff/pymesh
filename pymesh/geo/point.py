@@ -40,6 +40,15 @@ class Point:
         return f"{type(self).__name__}(x={self.x:.2f}, y={self.y:.2f}, z={self.z:.2f})"
 
     def copy(self) -> Self:
+        """Alias for deepcopy"""
+        return self.deepcopy()
+
+    def shallowcopy(self) -> Self:
+        """Alias for deepcopy"""
+        return self.deepcopy()
+
+    def deepcopy(self) -> Self:
+        """Recursive copy"""
         return Point(self.x, self.y, self.z)
 
     def move(self, dx: int | float, dy: int | float, dz: int | float) -> None:

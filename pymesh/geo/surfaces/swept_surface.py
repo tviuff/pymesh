@@ -46,8 +46,11 @@ class SweptSurface(Surface):
         u, w = validate_surface_path_parameters(u, w, uflip, wflip)
         return self.curve.path(u) + self.sweeper.path(w)
 
-    def copy(self) -> Self:
-        return SweptSurface(self.curve.copy(), self.sweeper.copy())
+    def shallowcopy(self) -> Self:
+        return SweptSurface(self.curve.shallowcopy(), self.sweeper.shallowcopy())
+
+    def deepcopy(self) -> Self:
+        return SweptSurface(self.curve.deepcopy(), self.sweeper.deepcopy())
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0

@@ -18,9 +18,30 @@ class Curve(ABC):
     start = AsInstanceOf(Point)
     end = AsInstanceOf(Point)
 
+    def copy(self, deepcopy: bool = False) -> Self:
+        """Copies object using the shallowcopy method. If deepcopy = True,
+        then the deepcopy method is used."""
+        if deepcopy:
+            return self.deepcopy()
+        return self.shallowcopy()
+
     @abstractmethod
-    def copy(self) -> Self:
-        """Returns a copy of the curve object"""
+    def shallowcopy(self) -> Self:
+        """Shallow copy.
+
+        Constructing a new collection object and then populating it with
+        references to the child objects found in the original.
+        """
+
+    @abstractmethod
+    def deepcopy(self) -> Self:
+        """Recursive copy.
+
+        Constructing a new collection object and then recursively populating
+        it with copies of the child objects found in the original. Copying
+        an object this way walks the whole object tree to create a fully
+        independent clone of the original object and all of its children.
+        """
 
     @abstractmethod
     def move(
