@@ -8,8 +8,13 @@ import numpy as np
 from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.surfaces.surface import Surface
+from pymesh.geo.vector3d import Vector3D
 from pymesh.typing import NDArray3
-from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
+from pymesh.utils import (
+    validate_move_parameters,
+    validate_rotate_parameters,
+    validate_surface_path_parameters,
+)
 
 
 class SweptSurface(Surface):
@@ -50,3 +55,8 @@ class SweptSurface(Surface):
         validate_move_parameters(dx, dy, dz)
         self.curve.move(dx, dy, dz)
         self.sweeper.move(dx, dy, dz)
+
+    def rotate(self, axis: Vector3D, angle: int | float) -> None:
+        validate_rotate_parameters(axis, angle)
+        self.curve.rotate(axis, angle)
+        self.sweeper.rotate(axis, angle)

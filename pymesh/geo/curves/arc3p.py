@@ -71,8 +71,9 @@ class Arc3P(Curve):
 
     def rotate(self, axis: Vector3D, angle: int | float) -> None:
         validate_rotate_parameters(axis, angle)
-        self.start.rotate(axis, angle)
         self.centre.rotate(axis, angle)
+        self.start.rotate(axis, angle)
+        self.end.rotate(axis, angle)
 
     @property
     def radius(self) -> float:

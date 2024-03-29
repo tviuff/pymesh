@@ -6,7 +6,7 @@ import numpy as np
 from numpy import ndarray
 import pytest
 
-from pymesh import Point, Arc3P
+from pymesh import Point, Vector3D, Arc3P
 
 
 @pytest.fixture
@@ -137,3 +137,28 @@ def test_move(assert_move, curve1, dx, dy, dz) -> None:
     p3 = Point(0 + dx, 1 + dy, 0 + dz)
     curve1_moved = Arc3P(p1, p2, p3)
     assert_move(curve1, curve1_moved, dx, dy, dz)
+
+
+def test_rotate(p00, p10, p01) -> None:
+    curve1 = Arc3P(p00, p10, p01)
+    curve2 = Arc3P(p00.copy(), p01.copy(), Point(-1, 0, 0))
+    assert curve1.end == curve2.start, "Incorrect test setup"
+
+    angle = 90 * math.pi / 180
+    axis = Vector3D(p00, Point(0, 0, 1))
+
+    print(curve1.centre, curve1.start, curve1.end)
+    print("Rotating curve..")
+    curve1.rotate(axis, angle)
+    print(curve1.centre, curve1.start, curve1.end)
+
+    DECIMALS = 4
+
+    assert np.all(
+        np.round(curve1.start.xyz, decimals=DECIMALS)
+        == np.round(curve2.start.xyz, decimals=DECIMALS)
+    ), "start point not rotated correctly"
+    assert np.all(
+        np.round(curve1.end.xyz, decimals=DECIMALS)
+        == np.round(curve2.end.xyz, decimals=DECIMALS)
+    ), "end point not rotated correctly"
