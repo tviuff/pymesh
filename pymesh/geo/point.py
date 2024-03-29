@@ -51,14 +51,14 @@ class Point:
         self.y += float(dy)
         self.z += float(dz)
 
-    # ! Uot-comment due to circular import (Vector3D file has "import Point")
+    # ! Commented out due to circular import (Vector3D file has "import Point")
     # def rotate(self, axis: Vector3D, angle: int | float) -> None:
     #     pass
 
-    # def mirror(self, plane: Vector3D) -> None:
+    # def mirror(self, plane_norrmal: Vector3D) -> None:
     #     pass
 
-    def get_distance(self, point: Self) -> float:
+    def get_distance_to(self, point: Self) -> float:
         """Returns the shortest distance between point instance and another point"""
         if not isinstance(point, Point):
             raise TypeError(f"point must be of type '{Point.__name__}'.")
