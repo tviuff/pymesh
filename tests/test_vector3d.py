@@ -1,5 +1,7 @@
 """Module for testing the Point class functionality"""
 
+import math
+
 import numpy as np
 import pytest
 
@@ -61,3 +63,15 @@ def test_move(
     assert_move, vector1: Vector3D, vector2: Vector3D, dx: float, dy: float, dz: float
 ) -> None:
     assert_move(vector1, vector2, dx, dy, dz)
+
+
+def test_rotate(p00, p10, p01) -> None:
+    DECIMALS = 4
+    angle = 90 * math.pi / 180
+    vector1 = Vector3D(p00, p10)
+    vector2 = Vector3D(p00, p01)
+    axis = Vector3D(p00, Point(0, 0, 1))
+    vector1.rotate(axis, angle)
+    result = np.round(vector1.end.xyz, decimals=DECIMALS)
+    expected = np.round(vector2.end.xyz, decimals=DECIMALS)
+    assert np.all(result == expected)

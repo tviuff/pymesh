@@ -6,6 +6,7 @@ from typing import Self
 
 import numpy as np
 
+from pymesh.geo.vector3d import Vector3D
 from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.typing import NDArray3, NDArray3xNxN
 
@@ -61,6 +62,16 @@ class Surface(ABC):
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
     ) -> None:
         """Moves the surface a given relative position"""
+
+    @abstractmethod
+    def rotate(self, axis: Vector3D, angle: int | float) -> None:
+        """Rotates the surface around an axis.
+
+        axis: vector axis the rotation is performed around
+
+        angle: defined in radians with poitive diriction being
+        counter-clockwise, based on the right-hand rule
+        """
 
     def get_path(
         self,

@@ -6,9 +6,14 @@ import numpy as np
 
 from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.point import Point
+from pymesh.geo.vector3d import Vector3D
 from pymesh.geo.surfaces.surface import Surface
 from pymesh.typing import NDArray3
-from pymesh.utils import validate_move_parameters, validate_surface_path_parameters
+from pymesh.utils import (
+    validate_move_parameters,
+    validate_rotate_parameters,
+    validate_surface_path_parameters,
+)
 
 
 class PlaneSurface(Surface):
@@ -56,3 +61,9 @@ class PlaneSurface(Surface):
         self.point0.move(dx, dy, dz)
         self.point1.move(dx, dy, dz)
         self.point2.move(dx, dy, dz)
+
+    def rotate(self, axis: Vector3D, angle: int | float) -> None:
+        validate_rotate_parameters(axis, angle)
+        self.point0.rotate(axis, angle)
+        self.point1.rotate(axis, angle)
+        self.point2.rotate(axis, angle)

@@ -5,7 +5,7 @@ import math
 import numpy as np
 import pytest
 
-from pymesh import Point
+from pymesh import Point, Vector3D
 
 
 def test_init(dx, dy, dz) -> None:
@@ -77,3 +77,12 @@ def test_move(assert_move, point1, point2, dx, dy, dz) -> None:
 
 def test_copy(assert_copy, point1) -> None:
     assert_copy(point1)
+
+
+def test_rotate(p00, p10, p01) -> None:
+    DECIMALS = 4
+    angle = 90 * math.pi / 180
+    p10.rotate(Vector3D(p00, Point(0, 0, 1)), angle)
+    result = np.round(p10.xyz, decimals=DECIMALS)
+    expected = np.round(p01.xyz, decimals=DECIMALS)
+    assert np.all(result == expected)

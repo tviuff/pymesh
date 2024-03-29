@@ -7,8 +7,13 @@ from typing import Self
 from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.point import Point
+from pymesh.geo.vector3d import Vector3D
 from pymesh.typing import NDArray3
-from pymesh.utils import validate_move_parameters, validate_curve_path_parameters
+from pymesh.utils import (
+    validate_move_parameters,
+    validate_rotate_parameters,
+    validate_curve_path_parameters,
+)
 
 
 TOLERANCE = 0.000001
@@ -63,6 +68,11 @@ class Arc3P(Curve):
         self.centre.move(dx, dy, dz)
         self.start.move(dx, dy, dz)
         self.end.move(dx, dy, dz)
+
+    def rotate(self, axis: Vector3D, angle: int | float) -> None:
+        validate_rotate_parameters(axis, angle)
+        self.start.rotate(axis, angle)
+        self.centre.rotate(axis, angle)
 
     @property
     def radius(self) -> float:

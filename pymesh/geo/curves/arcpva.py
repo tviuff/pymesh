@@ -9,7 +9,11 @@ from pymesh.geo.point import Point
 from pymesh.geo.vector3d import Vector3D
 from pymesh.geo.curves.curve import Curve
 from pymesh.typing import NDArray3
-from pymesh.utils import validate_move_parameters, validate_curve_path_parameters
+from pymesh.utils import (
+    validate_move_parameters,
+    validate_rotate_parameters,
+    validate_curve_path_parameters,
+)
 
 
 class ArcPVA(Curve):
@@ -61,6 +65,11 @@ class ArcPVA(Curve):
         validate_move_parameters(dx, dy, dz)
         self.start.move(dx, dy, dz)
         self.axis.move(dx, dy, dz)
+
+    def rotate(self, axis: Vector3D, angle: int | float) -> None:
+        validate_rotate_parameters(axis, angle)
+        self.start.rotate(axis, angle)
+        self.axis.rotate(axis, angle)
 
     @property
     def radius(self) -> float:
