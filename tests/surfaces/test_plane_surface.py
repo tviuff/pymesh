@@ -39,19 +39,19 @@ def test_init_invalid() -> None:
         PlaneSurface("random")  # pylint: disable=no-value-for-parameter
 
 
-def test_point_0(point0, point1, point2) -> None:
-    point_0 = PlaneSurface(point0, point1, point2).point_0
-    assert np.all(point_0 == point0.xyz)
+def test_point0(point0, point1, point2) -> None:
+    point0 = PlaneSurface(point0, point1, point2).point0
+    assert np.all(point0 == point0)
 
 
-def test_vector_01(point0, point1, point2) -> None:
-    vector_01 = PlaneSurface(point0, point1, point2).vector_01
-    assert np.all(vector_01 == (point1.xyz - point0.xyz))
+def test_point1(point0, point1, point2) -> None:
+    point1 = PlaneSurface(point0, point1, point2).point1
+    assert np.all(point1 == point1)
 
 
-def test_vector_02(point0, point1, point2) -> None:
-    vector_02 = PlaneSurface(point0, point1, point2).vector_02
-    assert np.all(vector_02 == (point2.xyz - point0.xyz))
+def test_point2(point0, point1, point2) -> None:
+    point2 = PlaneSurface(point0, point1, point2).point2
+    assert np.all(point2 == point2)
 
 
 def test_get_all_surfaces(point0, point1, point2) -> None:

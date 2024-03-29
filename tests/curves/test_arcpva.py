@@ -53,21 +53,21 @@ def test_repr(curve1) -> None:
     print("Curve.__repr__ =", f"{curve1!r}")
     assert (
         f"{curve1!r}"
-        == "ArcPVA(start=Point(x=1.00, y=0.00, z=0.00), axis=Vector3D(dx=0.00, dy=0.00, dz=1.00), angle=1.57)"
+        == "ArcPVA(start=Point(x=1.00, y=0.00, z=0.00), axis=Vector3D(start=Point(x=0.00, y=0.00, z=0.00), end=Point(x=0.00, y=0.00, z=1.00)), angle=1.57)"
     )
 
 
 def test_start(point: Point, axis: Vector3D, angle: float) -> None:
     curve = ArcPVA(point, axis, angle)
-    assert isinstance(curve.start, np.ndarray)
-    assert np.all(curve.start == point.xyz)
+    assert isinstance(curve.start, Point)
+    assert curve.start == point
 
 
 def test_end(curve1: ArcPVA) -> None:
     path_fn = curve1.get_path()
-    end = path_fn(1)
-    assert isinstance(curve1.end, np.ndarray)
-    assert np.all(curve1.end == end)
+    end_xyz = path_fn(1)
+    assert isinstance(curve1.end, Point)
+    assert np.all(curve1.end.xyz == end_xyz)
 
 
 def test_axis(point: Point, axis: Vector3D, angle: float) -> None:

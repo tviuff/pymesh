@@ -5,7 +5,7 @@ from typing import Self
 
 import numpy as np
 
-from pymesh.descriptors import AsNDArray
+from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.point import Point
 from pymesh.geo.surfaces.surface import Surface
 from pymesh.mesh.mesh_generator import MeshGenerator
@@ -20,74 +20,55 @@ class BilinearSurface(Surface):
     and creates mesh points for generating panels.
     """
 
-    bottom_left = AsNDArray(shape=(3,))
-    bottom_right = AsNDArray(shape=(3,))
-    top_left = AsNDArray(shape=(3,))
-    top_right = AsNDArray(shape=(3,))
+    p00 = AsInstanceOf(Point)
+    p10 = AsInstanceOf(Point)
+    p01 = AsInstanceOf(Point)
+    p11 = AsInstanceOf(Point)
 
-    def __init__(
-        self,
-        bottom_left: Point,
-        bottom_right: Point,
-        top_right: Point,
-        top_left: Point,
-    ):
+    def __init__(self, p00: Point, p10: Point, p11: Point, p01: Point):
+        """Creates a bilinear surface from the points p00, p10, p11 and p01.
+
+        These four points represent the surface corners going counter-clockwise.
+        The first number represents the value of u, while the second number
+        represents the value of w.
+        """
         self._all_surfaces.append(self)
-        self.bottom_left = bottom_left.xyz
-        self.bottom_right = bottom_right.xyz
-        self.top_right = top_right.xyz
-        self.top_left = top_left.xyz
-        self._set_mesh_generator(
-            MeshGenerator(self.get_path(), self.get_max_lengths()), force=True
-        )
+        self.p00 = p00
+        self.p10 = p10
+        self.p11 = p11
+        self.p01 = p01
+        super().__init__()
 
     def path(
         self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
     ) -> NDArray3[np.float64]:
         u, w = validate_surface_path_parameters(u, w, uflip, wflip)
         return (
-            (1 - u) * w * self.bottom_left
-            + u * w * self.bottom_right
-            + (1 - u) * (1 - w) * self.top_left
-            + u * (1 - w) * self.top_right
+            (1 - u) * w * self.p00.xyz
+            + u * w * self.p10.xyz
+            + (1 - u) * (1 - w) * self.p01.xyz
+            + u * (1 - w) * self.p11.xyz
         )
 
     def get_max_lengths(self) -> tuple[float]:
-        length_left_right_bottom = np.sqrt(
-            np.sum((self.bottom_left - self.bottom_right) ** 2)
-        )
-        length_left_right_top = np.sqrt(np.sum((self.top_left - self.top_right) ** 2))
-        length_top_bottom_left = np.sqrt(
-            np.sum((self.bottom_left - self.top_left) ** 2)
-        )
-        length_top_bottom_right = np.sqrt(
-            np.sum((self.bottom_right - self.top_right) ** 2)
-        )
-        length_left_right = float(
-            np.max((length_left_right_bottom, length_left_right_top))
-        )
-        length_top_bottom = float(
-            np.max((length_top_bottom_left, length_top_bottom_right))
-        )
-        return length_top_bottom, length_left_right
+        length_u_bottom = np.sqrt(np.sum((self.p00 - self.p10) ** 2))
+        length_u_top = np.sqrt(np.sum((self.p01 - self.p11) ** 2))
+        length_w_left = np.sqrt(np.sum((self.p00 - self.p01) ** 2))
+        length_w_right = np.sqrt(np.sum((self.p10 - self.p11) ** 2))
+        length_u = float(np.max((length_u_bottom, length_u_top)))
+        length_w = float(np.max((length_w_left, length_w_right)))
+        return length_u, length_w
 
     def copy(self) -> Self:
-        bottom_left = Point(
-            self.bottom_left[0], self.bottom_left[1], self.bottom_left[2]
+        return BilinearSurface(
+            self.p00.copy(), self.p10.copy(), self.p11.copy(), self.p01.copy()
         )
-        bottom_right = Point(
-            self.bottom_right[0], self.bottom_right[1], self.bottom_right[2]
-        )
-        top_right = Point(self.top_right[0], self.top_right[1], self.top_right[2])
-        top_left = Point(self.top_left[0], self.top_left[1], self.top_left[2])
-        return BilinearSurface(bottom_left, bottom_right, top_right, top_left)
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
     ) -> None:
         validate_move_parameters(dx, dy, dz)
-        dxyz = np.array([dx, dy, dz])
-        self.bottom_left += dxyz
-        self.bottom_right += dxyz
-        self.top_right += dxyz
-        self.top_left += dxyz
+        self.p00.move(dx, dy, dz)
+        self.p10.move(dx, dy, dz)
+        self.p11.move(dx, dy, dz)
+        self.p01.move(dx, dy, dz)

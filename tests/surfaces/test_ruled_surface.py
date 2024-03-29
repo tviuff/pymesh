@@ -27,14 +27,14 @@ def test_init_invalid() -> None:
 
 def test_curve_1(valid_lines) -> None:
     line1, line2 = valid_lines
-    curve_1 = RuledSurface(line1, line2).curve_1
-    assert np.all(curve_1 == line1)
+    curve1 = RuledSurface(line1, line2).curve1
+    assert np.all(curve1 == line1)
 
 
 def test_curve_2(valid_lines) -> None:
     line1, line2 = valid_lines
-    curve_2 = RuledSurface(line1, line2).curve_2
-    assert np.all(curve_2 == line2)
+    curve2 = RuledSurface(line1, line2).curve2
+    assert np.all(curve2 == line2)
 
 
 def test_get_all_surfaces(valid_lines) -> None:

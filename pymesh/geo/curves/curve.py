@@ -7,15 +7,16 @@ from typing import Self
 
 import numpy as np
 
-from pymesh.descriptors import AsNDArray
+from pymesh.geo.point import Point
+from pymesh.descriptors import AsInstanceOf
 from pymesh.typing import NDArray3
 
 
 class Curve(ABC):
     """Curve abstract base class"""
 
-    start = AsNDArray(shape=(3,))
-    end = AsNDArray(shape=(3,))
+    start = AsInstanceOf(Point)
+    end = AsInstanceOf(Point)
 
     @abstractmethod
     def copy(self) -> Self:

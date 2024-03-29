@@ -5,7 +5,7 @@ from typing import Self
 
 import numpy as np
 
-from pymesh.descriptors import AsNDArray
+from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.point import Point
 from pymesh.typing import NDArray3
 from pymesh.utils import validate_move_parameters
@@ -16,32 +16,26 @@ from pymesh.utils import validate_move_parameters
 class Vector3D:
     """3d vector generated from two points in space"""
 
-    start = AsNDArray(shape=(3,))
-    end = AsNDArray(shape=(3,))
+    start = AsInstanceOf(Point)
+    end = AsInstanceOf(Point)
 
     def __init__(self, start: Point, end: Point) -> None:
-        self.start = start.xyz
-        self.end = end.xyz
+        self.start = start
+        self.end = end
 
     def __eq__(self, other):
-        return np.all(self.start == other.start) and np.all(self.end == other.end)
+        return self.start == other.start and self.end == other.end
 
     def __repr__(self):
-        cls = type(self).__name__
-        vector = self.unit_vector * self.length
-        txt = f"{cls}(dx={vector[0]:.2f}, " f"dy={vector[1]:.2f}, dz={vector[2]:.2f})"
-        return txt
+        return f"{type(self).__name__}(start={self.start!r}, end={self.end!r})"
 
     def copy(self) -> Self:
-        start = Point(self.start[0], self.start[1], self.start[2])
-        end = Point(self.end[0], self.end[1], self.end[2])
-        return Vector3D(start, end)
+        return Vector3D(self.start.copy(), self.end.copy())
 
     def move(self, dx: int | float, dy: int | float, dz: int | float) -> None:
         validate_move_parameters(dx, dy, dz)
-        dxyz = np.array([dx, dy, dz])
-        self.start += dxyz
-        self.end += dxyz
+        self.start.move(dx, dy, dz)
+        self.end.move(dx, dy, dz)
 
     @property
     def length(self) -> float:

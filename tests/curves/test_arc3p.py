@@ -43,27 +43,26 @@ def test_init_invalid() -> None:
         Arc3P(Point(0, 0, 0), "point2", None)
 
 
-def test_eq(curve1: Arc3P) -> None:
-    # ! redundant test..
-    assert curve1 == curve1
+def test_ne(curve1: Arc3P, curve2: Arc3P) -> None:
+    assert curve1 != curve2
 
 
 def test_centre(point1: Point, point2: Point, point3: Point) -> None:
     curve = Arc3P(point1, point2, point3)
-    assert isinstance(curve.centre, ndarray)
-    assert np.all(curve.centre == point1.xyz)
+    assert isinstance(curve.centre, Point)
+    assert np.all(curve.centre == point1)
 
 
 def test_start(point1: Point, point2: Point, point3: Point) -> None:
     curve = Arc3P(point1, point2, point3)
-    assert isinstance(curve.start, ndarray)
-    assert np.all(curve.start == point2.xyz)
+    assert isinstance(curve.start, Point)
+    assert np.all(curve.start == point2)
 
 
 def test_end(point1: Point, point2: Point, point3: Point) -> None:
     curve = Arc3P(point1, point2, point3)
-    assert isinstance(curve.end, ndarray)
-    assert np.all(curve.end == point3.xyz)
+    assert isinstance(curve.end, Point)
+    assert np.all(curve.end == point3)
 
 
 def test_radius(curve1: Arc3P) -> None:

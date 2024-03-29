@@ -3,69 +3,61 @@
 import numpy as np
 import pytest
 
-from pymesh import Vector3D
+from pymesh import Point, Vector3D
 
 
 @pytest.fixture
-def vector1(point1, point2) -> None:
+def vector1(point1: Point, point2: Point) -> None:
     return Vector3D(point1, point2)
 
 
 @pytest.fixture
-def vector2(point1, point2, dx, dy, dz) -> None:
-    point1.move(dx, dy, dz)
-    point2.move(dx, dy, dz)
-    return Vector3D(point1, point2)
+def vector2(point1_moved: Point, point2_moved: Point) -> None:
+    return Vector3D(point1_moved, point2_moved)
 
 
-@pytest.mark.skip(reason="not implemeted correct")
 def test_init_invalid() -> None:
     with pytest.raises(TypeError):
         Vector3D("", "")
 
 
-def test_eq(vector1) -> None:
-    assert vector1 == vector1
-
-
-def test_ne(vector1, vector2) -> None:
+def test_ne(vector1: Vector3D, vector2: Vector3D) -> None:
     assert vector1 != vector2
 
 
-def test_repr(vector1, point1, point2) -> None:
-    dx = point2.x - point1.x
-    dy = point2.y - point1.y
-    dz = point2.z - point1.z
-    assert f"{vector1!r}" == f"Vector3D(dx={dx:.2f}, dy={dy:.2f}, dz={dz:.2f})"
+def test_repr(vector1: Vector3D, point1: Point, point2: Point) -> None:
+    assert f"{vector1!r}" == f"Vector3D(start={point1!r}, end={point2!r})"
 
 
-def test_start(vector1, point1) -> None:
-    assert isinstance(vector1.start, np.ndarray)
-    assert np.all(vector1.start == point1.xyz)
+def test_start(vector1: Vector3D, point1: Point) -> None:
+    assert isinstance(vector1.start, Point)
+    assert vector1.start == point1
 
 
-def test_end(vector1, point2) -> None:
-    assert isinstance(vector1.end, np.ndarray)
-    assert np.all(vector1.end == point2.xyz)
+def test_end(vector1: Vector3D, point2: Point) -> None:
+    assert isinstance(vector1.end, Point)
+    assert vector1.end == point2
 
 
-def test_length(point1, point2) -> None:
+def test_length(point1: Point, point2: Point) -> None:
     vector = Vector3D(point1, point2)
     length = np.sqrt(np.sum((point1.xyz - point2.xyz) ** 2))
     assert np.all(vector.length == length)
 
 
-def test_unit_vector(point1, point2) -> None:
+def test_unit_vector(point1: Point, point2: Point) -> None:
     vector = Vector3D(point1, point2)
-    unit_vector = (vector.end - vector.start) / np.sqrt(
+    unit_vector = (vector.end.xyz - vector.start.xyz) / np.sqrt(
         np.sum((point1.xyz - point2.xyz) ** 2)
     )
     assert np.all(vector.unit_vector == unit_vector)
 
 
-def test_copy(assert_copy, vector1) -> None:
+def test_copy(assert_copy, vector1: Vector3D) -> None:
     assert_copy(vector1)
 
 
-def test_move(assert_move, vector1, vector2, dx, dy, dz) -> None:
+def test_move(
+    assert_move, vector1: Vector3D, vector2: Vector3D, dx: float, dy: float, dz: float
+) -> None:
     assert_move(vector1, vector2, dx, dy, dz)

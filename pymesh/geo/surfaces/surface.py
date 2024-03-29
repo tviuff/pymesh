@@ -17,6 +17,11 @@ class Surface(ABC):
     __normal_is_flipped: bool = False
     _all_surfaces: list = []  # to contain every surface type instanciated
 
+    def __init__(self):
+        self._set_mesh_generator(
+            MeshGenerator(self.get_path(), self.get_max_lengths()), force=True
+        )
+
     @property
     def mesher(self) -> MeshGenerator:
         """Used for setting mesh properties"""
