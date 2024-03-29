@@ -1,5 +1,6 @@
 """Module for testing the Point class functionality"""
 
+import numpy as np
 import pytest
 
 from pymesh import Point, Line, CoonsPatch
@@ -64,3 +65,20 @@ def test_get_max_lengths(valid_lines) -> None:
 def test_path(p00, p01, p10, p11, valid_lines, test_surface_path) -> None:
     surface = CoonsPatch(valid_lines)
     test_surface_path(surface, p00, p01, p10, p11)
+
+
+@pytest.mark.skip(reason="Not sure of implementation")
+def test_rotate(valid_lines, axis, angle) -> None:
+    surface = CoonsPatch(valid_lines)
+    surface_copy = surface.copy()
+    points = (
+        Point(0, 0, 0),
+        Point(-1, 1, 0),
+        Point(-1, 0, 0),
+        Point(-1, 1, 0),
+    )
+    surface_copy.rotate(axis, angle)
+    for curve, point in zip(surface_copy.curves, points):
+        cp0 = curve.path(0)
+        p = Point(cp0[0], cp0[1], cp0[2])
+        assert p == point

@@ -52,3 +52,8 @@ def test_get_max_lengths(curve, sweeper) -> None:
 def test_path(p00, p10, p01, p11, curve, sweeper, test_surface_path) -> None:
     surface = SweptSurface(curve, sweeper)
     test_surface_path(surface, p00, p01, p10, p11)
+
+
+@pytest.mark.skip(reason="Not yet implemented")
+def test_rotate() -> None:
+    pass
