@@ -18,7 +18,7 @@ surface = BilinearSurface(point00, point10, point11, point01)
 surface.mesher.set_u_parameters(5, LinearDistribution())
 surface.mesher.set_w_parameters(10, ExponentialDistribution())
 
-surface_copy = surface.copy(deepcopy=True)
+surface_copy = surface.copy()
 surface_copy.move(dx=-1, dy=-1)
 
 surface_selection = BilinearSurface.get_all_surfaces()

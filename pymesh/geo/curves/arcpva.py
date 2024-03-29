@@ -56,11 +56,8 @@ class ArcPVA(Curve):
         )
         return txt
 
-    def shallowcopy(self) -> Self:
-        return ArcPVA(self.start, self.axis, self.angle)
-
-    def deepcopy(self) -> Self:
-        return ArcPVA(self.start.deepcopy(), self.axis.deepcopy(), self.angle)
+    def copy(self) -> Self:
+        return ArcPVA(self.start.copy(), self.axis.copy(), self.angle)
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0

@@ -41,11 +41,8 @@ class Line(Curve):
         u = validate_curve_path_parameters(u, flip)
         return self.start.xyz + (self.end - self.start) * u
 
-    def shallowcopy(self) -> Self:
-        return Line(self.start, self.end)
-
-    def deepcopy(self) -> Self:
-        return Line(self.start.deepcopy(), self.end.deepcopy())
+    def copy(self) -> Self:
+        return Line(self.start.copy(), self.end.copy())
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0

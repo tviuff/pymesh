@@ -148,7 +148,7 @@ def assert_move():
 def assert_copy():
 
     def func(old, dx=1, dy=1, dz=1):
-        new = old.copy(deepcopy=True)
+        new = old.copy()
         new.move(dx, dy, dz)
         assert new != old, "They both still reference the same data"
 

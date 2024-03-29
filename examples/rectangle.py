@@ -39,7 +39,7 @@ surface.mesher.set_w_parameters(
 )
 
 surface_copy = surface.copy()
-surface_copy.move()
+surface_copy.move(dx=-1, dy=-1)
 
 surface_selection = CoonsPatch.get_all_surfaces()  # get all instanciated surfaces
 

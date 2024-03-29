@@ -52,13 +52,8 @@ class PlaneSurface(Surface):
         length_w = float(np.sqrt(np.sum((self.point2 - self.point0) ** 2)))
         return length_u, length_w
 
-    def shallowcopy(self) -> Self:
-        return PlaneSurface(self.point0, self.point1, self.point2)
-
-    def deepcopy(self) -> Self:
-        return PlaneSurface(
-            self.point0.deepcopy(), self.point1.deepcopy(), self.point2.deepcopy()
-        )
+    def copy(self) -> Self:
+        return PlaneSurface(self.point0.copy(), self.point1.copy(), self.point2.copy())
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0

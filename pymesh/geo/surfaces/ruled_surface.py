@@ -44,11 +44,8 @@ class RuledSurface(Surface):
         u, w = validate_surface_path_parameters(u, w, uflip, wflip)
         return (1 - w) * self.curve1.path(u) + w * self.curve2.path(u)
 
-    def shallowcopy(self) -> Self:
-        return RuledSurface(self.curve1, self.curve2)
-
-    def deepcopy(self) -> Self:
-        return RuledSurface(self.curve1.deepcopy(), self.curve2.deepcopy())
+    def copy(self) -> Self:
+        return RuledSurface(self.curve1.copy(), self.curve2.copy())
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0

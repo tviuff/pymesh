@@ -27,30 +27,9 @@ class Vector3D:
     def __repr__(self):
         return f"{type(self).__name__}(start={self.start!r}, end={self.end!r})"
 
-    def copy(self, deepcopy: bool = False) -> Self:
-        """Copies object using the shallowcopy method. If deepcopy = True,
-        then the deepcopy method is used."""
-        if deepcopy:
-            return self.deepcopy()
-        return self.shallowcopy()
-
-    def shallowcopy(self) -> Self:
-        """Shallow copy.
-
-        Constructing a new collection object and then populating it with
-        references to the child objects found in the original.
-        """
-        return Vector3D(self.start, self.end)
-
-    def deepcopy(self) -> Self:
-        """Recursive copy.
-
-        Constructing a new collection object and then recursively populating
-        it with copies of the child objects found in the original. Copying
-        an object this way walks the whole object tree to create a fully
-        independent clone of the original object and all of its children.
-        """
-        return Vector3D(self.start.deepcopy(), self.end.deepcopy())
+    def copy(self) -> Self:
+        """Returns a copy of vector instance"""
+        return Vector3D(self.start.copy(), self.end.copy())
 
     def move(self, dx: int | float, dy: int | float, dz: int | float) -> None:
         validate_move_parameters(dx, dy, dz)

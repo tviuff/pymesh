@@ -22,7 +22,7 @@ surface.mesher.set_w_parameters(
     panel_density=0.2, distribution=ExponentialDistribution(flip_direction=True)
 )
 
-surface_copy = surface.copy(deepcopy=True)
+surface_copy = surface.copy()
 surface_copy.move(dx=-1, dy=-1)
 
 surface_selection = PlaneSurface.get_all_surfaces()

@@ -20,7 +20,7 @@ surface.mesher.mesh_distributions = (
     CosineDistribution(flip_direction=False),
 )
 
-surface_copy = surface.copy(deepcopy=True)
+surface_copy = surface.copy()
 surface_copy.move(dx=-1, dy=-1)
 
 surface_selection = SweptSurface.get_all_surfaces()

@@ -60,15 +60,12 @@ class BilinearSurface(Surface):
         length_w = float(np.max((length_w_left, length_w_right)))
         return length_u, length_w
 
-    def shallowcopy(self) -> Self:
-        return BilinearSurface(self.p00, self.p10, self.p11, self.p01)
-
-    def deepcopy(self) -> Self:
+    def copy(self) -> Self:
         return BilinearSurface(
-            self.p00.deepcopy(),
-            self.p10.deepcopy(),
-            self.p11.deepcopy(),
-            self.p01.deepcopy(),
+            self.p00.copy(),
+            self.p10.copy(),
+            self.p11.copy(),
+            self.p01.copy(),
         )
 
     def move(
