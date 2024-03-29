@@ -1,5 +1,4 @@
-"""Module including surface and coons patch classes
-"""
+"""Module containing the Surface class"""
 
 from abc import ABC, abstractmethod
 from collections.abc import Callable

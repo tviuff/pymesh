@@ -1,5 +1,4 @@
-"""Module including the ruled surface class
-"""
+"""Module containing the ruled RuledSurface class"""
 
 from typing import Self
 

@@ -1,4 +1,4 @@
-"""Module containing surface mesher class"""
+"""Module containing MeshGenerator class"""
 
 from collections.abc import Callable
 

@@ -1,5 +1,4 @@
-"""Module containing Point classes.
-"""
+"""Module containing the Vector3D class"""
 
 from typing import Self
 

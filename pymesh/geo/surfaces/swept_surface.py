@@ -1,4 +1,4 @@
-"""Module including the swept surface class
+"""Module including the SweptSurface class
 """
 
 from typing import Self

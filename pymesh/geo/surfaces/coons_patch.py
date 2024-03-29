@@ -1,5 +1,4 @@
-"""Module including the coons patch class
-"""
+"""Module containing the CoonsPatch class"""
 
 from typing import Self
 

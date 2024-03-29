@@ -1,5 +1,4 @@
-"""Module including the bilinear surface class
-"""
+"""Module containing the BilinearSurface class"""
 
 from typing import Self
 

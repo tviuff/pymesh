@@ -1,5 +1,4 @@
-"""Module containing Point classes.
-"""
+"""Module containing the Point class"""
 
 import math
 from typing import Self

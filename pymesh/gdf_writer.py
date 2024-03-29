@@ -1,4 +1,4 @@
-"""Module containing gdf writer class"""
+"""Module containing GDFWriter class"""
 
 from pathlib import Path
 import os

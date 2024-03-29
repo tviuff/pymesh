@@ -1,5 +1,4 @@
-"""Module including the plane surface class
-"""
+"""Module containing the PlaneSurface class"""
 
 from typing import Self
 

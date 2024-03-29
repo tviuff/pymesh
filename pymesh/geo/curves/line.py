@@ -1,5 +1,4 @@
-"""Module including line class
-"""
+"""Module containing the Line class"""
 
 from typing import Self
 

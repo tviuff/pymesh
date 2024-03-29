@@ -1,5 +1,4 @@
-"""Module includes the Arc3 class
-"""
+"""Module containing the Arc3P class"""
 
 import math
 import numpy as np

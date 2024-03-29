@@ -1,5 +1,4 @@
-"""Module including abstract curve class
-"""
+"""Module containing theCurve class"""
 
 from abc import ABC, abstractmethod
 from collections.abc import Callable
