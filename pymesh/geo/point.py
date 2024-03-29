@@ -25,7 +25,11 @@ class Point:
         return np.array([self.x, self.y, self.z])
 
     def __eq__(self, other) -> bool:
-        return np.all(self.xyz == other.xyz)
+        DECIMALS = 10
+        return np.all(
+            np.round(self.xyz, decimals=DECIMALS)
+            == np.round(other.xyz, decimals=DECIMALS)
+        )
 
     def __ne__(self, other: object) -> bool:
         return not self.__eq__(other)
@@ -70,7 +74,7 @@ class Point:
         xyz_diff = xyz_rotated - self.xyz
         self.move(xyz_diff[0], xyz_diff[1], xyz_diff[2])
 
-    # def mirror(self, plane_norrmal: Vector3D) -> None:
+    # def mirror(self, plane_norrmal: Vector3D) -> Self:
     #     pass
 
     def get_distance_to(self, point: Self) -> float:

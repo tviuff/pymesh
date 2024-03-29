@@ -139,26 +139,8 @@ def test_move(assert_move, curve1, dx, dy, dz) -> None:
     assert_move(curve1, curve1_moved, dx, dy, dz)
 
 
-def test_rotate(p00, p10, p01) -> None:
+def test_rotate(assert_rotate, p00, p10, p01, axis, angle) -> None:
     curve1 = Arc3P(p00, p10, p01)
-    curve2 = Arc3P(p00.copy(), p01.copy(), Point(-1, 0, 0))
-    assert curve1.end == curve2.start, "Incorrect test setup"
+    curve2 = Arc3P(p00, p01.copy(), Point(-1, 0, 0))
 
-    angle = 90 * math.pi / 180
-    axis = Vector3D(p00, Point(0, 0, 1))
-
-    print(curve1.centre, curve1.start, curve1.end)
-    print("Rotating curve..")
-    curve1.rotate(axis, angle)
-    print(curve1.centre, curve1.start, curve1.end)
-
-    DECIMALS = 4
-
-    assert np.all(
-        np.round(curve1.start.xyz, decimals=DECIMALS)
-        == np.round(curve2.start.xyz, decimals=DECIMALS)
-    ), "start point not rotated correctly"
-    assert np.all(
-        np.round(curve1.end.xyz, decimals=DECIMALS)
-        == np.round(curve2.end.xyz, decimals=DECIMALS)
-    ), "end point not rotated correctly"
+    assert_rotate(curve1, curve2, axis, angle)

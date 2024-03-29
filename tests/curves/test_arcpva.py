@@ -132,13 +132,6 @@ def test_move(assert_move, curve1, curve1_moved, dx, dy, dz) -> None:
     assert_move(curve1, curve1_moved, dx, dy, dz)
 
 
-def test_rotate(curve1, curve1_rotated) -> None:
-    angle = 90 * math.pi / 180
-    axis = Vector3D(Point(0, 0, 0), Point(0, 0, 1))
-
-    print(f"start={curve1.start!r}, end={curve1.axis!r}, angle={curve1.angle:.2f}")
-    print("Rotating curve..")
-    curve1.rotate(axis, angle)
-    print(f"start={curve1.start!r}, end={curve1.axis!r}, angle={curve1.angle:.2f}")
-
-    assert curve1 == curve1_rotated, "Rotated curve not equal to expected"
+def test_rotate(assert_rotate, curve1, curve1_rotated, axis, angle) -> None:
+    print(curve1, curve1_rotated)
+    assert_rotate(curve1, curve1_rotated, axis, angle)
