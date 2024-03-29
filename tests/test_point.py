@@ -52,14 +52,14 @@ def test_xyz(point2, dx, dy, dz) -> None:
     assert np.all(point2.xyz == np.array([dx, dy, dz]))
 
 
-def test_get_distance(point1, point2, dx, dy, dz) -> None:
-    assert point1.get_distance(point2) == math.sqrt(dx**2 + dy**2 + dz**2)
-    assert point2.get_distance(point1) == math.sqrt(dx**2 + dy**2 + dz**2)
+def test_get_distance_to(point1, point2, dx, dy, dz) -> None:
+    assert point1.get_distance_to(point2) == math.sqrt(dx**2 + dy**2 + dz**2)
+    assert point2.get_distance_to(point1) == math.sqrt(dx**2 + dy**2 + dz**2)
 
 
 def test_get_distance_invalid(point1: Point) -> None:
     with pytest.raises(TypeError):
-        point1.get_distance("")
+        point1.get_distance_to("")
 
 
 def test_create_relative_point(point1, point2, dx, dy, dz) -> None:
