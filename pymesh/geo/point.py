@@ -74,7 +74,7 @@ class Point:
         xyz_diff = xyz_rotated - self.xyz
         self.move(xyz_diff[0], xyz_diff[1], xyz_diff[2])
 
-    # def mirror(self, plane_norrmal: Vector3D) -> Self:
+    # def mirror(self, point_in_plane: Self, plane_norrmal) -> Self:
     #     pass
 
     def get_distance_to(self, point: Self) -> float:
