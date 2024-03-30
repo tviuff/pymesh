@@ -57,8 +57,8 @@ class Vector3D:
         Plane is defined by a normal vector (a, b, c) and a point (x0, y0, z0).
         By default x0 = 0.0, y0 = 0.0 and z0 = 0.0.
         """
-        self.start.rotate(a, b, c, x0, y0, z0)
-        self.end.rotate(a, b, c, x0, y0, z0)
+        self.start.mirror(a, b, c, x0, y0, z0)
+        self.end.mirror(a, b, c, x0, y0, z0)
         return self
 
     @property

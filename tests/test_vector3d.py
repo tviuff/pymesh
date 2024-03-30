@@ -74,3 +74,31 @@ def test_rotate(p00, p10, p01) -> None:
     result = np.round(vector1.end.xyz, decimals=DECIMALS)
     expected = np.round(vector2.end.xyz, decimals=DECIMALS)
     assert np.all(result == expected)
+
+
+def test_mirror() -> None:
+    assert Vector3D(Point(0, 0, 0), Point(0, 1, 0)).mirror(1, 0, 0) == Vector3D(
+        Point(0, 0, 0), Point(0, 1, 0)
+    )
+    assert Vector3D(Point(0, 0, 0), Point(1, 0, 0)).mirror(1, 0, 0) == Vector3D(
+        Point(0, 0, 0), Point(-1, 0, 0)
+    )
+    assert Vector3D(Point(0, 0, 0), Point(0, 1, 0)).mirror(0, 1, 0) == Vector3D(
+        Point(0, 0, 0), Point(0, -1, 0)
+    )
+    assert Vector3D(Point(0, 0, 0), Point(1, 0, 0)).mirror(0, 1, 0) == Vector3D(
+        Point(0, 0, 0), Point(1, 0, 0)
+    )
+    assert Vector3D(Point(0, 0, 0), Point(0, 0, 1)).mirror(0, 0, 1) == Vector3D(
+        Point(0, 0, 0), Point(0, 0, -1)
+    )
+
+    assert Vector3D(Point(0, 0, 0), Point(2, 0, 0)).mirror(1, 0, 0, x0=1) == Vector3D(
+        Point(2, 0, 0), Point(0, 0, 0)
+    )
+    assert Vector3D(Point(0, 0, 0), Point(0, 2, 0)).mirror(0, 1, 0, y0=1) == Vector3D(
+        Point(0, 2, 0), Point(0, 0, 0)
+    )
+    assert Vector3D(Point(0, 0, 0), Point(0, 0, 3)).mirror(0, 0, 1, z0=2) == Vector3D(
+        Point(0, 0, 4), Point(0, 0, 1)
+    )
