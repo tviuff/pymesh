@@ -67,11 +67,10 @@ def test_move(
 
 def test_rotate(p00, p10, p01) -> None:
     DECIMALS = 4
-    angle = 90 * math.pi / 180
-    vector1 = Vector3D(p00, p10)
-    vector2 = Vector3D(p00, p01)
     axis = Vector3D(p00, Point(0, 0, 1))
-    vector1.rotate(axis, angle)
+    angle = 90 * math.pi / 180
+    vector1 = Vector3D(p00, p10).rotate(axis, angle)
+    vector2 = Vector3D(p00, p01)
     result = np.round(vector1.end.xyz, decimals=DECIMALS)
     expected = np.round(vector2.end.xyz, decimals=DECIMALS)
     assert np.all(result == expected)

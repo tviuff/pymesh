@@ -57,14 +57,16 @@ class PlaneSurface(Surface):
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
-    ) -> None:
+    ) -> Self:
         validate_move_parameters(dx, dy, dz)
         self.point0.move(dx, dy, dz)
         self.point1.move(dx, dy, dz)
         self.point2.move(dx, dy, dz)
+        return self
 
-    def rotate(self, axis: Vector3D, angle: int | float) -> None:
+    def rotate(self, axis: Vector3D, angle: int | float) -> Self:
         validate_rotate_parameters(axis, angle)
         self.point0.rotate(axis, angle)
         self.point1.rotate(axis, angle)
         self.point2.rotate(axis, angle)
+        return self

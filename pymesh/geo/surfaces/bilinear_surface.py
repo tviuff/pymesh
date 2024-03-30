@@ -70,16 +70,18 @@ class BilinearSurface(Surface):
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
-    ) -> None:
+    ) -> Self:
         validate_move_parameters(dx, dy, dz)
         self.p00.move(dx, dy, dz)
         self.p10.move(dx, dy, dz)
         self.p11.move(dx, dy, dz)
         self.p01.move(dx, dy, dz)
+        return self
 
-    def rotate(self, axis: Vector3D, angle: int | float) -> None:
+    def rotate(self, axis: Vector3D, angle: int | float) -> Self:
         validate_rotate_parameters(axis, angle)
         self.p00.rotate(axis, angle)
         self.p10.rotate(axis, angle)
         self.p11.rotate(axis, angle)
         self.p01.rotate(axis, angle)
+        return self

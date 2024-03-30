@@ -31,15 +31,17 @@ class Vector3D:
         """Returns a copy of vector instance"""
         return Vector3D(self.start.copy(), self.end.copy())
 
-    def move(self, dx: int | float, dy: int | float, dz: int | float) -> None:
+    def move(self, dx: int | float, dy: int | float, dz: int | float) -> Self:
         validate_move_parameters(dx, dy, dz)
         self.start.move(dx, dy, dz)
         self.end.move(dx, dy, dz)
+        return self
 
-    def rotate(self, axis: Self, angle: int | float) -> None:
+    def rotate(self, axis: Self, angle: int | float) -> Self:
         validate_rotate_parameters(axis, angle)
         self.start.rotate(axis, angle)
         self.end.rotate(axis, angle)
+        return self
 
     @property
     def length(self) -> float:

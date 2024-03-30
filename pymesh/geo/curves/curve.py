@@ -25,11 +25,11 @@ class Curve(ABC):
     @abstractmethod
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
-    ) -> None:
+    ) -> Self:
         """Moves the curve a given relative position"""
 
     @abstractmethod
-    def rotate(self, axis: Vector3D, angle: int | float) -> None:
+    def rotate(self, axis: Vector3D, angle: int | float) -> Self:
         """Rotates the curve around an axis.
 
         axis: vector axis the rotation is performed around

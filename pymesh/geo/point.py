@@ -47,13 +47,14 @@ class Point:
         """Returns a copy of point instance"""
         return Point(self.x, self.y, self.z)
 
-    def move(self, dx: int | float, dy: int | float, dz: int | float) -> None:
+    def move(self, dx: int | float, dy: int | float, dz: int | float) -> Self:
         validate_move_parameters(dx, dy, dz)
         self.x += float(dx)
         self.y += float(dy)
         self.z += float(dz)
+        return self
 
-    def rotate(self, axis, angle: int | float) -> None:
+    def rotate(self, axis, angle: int | float) -> Self:
         """Rotates point around an axis.
 
         axis: a Vector3D type
@@ -73,9 +74,10 @@ class Point:
         xyz_rotated = xyz0 + part1 + part2 + part3
         xyz_diff = xyz_rotated - self.xyz
         self.move(xyz_diff[0], xyz_diff[1], xyz_diff[2])
+        return self
 
     def mirror(self, point_in_plane: Self, plane_norrmal) -> Self:
-        pass
+        return self
 
     def get_distance_to(self, point: Self) -> float:
         """Returns the shortest distance between point instance and another point"""

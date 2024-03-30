@@ -61,15 +61,17 @@ class ArcPVA(Curve):
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
-    ) -> None:
+    ) -> Self:
         validate_move_parameters(dx, dy, dz)
         self.start.move(dx, dy, dz)
         self.axis.move(dx, dy, dz)
+        return self
 
-    def rotate(self, axis: Vector3D, angle: int | float) -> None:
+    def rotate(self, axis: Vector3D, angle: int | float) -> Self:
         validate_rotate_parameters(axis, angle)
         self.start.rotate(axis, angle)
         self.axis.rotate(axis, angle)
+        return self
 
     @property
     def radius(self) -> float:
