@@ -30,6 +30,12 @@ class RuledSurface(Surface):
         self.curve2 = curve2
         super().__init__()
 
+    def __eq__(self, other):
+        return self.curve1 == other.curve1 and self.curve2 == other.curve2
+
+    def __repr__(self):
+        return f"{type(self).__name__}(curve1={self.curve1!r}, curve2={self.curve2!r})"
+
     def get_max_lengths(self) -> tuple[float]:
         length_u = max(self.curve1.length, self.curve2.length)
         length_w = max(

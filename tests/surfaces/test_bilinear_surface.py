@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from pymesh import BilinearSurface
+from pymesh import Point, BilinearSurface
 from pymesh.geo.surfaces.surface import Surface
 
 
@@ -15,6 +15,11 @@ def surface1(p00, p01, p10, p11) -> None:
 def test_init_invalid() -> None:
     with pytest.raises(TypeError):
         BilinearSurface("", "", "", "")
+
+
+@pytest.mark.skip(reason="Not implemented")
+def test_repr() -> None:
+    pass
 
 
 def test_bottom_left(surface1, p00) -> None:
@@ -67,3 +72,20 @@ def test_rotate(assert_rotate, p00, p01, p10, p11, axis, angle) -> None:
     point01.rotate(axis, angle)
     surface_rotated = BilinearSurface(point00, point10, point11, point01)
     assert_rotate(surface, surface_rotated, axis, angle)
+
+
+def test_mirror() -> None:
+    surface = BilinearSurface(
+        Point(0, 0, 0), Point(1, 0, 0), Point(1, 1, 0), Point(0, 1, 0)
+    )
+    surface_mirror = BilinearSurface(
+        Point(0, 0, 0), Point(-1, 0, 0), Point(-1, 1, 0), Point(0, 1, 0)
+    )
+    assert surface.mirror(1, 0, 0) == surface_mirror
+    surface = BilinearSurface(
+        Point(0, 0, 0), Point(1, 0, 0), Point(1, 1, 0), Point(0, 1, 0)
+    )
+    surface_mirror = BilinearSurface(
+        Point(0, 0, 0), Point(1, 0, 0), Point(1, -1, 0), Point(0, -1, 0)
+    )
+    assert surface.mirror(0, 1, 0) == surface_mirror

@@ -73,8 +73,7 @@ class Point:
         part3 = avec * np.dot(avec, pvec) * (1 - math.cos(angle))
         xyz_rotated = xyz0 + part1 + part2 + part3
         xyz_diff = xyz_rotated - self.xyz
-        self.move(xyz_diff[0], xyz_diff[1], xyz_diff[2])
-        return self
+        return self.move(xyz_diff[0], xyz_diff[1], xyz_diff[2])
 
     def mirror(
         self,
@@ -90,7 +89,6 @@ class Point:
         Plane is defined by a normal vector (a, b, c) and a point (x0, y0, z0).
         By default x0 = 0.0, y0 = 0.0 and z0 = 0.0.
         """
-        # aknowledgement: https://math.stackexchange.com/questions/3927881/reflection-over-planes-in-3d
         for val in (a, b, c, x0, y0, z0):
             if not isinstance(val, (int, float)):
                 raise TypeError(f"Expected {val!r} to be int or float")

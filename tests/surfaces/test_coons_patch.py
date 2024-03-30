@@ -41,6 +41,11 @@ def test_init_lines_not_connected(lines_not_connected):
         CoonsPatch(lines_not_connected)
 
 
+@pytest.mark.skip(reason="Not implemented")
+def test_repr() -> None:
+    pass
+
+
 def test_curves(valid_lines) -> None:
     line_u0, line_u1, line_0w, line_1w = valid_lines
     curves = CoonsPatch((line_u0, line_0w, line_u1, line_1w)).curves
@@ -82,3 +87,8 @@ def test_rotate(valid_lines, axis, angle) -> None:
         cp0 = curve.path(0)
         p = Point(cp0[0], cp0[1], cp0[2])
         assert p == point
+
+
+@pytest.mark.skip(reason="Not sure of implementation")
+def test_mirror() -> None:
+    pass

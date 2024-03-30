@@ -29,6 +29,11 @@ def test_init_invalid() -> None:
         SweptSurface("", "")
 
 
+@pytest.mark.skip(reason="Not implemented")
+def test_repr() -> None:
+    pass
+
+
 def test_init_lines_not_connected(lines_not_connected):
     curve, sweeper = lines_not_connected
     SweptSurface(curve, sweeper)
@@ -57,3 +62,11 @@ def test_path(p00, p10, p01, p11, curve, sweeper, test_surface_path) -> None:
 @pytest.mark.skip(reason="Not yet implemented")
 def test_rotate() -> None:
     pass
+
+
+def test_mirror(curve, sweeper) -> None:
+    surface = SweptSurface(curve, sweeper)
+    curve_mirror = Line(Point(0, 0, 0), Point(1, 0, 0))
+    sweeper_mirror = Line(Point(0, 0, 0), Point(0, -1, 0))
+    surface_mirror = SweptSurface(curve_mirror, sweeper_mirror)
+    assert surface.mirror(0, 1, 0) == surface_mirror

@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from pymesh import Line, RuledSurface
+from pymesh import Point, Line, RuledSurface
 from pymesh.geo.surfaces.surface import Surface
 
 
@@ -22,7 +22,12 @@ def surface1(valid_lines) -> None:
 
 def test_init_invalid() -> None:
     with pytest.raises(TypeError):
-        RuledSurface("random")  # pylint: disable=no-value-for-parameter
+        RuledSurface("", "")
+
+
+@pytest.mark.skip(reason="Not implemented")
+def test_repr() -> None:
+    pass
 
 
 def test_curve_1(valid_lines) -> None:
@@ -64,3 +69,13 @@ def test_path(p00, p01, p10, p11, test_surface_path) -> None:
 @pytest.mark.skip(reason="Not yet implemented")
 def test_rotate() -> None:
     pass
+
+
+def test_mirror(p00, p01, p10, p11) -> None:
+    line1 = Line(p00, p01)
+    line2 = Line(p10, p11)
+    surface = RuledSurface(line1, line2)
+    line1_mirror = Line(Point(0, 0, 0), Point(0, 1, 0))
+    line2_mirror = Line(Point(-1, 0, 0), Point(-1, 1, 0))
+    surface_mirror = RuledSurface(line1_mirror, line2_mirror)
+    assert surface.mirror(1, 0, 0) == surface_mirror

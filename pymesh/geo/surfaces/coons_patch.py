@@ -28,6 +28,21 @@ class CoonsPatch(Surface):
         self.curves = curves  # also sets self._flipped_curves
         super().__init__()
 
+    def __eq__(self, other):
+        is_equal = True
+        for scurve, ocurve in zip(self.curves, other.curves):
+            if scurve != ocurve:
+                is_equal = False
+                break
+        return is_equal
+
+    def __repr__(self):
+        txt = f"{type(self).__name__}(curves=("
+        for i, curve in enumerate(self.curves):
+            txt += f"{curve!r}"
+            txt += "))" if i == 3 else ", "
+        return txt
+
     @property
     def curves(self) -> tuple[Curve]:
         return self._curves

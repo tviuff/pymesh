@@ -40,6 +40,20 @@ class BilinearSurface(Surface):
         self.p01 = p01
         super().__init__()
 
+    def __eq__(self, other):
+        return (
+            self.p00 == other.p00
+            and self.p10 == other.p10
+            and self.p11 == other.p11
+            and self.p01 == other.p01
+        )
+
+    def __repr__(self):
+        return (
+            f"{type(self).__name__}(p00={self.p00!r},"
+            f"p10={self.p10!r}, p11={self.p11!r}, p01={self.p01!r})"
+        )
+
     def path(
         self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
     ) -> NDArray3[np.float64]:

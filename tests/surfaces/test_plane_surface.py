@@ -36,7 +36,12 @@ def surface1(point0, point1, point2) -> None:
 
 def test_init_invalid() -> None:
     with pytest.raises(TypeError):
-        PlaneSurface("random")  # pylint: disable=no-value-for-parameter
+        PlaneSurface("", "", "")
+
+
+@pytest.mark.skip(reason="Not implemented")
+def test_repr() -> None:
+    pass
 
 
 def test_point0(point0, point1, point2) -> None:
@@ -80,3 +85,12 @@ def test_rotate(point0, point1, point2, axis, angle) -> None:
     surface = PlaneSurface(point0, point1, point2)
     surface_copy = surface.copy()
     surface_copy.rotate(axis, angle)
+
+
+def test_mirror() -> None:
+    surface = PlaneSurface(Point(0, 0, 0), Point(1, 0, 0), Point(0, 1, 0))
+    surface_mirror = PlaneSurface(Point(0, 0, 0), Point(-1, 0, 0), Point(0, 1, 0))
+    assert surface.mirror(1, 0, 0) == surface_mirror
+    surface = PlaneSurface(Point(0, 0, 0), Point(1, 0, 0), Point(0, 1, 0))
+    surface_mirror = PlaneSurface(Point(0, 0, 0), Point(1, 0, 0), Point(0, -1, 0))
+    assert surface.mirror(0, 1, 0) == surface_mirror

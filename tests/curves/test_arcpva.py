@@ -135,3 +135,10 @@ def test_move(assert_move, curve1, curve1_moved, dx, dy, dz) -> None:
 def test_rotate(assert_rotate, curve1, curve1_rotated, axis, angle) -> None:
     print(curve1, curve1_rotated)
     assert_rotate(curve1, curve1_rotated, axis, angle)
+
+
+def test_mirror() -> None:
+    axis = Vector3D(Point(0, 0, 0), Point(0, 0, 1))
+    assert ArcPVA(Point(-1, 0, 0), axis, -math.pi / 2).mirror(1, 0, 0) == ArcPVA(
+        Point(0, 0, 0), axis, math.pi / 2
+    )

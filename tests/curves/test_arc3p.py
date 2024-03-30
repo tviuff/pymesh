@@ -142,5 +142,10 @@ def test_move(assert_move, curve1, dx, dy, dz) -> None:
 def test_rotate(assert_rotate, p00, p10, p01, axis, angle) -> None:
     curve1 = Arc3P(p00, p10, p01)
     curve2 = Arc3P(p00, p01.copy(), Point(-1, 0, 0))
-
     assert_rotate(curve1, curve2, axis, angle)
+
+
+def test_mirror() -> None:
+    assert Arc3P(Point(0, 0, 0), Point(-1, 0, 0), Point(0, 1, 0)).mirror(
+        1, 0, 0
+    ) == Arc3P(Point(0, 0, 0), Point(1, 0, 0), Point(0, 1, 0))

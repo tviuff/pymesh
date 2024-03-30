@@ -37,6 +37,12 @@ class SweptSurface(Surface):
         self.sweeper = sweeper
         super().__init__()
 
+    def __eq__(self, other):
+        return self.curve == other.curve and self.sweeper == other.sweeper
+
+    def __repr__(self):
+        return f"{type(self).__name__}(curve={self.curve!r}, sweeper={self.sweeper!r})"
+
     def get_max_lengths(self) -> tuple[float]:
         return self.curve.length, self.sweeper.length
 

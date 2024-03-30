@@ -37,6 +37,19 @@ class PlaneSurface(Surface):
         self.point2 = point2
         super().__init__()
 
+    def __eq__(self, other):
+        return (
+            self.point0 == other.point0
+            and self.point1 == other.point1
+            and self.point2 == other.point2
+        )
+
+    def __repr__(self):
+        return (
+            f"{type(self).__name__}(point0={self.point0!r},"
+            f"point1={self.point1!r}, point2={self.point2!r})"
+        )
+
     def path(
         self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
     ) -> NDArray3[np.float64]:
