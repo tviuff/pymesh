@@ -63,3 +63,16 @@ class SweptSurface(Surface):
         self.curve.rotate(axis, angle)
         self.sweeper.rotate(axis, angle)
         return self
+
+    def mirror(
+        self,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
+        self.curve.mirror(a, b, c, x0, y0, z0)
+        self.sweeper.mirror(a, b, c, x0, y0, z0)
+        return self

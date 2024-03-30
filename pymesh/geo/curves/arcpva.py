@@ -73,6 +73,19 @@ class ArcPVA(Curve):
         self.axis.rotate(axis, angle)
         return self
 
+    def mirror(
+        self,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
+        self.start.mirror(a, b, c, x0, y0, z0)
+        self.axis.mirror(a, b, c, x0, y0, z0)
+        return self
+
     @property
     def radius(self) -> float:
         a = self.start - self.axis.start

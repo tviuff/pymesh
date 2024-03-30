@@ -77,6 +77,20 @@ class Arc3P(Curve):
         self.end.rotate(axis, angle)
         return self
 
+    def mirror(
+        self,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
+        self.centre.mirror(a, b, c, x0, y0, z0)
+        self.start.mirror(a, b, c, x0, y0, z0)
+        self.end.mirror(a, b, c, x0, y0, z0)
+        return self
+
     @property
     def radius(self) -> float:
         return np.sqrt(np.sum((self.start - self.centre) ** 2))

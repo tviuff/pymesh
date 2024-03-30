@@ -85,10 +85,18 @@ class Point:
         y0: int | float = 0.0,
         z0: int | float = 0.0,
     ) -> Self:
+        """Mirrors point in a plane.
+
+        Plane is defined by a normal vector (a, b, c) and a point (x0, y0, z0).
+        By default x0 = 0.0, y0 = 0.0 and z0 = 0.0.
+        """
+        # aknowledgement: https://math.stackexchange.com/questions/3927881/reflection-over-planes-in-3d
         for val in (a, b, c, x0, y0, z0):
             if not isinstance(val, (int, float)):
                 raise TypeError(f"Expected {val!r} to be int or float")
         a, b, c = float(a), float(b), float(c)
+        length = math.sqrt(a**2 + b**2 + c**2)
+        a, b, c = a / length, b / length, c / length
         x0, y0, z0 = float(x0), float(y0), float(z0)
         transformation_matrix = np.array(
             [

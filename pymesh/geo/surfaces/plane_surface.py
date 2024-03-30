@@ -70,3 +70,17 @@ class PlaneSurface(Surface):
         self.point1.rotate(axis, angle)
         self.point2.rotate(axis, angle)
         return self
+
+    def mirror(
+        self,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
+        self.point0.mirror(a, b, c, x0, y0, z0)
+        self.point1.mirror(a, b, c, x0, y0, z0)
+        self.point2.mirror(a, b, c, x0, y0, z0)
+        return self

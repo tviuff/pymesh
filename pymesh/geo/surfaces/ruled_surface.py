@@ -60,3 +60,16 @@ class RuledSurface(Surface):
         self.curve1.rotate(axis, angle)
         self.curve2.rotate(axis, angle)
         return self
+
+    def mirror(
+        self,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
+        self.curve1.mirror(a, b, c, x0, y0, z0)
+        self.curve2.mirror(a, b, c, x0, y0, z0)
+        return self

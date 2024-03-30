@@ -38,6 +38,22 @@ class Curve(ABC):
         counter-clockwise, based on the right-hand rule
         """
 
+    @abstractmethod
+    def mirror(
+        self,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
+        """Mirrors curve in a plane.
+
+        Plane is defined by a normal vector (a, b, c) and a point (x0, y0, z0).
+        By default x0 = 0.0, y0 = 0.0 and z0 = 0.0.
+        """
+
     @property
     @abstractmethod
     def length(self) -> float:

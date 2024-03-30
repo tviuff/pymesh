@@ -85,3 +85,18 @@ class BilinearSurface(Surface):
         self.p11.rotate(axis, angle)
         self.p01.rotate(axis, angle)
         return self
+
+    def mirror(
+        self,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
+        self.p00.mirror(a, b, c, x0, y0, z0)
+        self.p10.mirror(a, b, c, x0, y0, z0)
+        self.p11.mirror(a, b, c, x0, y0, z0)
+        self.p01.mirror(a, b, c, x0, y0, z0)
+        return self

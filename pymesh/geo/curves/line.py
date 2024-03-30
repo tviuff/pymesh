@@ -57,3 +57,16 @@ class Line(Curve):
         self.start.rotate(axis, angle)
         self.end.rotate(axis, angle)
         return self
+
+    def mirror(
+        self,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
+        self.start.mirror(a, b, c, x0, y0, z0)
+        self.end.mirror(a, b, c, x0, y0, z0)
+        return self
