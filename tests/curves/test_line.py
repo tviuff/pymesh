@@ -69,3 +69,31 @@ def test_move(assert_move, line1, line1_moved, dx, dy, dz) -> None:
 def test_rotate(assert_rotate, line1, line1_rotated, axis, angle) -> None:
     print(line1, line1_rotated)
     assert_rotate(line1, line1_rotated, axis, angle)
+
+
+def test_mirror() -> None:
+    assert Line(Point(0, 0, 0), Point(0, 1, 0)).mirror(1, 0, 0) == Line(
+        Point(0, 0, 0), Point(0, 1, 0)
+    )
+    assert Line(Point(0, 0, 0), Point(1, 0, 0)).mirror(1, 0, 0) == Line(
+        Point(0, 0, 0), Point(-1, 0, 0)
+    )
+    assert Line(Point(0, 0, 0), Point(0, 1, 0)).mirror(0, 1, 0) == Line(
+        Point(0, 0, 0), Point(0, -1, 0)
+    )
+    assert Line(Point(0, 0, 0), Point(1, 0, 0)).mirror(0, 1, 0) == Line(
+        Point(0, 0, 0), Point(1, 0, 0)
+    )
+    assert Line(Point(0, 0, 0), Point(0, 0, 1)).mirror(0, 0, 1) == Line(
+        Point(0, 0, 0), Point(0, 0, -1)
+    )
+
+    assert Line(Point(0, 0, 0), Point(2, 0, 0)).mirror(1, 0, 0, x0=1) == Line(
+        Point(2, 0, 0), Point(0, 0, 0)
+    )
+    assert Line(Point(0, 0, 0), Point(0, 2, 0)).mirror(0, 1, 0, y0=1) == Line(
+        Point(0, 2, 0), Point(0, 0, 0)
+    )
+    assert Line(Point(0, 0, 0), Point(0, 0, 3)).mirror(0, 0, 1, z0=2) == Line(
+        Point(0, 0, 4), Point(0, 0, 1)
+    )
