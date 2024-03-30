@@ -79,12 +79,14 @@ def test_copy(assert_copy, point1) -> None:
     assert_copy(point1)
 
 
-def test_rotate(p00, p10, p01) -> None:
-    DECIMALS = 4
+def test_rotate(p10, p01) -> None:
+    DECIMALS = 10
     angle = 90 * math.pi / 180
-    p10.rotate(Vector3D(p00, Point(0, 0, 1)), angle)
+    p10.rotate(angle, 0, 0, 1)
     result = np.round(p10.xyz, decimals=DECIMALS)
     expected = np.round(p01.xyz, decimals=DECIMALS)
+    print(result)
+    print(expected)
     assert np.all(result == expected)
 
 

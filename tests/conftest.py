@@ -24,11 +24,6 @@ def dz() -> float:
 
 
 @pytest.fixture
-def axis() -> Vector3D:
-    return Vector3D(Point(0, 0, 0), Point(0, 0, 1))
-
-
-@pytest.fixture
 def angle() -> float:
     return 90 * math.pi / 180
 
@@ -74,16 +69,16 @@ def point2_moved(dx, dy, dz):
 
 
 @pytest.fixture
-def point1_rotated(point1, axis, angle) -> Point:
+def point1_rotated(point1, angle) -> Point:
     point = point1.copy()
-    point.rotate(axis, angle)
+    point.rotate(angle, a=0, b=0, c=1)
     return point
 
 
 @pytest.fixture
-def point2_rotated(point2, axis, angle) -> Point:
+def point2_rotated(point2, angle) -> Point:
     point = point2.copy()
-    point.rotate(axis, angle)
+    point.rotate(angle, a=0, b=0, c=1)
     return point
 
 
@@ -132,13 +127,10 @@ def assert_move():
 @pytest.fixture
 def assert_rotate():
 
-    def func(
-        self,
-        other,
-        axis=Vector3D(Point(0, 0, 0), Point(0, 0, 1)),
-        angle=90 * math.pi / 180,
-    ):
-        self.rotate(axis, angle)
+    def func(self, other, a, b, c, angle, x0=0, y0=0, z0=0):
+        self.rotate(angle, a, b, c, x0, y0, z0)
+        print(self)
+        print(other)
         assert (
             self == other
         ), "They are not the same, check both self.rotate() and other"

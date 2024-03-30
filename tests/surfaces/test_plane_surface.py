@@ -1,5 +1,6 @@
 """Module for testing the Point class functionality"""
 
+import math
 import numpy as np
 import pytest
 
@@ -39,7 +40,7 @@ def test_init_invalid() -> None:
         PlaneSurface("", "", "")
 
 
-@pytest.mark.skip(reason="Not implemented")
+@pytest.mark.skip(reason="Test not implemented")
 def test_repr() -> None:
     pass
 
@@ -80,11 +81,11 @@ def test_path(point0, point1, point2, test_surface_path) -> None:
     test_surface_path(surface, p00, p01, p10, p11)
 
 
-@pytest.mark.skip(reason="Not yet implemented")
-def test_rotate(point0, point1, point2, axis, angle) -> None:
-    surface = PlaneSurface(point0, point1, point2)
-    surface_copy = surface.copy()
-    surface_copy.rotate(axis, angle)
+def test_rotate(assert_rotate) -> None:
+    angle = 90 * math.pi / 180
+    surface = PlaneSurface(Point(0, 0, 0), Point(1, 0, 0), Point(0, 1, 0))
+    surface_rotated = PlaneSurface(Point(0, 0, 0), Point(0, 1, 0), Point(-1, 0, 0))
+    assert_rotate(surface, surface_rotated, a=0, b=0, c=1, angle=angle)
 
 
 def test_mirror() -> None:

@@ -48,6 +48,6 @@ def test_get_num_points(mesher) -> None:
     assert num_points[1] == 6
 
 
-@pytest.mark.skip(reason="not yet fully implemented")
+@pytest.mark.skip(reason="Test not implemented")
 def test_generate_mesh_points(mesher) -> None:
     points = mesher.generate_mesh_points()

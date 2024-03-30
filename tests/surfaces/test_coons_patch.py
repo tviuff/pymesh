@@ -1,5 +1,6 @@
 """Module for testing the Point class functionality"""
 
+import math
 import numpy as np
 import pytest
 
@@ -41,7 +42,7 @@ def test_init_lines_not_connected(lines_not_connected):
         CoonsPatch(lines_not_connected)
 
 
-@pytest.mark.skip(reason="Not implemented")
+@pytest.mark.skip(reason="Test not implemented")
 def test_repr() -> None:
     pass
 
@@ -72,23 +73,31 @@ def test_path(p00, p01, p10, p11, valid_lines, test_surface_path) -> None:
     test_surface_path(surface, p00, p01, p10, p11)
 
 
-@pytest.mark.skip(reason="Not sure of implementation")
-def test_rotate(valid_lines, axis, angle) -> None:
-    surface = CoonsPatch(valid_lines)
-    surface_copy = surface.copy()
-    points = (
-        Point(0, 0, 0),
-        Point(-1, 1, 0),
-        Point(-1, 0, 0),
-        Point(-1, 1, 0),
+def test_rotate() -> None:
+    DECIMALS = 4
+    line_u0 = Line(Point(0, 0, 0), Point(1, 0, 0))
+    line_u1 = Line(Point(1, 1, 0), Point(0, 1, 0))
+    line_0w = Line(Point(0, 1, 0), Point(0, 0, 0))
+    line_1w = Line(Point(1, 1, 0), Point(1, 0, 0))
+    surface = CoonsPatch((line_u0, line_u1, line_0w, line_1w))
+    angle = 90 * math.pi / 180
+    rotated = surface.rotate(angle, a=0, b=0, c=1)
+    rotated_corners = (
+        np.round(rotated.path(0, 0), decimals=DECIMALS),
+        np.round(rotated.path(1, 0), decimals=DECIMALS),
+        np.round(rotated.path(1, 1), decimals=DECIMALS),
+        np.round(rotated.path(0, 1), decimals=DECIMALS),
     )
-    surface_copy.rotate(axis, angle)
-    for curve, point in zip(surface_copy.curves, points):
-        cp0 = curve.path(0)
-        p = Point(cp0[0], cp0[1], cp0[2])
-        assert p == point
+    expected_corners = (
+        np.array([0, 0, 0]),
+        np.array([0, 1, 0]),
+        np.array([-1, 1, 0]),
+        np.array([-1, 0, 0]),
+    )
+    for rotated, expected in zip(rotated_corners, expected_corners):
+        assert np.all(rotated == expected)
 
 
-@pytest.mark.skip(reason="Not sure of implementation")
+@pytest.mark.skip(reason="Test not implemented")
 def test_mirror() -> None:
     pass

@@ -1,5 +1,6 @@
 """Module for testing the SweptSurface class functionality"""
 
+import math
 import pytest
 
 from pymesh import Point, Line, SweptSurface
@@ -29,7 +30,7 @@ def test_init_invalid() -> None:
         SweptSurface("", "")
 
 
-@pytest.mark.skip(reason="Not implemented")
+@pytest.mark.skip(reason="Test not implemented")
 def test_repr() -> None:
     pass
 
@@ -59,9 +60,13 @@ def test_path(p00, p10, p01, p11, curve, sweeper, test_surface_path) -> None:
     test_surface_path(surface, p00, p01, p10, p11)
 
 
-@pytest.mark.skip(reason="Not yet implemented")
-def test_rotate() -> None:
-    pass
+def test_rotate(assert_rotate, curve, sweeper) -> None:
+    angle = 90 * math.pi / 180
+    surface = SweptSurface(curve, sweeper)
+    curve_rotated = Line(Point(0, 0, 0), Point(0, 1, 0))
+    sweeper_rotated = Line(Point(0, 0, 0), Point(-1, 0, 0))
+    surface_rotated = SweptSurface(curve_rotated, sweeper_rotated)
+    assert_rotate(surface, surface_rotated, a=0, b=0, c=1, angle=angle)
 
 
 def test_mirror(curve, sweeper) -> None:

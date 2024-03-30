@@ -54,20 +54,33 @@ class Point:
         self.z += float(dz)
         return self
 
-    def rotate(self, axis, angle: int | float) -> Self:
+    def rotate(
+        self,
+        angle: int | float,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
         """Rotates point around an axis.
 
-        axis: a Vector3D type
-
         angle: defined in radians with poitive diriction being
-        counter-clockwise, based on the right-hand rule
+        counter-clockwise, based on the right-hand rule.
+        a, b, c: axis vector direction.
+        x0, y0, z0: axis base, default is origin of coordinate system.
         """
-        # ! axis is expected to be a Vector3D
-        # ! although importing module results in a circular import error
-        validate_rotate_parameters(axis, angle)
-        pvec = self - axis.start
-        avec = axis.end - axis.start
-        xyz0 = axis.start.xyz
+        for val in (angle, a, b, c, x0, y0, z0):
+            if not isinstance(val, (int, float)):
+                raise TypeError(f"Expected {val!r} to be int or float")
+        a, b, c = float(a), float(b), float(c)
+        length = math.sqrt(a**2 + b**2 + c**2)
+        a, b, c = a / length, b / length, c / length
+        x0, y0, z0 = float(x0), float(y0), float(z0)
+        pvec = np.array([self.x - x0, self.y - y0, self.z - z0])
+        avec = np.array([a, b, c])
+        xyz0 = np.array([x0, y0, z0])
         part1 = pvec * math.cos(angle)
         part2 = np.cross(avec, pvec) * math.sin(angle)
         part3 = avec * np.dot(avec, pvec) * (1 - math.cos(angle))

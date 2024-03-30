@@ -1,5 +1,6 @@
 """Module for testing the Point class functionality"""
 
+import math
 import numpy as np
 import pytest
 
@@ -25,7 +26,7 @@ def test_init_invalid() -> None:
         RuledSurface("", "")
 
 
-@pytest.mark.skip(reason="Not implemented")
+@pytest.mark.skip(reason="Test not implemented")
 def test_repr() -> None:
     pass
 
@@ -58,7 +59,7 @@ def test_get_max_lengths(surface1) -> None:
         assert length == 1.0
 
 
-@pytest.mark.skip(reason="not found a way to test it yet")
+@pytest.mark.skip(reason="Test not implemented")
 def test_path(p00, p01, p10, p11, test_surface_path) -> None:
     line1 = Line(p00, p01)
     line2 = Line(p10, p11)
@@ -66,9 +67,15 @@ def test_path(p00, p01, p10, p11, test_surface_path) -> None:
     test_surface_path(surface, p00, p01, p10, p11)
 
 
-@pytest.mark.skip(reason="Not yet implemented")
-def test_rotate() -> None:
-    pass
+def test_rotate(assert_rotate) -> None:
+    angle = 90 * math.pi / 180
+    line1 = Line(Point(0, 0, 0), Point(0, 1, 0))
+    line2 = Line(Point(1, 0, 0), Point(1, 1, 0))
+    surface = RuledSurface(line1, line2)
+    line1_rotated = Line(Point(0, 0, 0), Point(-1, 0, 0))
+    line2_rotated = Line(Point(0, 1, 0), Point(-1, 1, 0))
+    surface_rotated = RuledSurface(line1_rotated, line2_rotated)
+    assert_rotate(surface, surface_rotated, a=0, b=0, c=1, angle=angle)
 
 
 def test_mirror(p00, p01, p10, p11) -> None:

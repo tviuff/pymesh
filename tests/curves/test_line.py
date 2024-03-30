@@ -5,7 +5,7 @@ import math
 import numpy as np
 import pytest
 
-from pymesh import Point, Vector3D, Line
+from pymesh import Point, Line
 
 
 def test_init(point1: Point, point2: Point) -> None:
@@ -66,9 +66,8 @@ def test_move(assert_move, line1, line1_moved, dx, dy, dz) -> None:
     assert_move(line1, line1_moved, dx, dy, dz)
 
 
-def test_rotate(assert_rotate, line1, line1_rotated, axis, angle) -> None:
-    print(line1, line1_rotated)
-    assert_rotate(line1, line1_rotated, axis, angle)
+def test_rotate(assert_rotate, line1, line1_rotated, angle) -> None:
+    assert_rotate(line1, line1_rotated, a=0, b=0, c=1, angle=angle)
 
 
 def test_mirror() -> None:

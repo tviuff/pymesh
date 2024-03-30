@@ -11,7 +11,6 @@ from pymesh.geo.curves.curve import Curve
 from pymesh.typing import NDArray3
 from pymesh.utils import (
     validate_move_parameters,
-    validate_rotate_parameters,
     validate_curve_path_parameters,
 )
 
@@ -67,10 +66,18 @@ class ArcPVA(Curve):
         self.axis.move(dx, dy, dz)
         return self
 
-    def rotate(self, axis: Vector3D, angle: int | float) -> Self:
-        validate_rotate_parameters(axis, angle)
-        self.start.rotate(axis, angle)
-        self.axis.rotate(axis, angle)
+    def rotate(
+        self,
+        angle: int | float,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
+        self.start.rotate(angle, a, b, c, x0, y0, z0)
+        self.axis.rotate(angle, a, b, c, x0, y0, z0)
         return self
 
     def mirror(

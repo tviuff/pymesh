@@ -7,11 +7,9 @@ import numpy as np
 from pymesh.exceptions import CurveIntersectionError
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.surfaces.surface import Surface
-from pymesh.geo.vector3d import Vector3D
 from pymesh.typing import NDArray3
 from pymesh.utils import (
     validate_move_parameters,
-    validate_rotate_parameters,
     validate_surface_path_parameters,
 )
 
@@ -89,7 +87,7 @@ class CoonsPatch(Surface):
             raise CurveIntersectionError(
                 "Selected curves does not share intersection points"
             )
-        cflip, cselect = set__curve_order(flipped_curves, curve_selection)
+        cflip, cselect = set_curve_order(flipped_curves, curve_selection)
         self._flipped_curves = tuple(cflip)
         self._curves = tuple(cselect)
 
@@ -147,10 +145,18 @@ class CoonsPatch(Surface):
             curve.move(dx, dy, dz)
         return self
 
-    def rotate(self, axis: Vector3D, angle: int | float) -> Self:
-        validate_rotate_parameters(axis, angle)
+    def rotate(
+        self,
+        angle: int | float,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
         for curve in self.curves:
-            curve.rotate(axis, angle)
+            curve.rotate(angle, a, b, c, x0, y0, z0)
         return self
 
     def mirror(
@@ -167,7 +173,7 @@ class CoonsPatch(Surface):
         return self
 
 
-def set__curve_order(cflip, cselect) -> tuple[list]:
+def set_curve_order(cflip, cselect) -> tuple[list]:
     """Sets the order u0, u1, 0w, 1w where u0 = first item in cselect"""
     cselect = [cselect[0], cselect[2], cselect[3], cselect[1]]
     cflip = [cflip[0], cflip[2], cflip[3], cflip[1]]

@@ -29,13 +29,22 @@ class Curve(ABC):
         """Moves the curve a given relative position"""
 
     @abstractmethod
-    def rotate(self, axis: Vector3D, angle: int | float) -> Self:
+    def rotate(
+        self,
+        angle: int | float,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
         """Rotates the curve around an axis.
 
-        axis: vector axis the rotation is performed around
-
         angle: defined in radians with poitive diriction being
-        counter-clockwise, based on the right-hand rule
+        counter-clockwise, based on the right-hand rule.
+        a, b, c: axis vector direction.
+        x0, y0, z0: axis base, default is origin of coordinate system.
         """
 
     @abstractmethod

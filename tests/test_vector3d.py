@@ -65,6 +65,7 @@ def test_move(
     assert_move(vector1, vector2, dx, dy, dz)
 
 
+@pytest.mark.skip(reason="Test of deprocated implementation")
 def test_rotate(p00, p10, p01) -> None:
     DECIMALS = 4
     axis = Vector3D(p00, Point(0, 0, 1))
@@ -73,6 +74,18 @@ def test_rotate(p00, p10, p01) -> None:
     vector2 = Vector3D(p00, p01)
     result = np.round(vector1.end.xyz, decimals=DECIMALS)
     expected = np.round(vector2.end.xyz, decimals=DECIMALS)
+    assert np.all(result == expected)
+
+
+def test_rotate(p00, p10, p01) -> None:
+    DECIMALS = 4
+    angle = 90 * math.pi / 180
+    vector1 = Vector3D(p00, p10).rotate(angle, 0, 0, 1)
+    vector2 = Vector3D(p00, p01)
+    result = np.round(vector1.end.xyz, decimals=DECIMALS)
+    expected = np.round(vector2.end.xyz, decimals=DECIMALS)
+    print(result)
+    print(expected)
     assert np.all(result == expected)
 
 

@@ -7,11 +7,9 @@ from typing import Self
 from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.point import Point
-from pymesh.geo.vector3d import Vector3D
 from pymesh.typing import NDArray3
 from pymesh.utils import (
     validate_move_parameters,
-    validate_rotate_parameters,
     validate_curve_path_parameters,
 )
 
@@ -70,11 +68,19 @@ class Arc3P(Curve):
         self.end.move(dx, dy, dz)
         return self
 
-    def rotate(self, axis: Vector3D, angle: int | float) -> Self:
-        validate_rotate_parameters(axis, angle)
-        self.centre.rotate(axis, angle)
-        self.start.rotate(axis, angle)
-        self.end.rotate(axis, angle)
+    def rotate(
+        self,
+        angle: int | float,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
+        self.centre.rotate(angle, a, b, c, x0, y0, z0)
+        self.start.rotate(angle, a, b, c, x0, y0, z0)
+        self.end.rotate(angle, a, b, c, x0, y0, z0)
         return self
 
     def mirror(

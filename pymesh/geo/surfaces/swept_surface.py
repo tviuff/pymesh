@@ -64,10 +64,18 @@ class SweptSurface(Surface):
         self.sweeper.move(dx, dy, dz)
         return self
 
-    def rotate(self, axis: Vector3D, angle: int | float) -> Self:
-        validate_rotate_parameters(axis, angle)
-        self.curve.rotate(axis, angle)
-        self.sweeper.rotate(axis, angle)
+    def rotate(
+        self,
+        angle: int | float,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
+        self.curve.rotate(angle, a, b, c, x0, y0, z0)
+        self.sweeper.rotate(angle, a, b, c, x0, y0, z0)
         return self
 
     def mirror(

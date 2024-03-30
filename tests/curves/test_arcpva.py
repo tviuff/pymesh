@@ -132,9 +132,8 @@ def test_move(assert_move, curve1, curve1_moved, dx, dy, dz) -> None:
     assert_move(curve1, curve1_moved, dx, dy, dz)
 
 
-def test_rotate(assert_rotate, curve1, curve1_rotated, axis, angle) -> None:
-    print(curve1, curve1_rotated)
-    assert_rotate(curve1, curve1_rotated, axis, angle)
+def test_rotate(assert_rotate, curve1, curve1_rotated, angle) -> None:
+    assert_rotate(curve1, curve1_rotated, a=0, b=0, c=1, angle=angle)
 
 
 def test_mirror() -> None:

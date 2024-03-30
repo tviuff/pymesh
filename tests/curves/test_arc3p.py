@@ -6,7 +6,7 @@ import numpy as np
 from numpy import ndarray
 import pytest
 
-from pymesh import Point, Vector3D, Arc3P
+from pymesh import Point, Arc3P
 
 
 @pytest.fixture
@@ -139,10 +139,10 @@ def test_move(assert_move, curve1, dx, dy, dz) -> None:
     assert_move(curve1, curve1_moved, dx, dy, dz)
 
 
-def test_rotate(assert_rotate, p00, p10, p01, axis, angle) -> None:
-    curve1 = Arc3P(p00, p10, p01)
-    curve2 = Arc3P(p00, p01.copy(), Point(-1, 0, 0))
-    assert_rotate(curve1, curve2, axis, angle)
+def test_rotate(assert_rotate, angle) -> None:
+    curve1 = Arc3P(Point(0, 0, 0), Point(1, 0, 0), Point(0, 1, 0))
+    curve1_rotated = Arc3P(Point(0, 0, 0), Point(0, 1, 0), Point(-1, 0, 0))
+    assert_rotate(curve1, curve1_rotated, a=0, b=0, c=1, angle=angle)
 
 
 def test_mirror() -> None:

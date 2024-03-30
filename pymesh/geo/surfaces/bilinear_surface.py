@@ -92,12 +92,20 @@ class BilinearSurface(Surface):
         self.p01.move(dx, dy, dz)
         return self
 
-    def rotate(self, axis: Vector3D, angle: int | float) -> Self:
-        validate_rotate_parameters(axis, angle)
-        self.p00.rotate(axis, angle)
-        self.p10.rotate(axis, angle)
-        self.p11.rotate(axis, angle)
-        self.p01.rotate(axis, angle)
+    def rotate(
+        self,
+        angle: int | float,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
+        self.p00.rotate(angle, a, b, c, x0, y0, z0)
+        self.p10.rotate(angle, a, b, c, x0, y0, z0)
+        self.p11.rotate(angle, a, b, c, x0, y0, z0)
+        self.p01.rotate(angle, a, b, c, x0, y0, z0)
         return self
 
     def mirror(

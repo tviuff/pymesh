@@ -1,5 +1,6 @@
 """Module for testing the BilinearSurface class functionality"""
 
+import math
 import numpy as np
 import pytest
 
@@ -17,7 +18,7 @@ def test_init_invalid() -> None:
         BilinearSurface("", "", "", "")
 
 
-@pytest.mark.skip(reason="Not implemented")
+@pytest.mark.skip(reason="Test not implemented")
 def test_repr() -> None:
     pass
 
@@ -53,25 +54,21 @@ def test_get_max_lengths(surface1) -> None:
         assert length == 1.0
 
 
-@pytest.mark.skip(reason="not found a way to test it yet")
+@pytest.mark.skip(reason="Test not implemented")
 def test_path(p00, p01, p10, p11, test_surface_path) -> None:
     surface = BilinearSurface(p00, p10, p11, p01)
     test_surface_path(surface, p00, p01, p10, p11)
 
 
-@pytest.mark.skip(reason="not found a way to test it yet")
-def test_rotate(assert_rotate, p00, p01, p10, p11, axis, angle) -> None:
-    surface = BilinearSurface(p00, p10, p11, p01)
-    point00 = p00.copy()
-    point10 = p10.copy()
-    point11 = p11.copy()
-    point01 = p01.copy()
-    point00.rotate(axis, angle)
-    point10.rotate(axis, angle)
-    point11.rotate(axis, angle)
-    point01.rotate(axis, angle)
-    surface_rotated = BilinearSurface(point00, point10, point11, point01)
-    assert_rotate(surface, surface_rotated, axis, angle)
+def test_rotate(assert_rotate) -> None:
+    angle = 90 * math.pi / 180
+    surface = BilinearSurface(
+        Point(0, 0, 0), Point(1, 0, 0), Point(1, 1, 0), Point(0, 1, 0)
+    )
+    surface_rotated = BilinearSurface(
+        Point(0, 0, 0), Point(0, 1, 0), Point(-1, 1, 0), Point(-1, 0, 0)
+    )
+    assert_rotate(surface, surface_rotated, a=0, b=0, c=1, angle=angle)
 
 
 def test_mirror() -> None:
