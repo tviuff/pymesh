@@ -76,8 +76,32 @@ class Point:
         self.move(xyz_diff[0], xyz_diff[1], xyz_diff[2])
         return self
 
-    def mirror(self, a: Self, plane_norrmal) -> Self:
-        return self
+    def mirror(
+        self,
+        a: int | float,
+        b: int | float,
+        c: int | float,
+        x0: int | float = 0.0,
+        y0: int | float = 0.0,
+        z0: int | float = 0.0,
+    ) -> Self:
+        for val in (a, b, c, x0, y0, z0):
+            if not isinstance(val, (int, float)):
+                raise TypeError(f"Expected {val!r} to be int or float")
+        a, b, c = float(a), float(b), float(c)
+        x0, y0, z0 = float(x0), float(y0), float(z0)
+        transformation_matrix = np.array(
+            [
+                [1 - 2 * a * a, -2 * a * b, -2 * a * c],
+                [-2 * a * b, 1 - 2 * b * b, -2 * b * c],
+                [-2 * a * c, -2 * b * c, 1 - 2 * c * c],
+            ]
+        )
+        xyz0 = np.array([x0, y0, z0])
+        dxyz = self.xyz - xyz0
+        dxyz_mirror = transformation_matrix.dot(dxyz)
+        dx, dy, dz = dxyz_mirror - self.xyz + xyz0
+        return self.move(dx, dy, dz)
 
     def get_distance_to(self, point: Self) -> float:
         """Returns the shortest distance between point instance and another point"""
