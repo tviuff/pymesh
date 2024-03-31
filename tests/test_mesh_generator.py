@@ -4,50 +4,48 @@ from collections.abc import Callable
 
 import pytest
 
-from pymesh import PlaneSurface, ExponentialDistribution, CosineDistribution
+from pymesh import BilinearSurface, ExponentialDistribution, CosineDistribution
 from pymesh.mesh.mesh_generator import MeshGenerator
 
 
 @pytest.fixture
-def mesher(p00, p01, p10) -> MeshGenerator:
-    surface = PlaneSurface(p00, p01, p10)
-    return MeshGenerator(surface.get_path(), surface.get_max_lengths())
+def mesher() -> MeshGenerator:
+    return MeshGenerator()
 
 
-def test_init(mesher) -> None:
-    assert len(mesher.panel_densities) == 2
-    assert len(mesher.mesh_distributions) == 2
-    assert len(mesher.lengths) == 2
-    assert isinstance(mesher.surface_fn, Callable)
+@pytest.fixture
+def surface(p00, p01, p11, p10) -> None:
+    return BilinearSurface(p00, p01, p11, p10)
 
 
-def test_set_u_parameters(mesher) -> None:
-    INDEX = 0
-    mesher.set_u_parameters(panel_density=3, distribution=CosineDistribution())
-    assert mesher.panel_densities[INDEX] == 3
-    assert isinstance(mesher.mesh_distributions[INDEX], CosineDistribution)
+def test_init_invalid() -> None:
+    with pytest.raises(TypeError):
+        MeshGenerator("")
 
 
-def test_set_w_parameters(mesher) -> None:
-    INDEX = 1
-    mesher.set_w_parameters(panel_density=0.2, distribution=ExponentialDistribution())
-    assert mesher.panel_densities[INDEX] == 0.2
-    assert isinstance(mesher.mesh_distributions[INDEX], ExponentialDistribution)
+def test_add_surface(mesher, surface) -> None:
+    mesher.add_surface(surface)
 
 
-def test_lengths(mesher) -> None:
-    assert mesher.lengths == (1, 1)
+def test_get_num_points(mesher, surface) -> None:
+    mesher.add_surface(surface)
+    assert mesher.get_num_points(1, 0.2) == 6
+    assert mesher.get_num_points(1, 1) == 2
 
 
-def test_get_num_points(mesher) -> None:
-    mesher.set_u_parameters(panel_density=3)
-    mesher.set_w_parameters(panel_density=0.2)
-    num_points = mesher._get_num_points()
-    assert len(num_points) == 2
-    assert num_points[0] == 4
-    assert num_points[1] == 6
+def test__generate_mesh_points(mesher, surface) -> None:
+    mesher.add_surface(surface)
+    mesh = mesher.surfaces[0]
+    mesh_points = mesher._generate_mesh_points(mesh)
 
 
-@pytest.mark.skip(reason="Test not implemented")
-def test_generate_mesh_points(mesher) -> None:
-    points = mesher.generate_mesh_points()
+def test__generate_panels(mesher, surface) -> None:
+    mesher.add_surface(surface)
+    mesh = mesher.surfaces[0]
+    mesh_points = mesher._generate_mesh_points(mesh)
+    mesh_points = mesher._generate_panels(mesh_points, flipped_normal=True)
+
+
+def test_get_panels(mesher, surface) -> None:
+    mesher.add_surface(surface)
+    panels = mesher.get_panels()
