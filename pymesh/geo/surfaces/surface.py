@@ -1,5 +1,6 @@
 """Module containing the Surface class"""
 
+from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from typing import Self
@@ -20,9 +21,9 @@ class Surface(ABC):
         return self._is_normal_flipped
 
     @classmethod
-    def get_all_surfaces(cls) -> list:
+    def get_all_surfaces(cls) -> tuple[Surface]:
         """Returns a list of all generated surfaces, independent of surface class name"""
-        return cls._all_surfaces
+        return tuple(cls._all_surfaces)
 
     def flip_normal(self) -> None:
         """Flips surface normal"""

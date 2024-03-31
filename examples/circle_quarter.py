@@ -34,20 +34,21 @@ arc01 = Arc3P(point00, point01c, point11c)
 surface_circle01 = RuledSurface(line01, arc01)
 surface_circle01.flip_normal()
 
-for surface in tuple(RuledSurface.get_all_surfaces()):
+for surface in RuledSurface.get_all_surfaces():
     for angle in (90, 180, 270):
         surface.copy().rotate(angle * math.pi / 180, a=0, b=0, c=1)
 
 mesh = MeshGenerator()
-for surface in tuple(RuledSurface.get_all_surfaces()):
+for surface in RuledSurface.get_all_surfaces():
     mesh.add_surface(surface, density_u=0.2, density_w=0.2)
 
 circle = ArcPVA(Point(DIAMETER / 2, 0, -DEPTH), 2 * math.pi, a=0, b=0, c=1)
 circle_line = Line(Point(0, 0, -DEPTH), Point(0, 0, 0))
 surface_cylinder = SweptSurface(circle, circle_line)
 
-mesh.add_surface(surface_cylinder, density_u=0.2, density_w=1.0)
+mesh.add_surface(surface_cylinder, density_u=0.2, density_w=0.2)
 
 if __name__ == "__main__":
-    viewer = MeshViewer(mesh, panel_normal_length=0.5)
+    viewer = MeshViewer(mesh, panel_normal_length=0.2)
+    viewer.ax.set(xlim=(-2, 2), ylim=(-2, 2), zlim=(-6, 0))
     viewer.show()
