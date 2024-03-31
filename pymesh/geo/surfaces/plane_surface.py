@@ -60,7 +60,9 @@ class PlaneSurface(Surface):
         return length_u, length_w
 
     def copy(self) -> Self:
-        return PlaneSurface(self.point0.copy(), self.point1.copy(), self.point2.copy())
+        copy = PlaneSurface(self.point0.copy(), self.point1.copy(), self.point2.copy())
+        copy._is_normal_flipped = self._is_normal_flipped
+        return copy
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0

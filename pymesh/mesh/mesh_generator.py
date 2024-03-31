@@ -4,14 +4,8 @@ import numpy as np
 
 from pymesh.geo.surfaces.surface import Surface
 
-# from pymesh.constants import MeshConstants
-# from pymesh.descriptors import AsContainerOf
 from pymesh.mesh.mesh_distributions import MeshDistribution, LinearDistribution
 from pymesh.typing import NDArray3xNxN
-
-
-# LENGTH: int = 2
-# NUM: int = 100
 
 
 class MeshGenerator:

@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 import math
 from pathlib import Path
 from pymesh import Point, Line, CoonsPatch
-from pymesh import ExponentialDistribution
+from pymesh import MeshGenerator, ExponentialDistribution
 from pymesh import MeshViewer, GDFWriter
 
 point1 = Point(0, 0, 0)
@@ -25,23 +25,23 @@ line4 = Line(point4, point1)
 surface = CoonsPatch([line1, line3, line2, line4])
 surface.flip_normal()  # flips surface normal
 
-# Setting meshing options for the normalized u and w dimensons
-surface.mesher.set_u_parameters(
-    panel_density=3,  # int specifies number of panels
-    distribution=ExponentialDistribution(),  # mesh distributed expoentially
-)
-surface.mesher.set_w_parameters(
-    panel_density=0.2,  # float specifies largest panel length along boundaries
-)
-
 surface_copy = surface.copy()
-# surface_copy.move(dx=-1, dy=-1)
+surface_copy.move(dx=-1, dy=-1)
 surface_copy.rotate(90 * math.pi / 180, a=0, b=0, c=1)
+surface_copy.mirror(a=0, b=0, c=1, z0=-1)
 
-surface_selection = CoonsPatch.get_all_surfaces()  # get all instanciated surfaces
+# Setting meshing options for the normalized u and w dimensons
+mesh = MeshGenerator()
+for surface in CoonsPatch.get_all_surfaces():
+    mesh.add_surface(
+        surface,
+        density_u=3,  # int specifies number of panels,
+        distribution_u=ExponentialDistribution(),  # mesh distributed expoentially
+        density_w=0.2,  # float specifies largest panel length along boundaries
+    )
 
-viewer = MeshViewer(panel_normal_length=0.5)  # specify panel normal length
-viewer.add_panels(surface_selection, include_normals=True)  # include panel normals
+viewer = MeshViewer(mesh, panel_normal_length=0.5)  # specify panel normal length
+# viewer.add_panels(surface_selection, include_normals=True)  # include panel normals
 viewer.show()  # plot selected surface panels
 
 # writer = GDFWriter()

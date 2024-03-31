@@ -48,7 +48,9 @@ class SweptSurface(Surface):
         return self.curve.path(u) + sweep
 
     def copy(self) -> Self:
-        return SweptSurface(self.curve.copy(), self.sweeper.copy())
+        copy = SweptSurface(self.curve.copy(), self.sweeper.copy())
+        copy._is_normal_flipped = self._is_normal_flipped
+        return copy
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0

@@ -130,7 +130,9 @@ class CoonsPatch(Surface):
             curve_0w.copy(),
             curve_1w.copy(),
         )
-        return CoonsPatch(curves_copy)
+        copy = CoonsPatch(curves_copy)
+        copy._is_normal_flipped = self._is_normal_flipped
+        return copy
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0

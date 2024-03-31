@@ -13,5 +13,5 @@ from pymesh.geo.surfaces.ruled_surface import RuledSurface
 from pymesh.geo.surfaces.swept_surface import SweptSurface
 from pymesh.mesh.mesh_distributions import LinearDistribution, ExponentialDistribution
 from pymesh.mesh.mesh_distributions import PowerDistribution, CosineDistribution
-from pymesh.mesh_viewer import MeshViewer
+from pymesh.mesh.mesh_viewer import MeshViewer
 from pymesh.mesh.mesh_generator import MeshGenerator

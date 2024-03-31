@@ -45,7 +45,9 @@ class RuledSurface(Surface):
         return (1 - w) * self.curve1.path(u) + w * self.curve2.path(u)
 
     def copy(self) -> Self:
-        return RuledSurface(self.curve1.copy(), self.curve2.copy())
+        copy = RuledSurface(self.curve1.copy(), self.curve2.copy())
+        copy._is_normal_flipped = self._is_normal_flipped
+        return copy
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0

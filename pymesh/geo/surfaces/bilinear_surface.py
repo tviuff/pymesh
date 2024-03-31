@@ -69,12 +69,14 @@ class BilinearSurface(Surface):
         return length_u, length_w
 
     def copy(self) -> Self:
-        return BilinearSurface(
+        copy = BilinearSurface(
             self.p00.copy(),
             self.p10.copy(),
             self.p11.copy(),
             self.p01.copy(),
         )
+        copy._is_normal_flipped = self._is_normal_flipped
+        return copy
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
