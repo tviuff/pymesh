@@ -30,7 +30,6 @@ class SweptSurface(Surface):
         self._all_surfaces.append(self)
         self.curve = curve
         self.sweeper = sweeper
-        super().__init__()
 
     def __eq__(self, other):
         return self.curve == other.curve and self.sweeper == other.sweeper

@@ -1,154 +1,108 @@
 """Module containing MeshGenerator class"""
 
-from collections.abc import Callable
-
 import numpy as np
 
-from pymesh.constants import MeshConstants
-from pymesh.descriptors import AsContainerOf
-from pymesh.mesh.mesh_distributions import MeshDistribution
+from pymesh.geo.surfaces.surface import Surface
+
+# from pymesh.constants import MeshConstants
+# from pymesh.descriptors import AsContainerOf
+from pymesh.mesh.mesh_distributions import MeshDistribution, LinearDistribution
 from pymesh.typing import NDArray3xNxN
 
 
-LENGTH: int = 2
-NUM: int = 100
+# LENGTH: int = 2
+# NUM: int = 100
 
 
 class MeshGenerator:
     """Surface mesh generator"""
 
-    mesh_distributions = AsContainerOf(
-        container_type=tuple,
-        item_type=MeshDistribution,
-        min_length=LENGTH,
-        max_length=LENGTH,
-    )
-    panel_densities = AsContainerOf(
-        container_type=tuple,
-        item_type=int | float,
-        min_length=LENGTH,
-        max_length=LENGTH,
-    )
-    lengths = AsContainerOf(
-        container_type=tuple, item_type=float, min_length=LENGTH, max_length=LENGTH
-    )
+    surfaces: list = []
 
-    def __init__(
+    def add_surface(
         self,
-        surface_fn: Callable[[int | float, int | float], NDArray3xNxN[np.float64]],
-        lengths: tuple[float],
-    ):
-        self.surface_fn = surface_fn
-        self.lengths = lengths
-        self.mesh_distributions = (
-            MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value(),
-            MeshConstants.DEFAULT_DISTRIBUTION_METHOD.value(),
-        )
-        self.panel_densities = (
-            MeshConstants.DEFAULT_DENSITY.value,
-            MeshConstants.DEFAULT_DENSITY.value,
-        )
-
-    def set_u_parameters(
-        self, panel_density: int | float = None, distribution: MeshDistribution = None
+        surface: Surface,
+        density_u: int | float = 0.2,
+        density_w: int | float = 0.2,
+        distribution_u: MeshDistribution = LinearDistribution(),
+        distribution_w: MeshDistribution = LinearDistribution(),
     ) -> None:
-        """Sets surface mesh parameters for the u dimension.
+        length_u, length_w = surface.get_max_lengths()
+        num_points_u = self.get_num_points(length_u, density_u)
+        num_points_w = self.get_num_points(length_w, density_w)
+        data = {
+            "path": surface.get_path(),
+            "flipped_normal": surface.is_normal_flipped,
+            "num_points": (num_points_u, num_points_w),
+            "distributions": (distribution_u, distribution_w),
+        }
+        self.surfaces.append(data)
 
-        panel_density:
-        Optional, can be either an int or a float.
-        If an int, the value specifies the number of panels along the dimension.
-        If a float, the value represents the largest panel length along the boundaries.
+    @staticmethod
+    def get_num_points(length, density) -> tuple[int]:
+        """Returns number of points along a dimension"""
+        num_points = density + 1
+        if isinstance(density, float):
+            num_points = int(np.ceil(length / density) + 1)
+        return num_points
 
-        distribution:
-        Optional, can be set to various instances of MeshDistribution subclasses.
-        Default is LinearDistribution. Other options are:
-          * ExponentialDistribution
-          * CosineDistribution
-          * PowerDistribution
-        """
-        index = 0
-        if panel_density is not None:
-            self._set_panel_density_index(panel_density, index)
-        if distribution is not None:
-            self._set_mesh_distribution_index(distribution, index)
-
-    def set_w_parameters(
-        self, panel_density: int | float = None, distribution: MeshDistribution = None
-    ) -> None:
-        """Sets surface mesh parameters for the w dimension.
-
-        panel_density:
-        Optional, can be either an int or a float.
-        If an int, the value specifies the number of panels along the dimension.
-        If a float, the value represents the largest panel length along the boundaries.
-
-        distribution:
-        Optional, can be set to various instances of MeshDistribution subclasses.
-        Default is LinearDistribution. Other options are:
-          * ExponentialDistribution
-          * CosineDistribution
-          * PowerDistribution
-        """
-        index = 1
-        if panel_density is not None:
-            self._set_panel_density_index(panel_density, index)
-        if distribution is not None:
-            self._set_mesh_distribution_index(distribution, index)
-
-    def _set_panel_density_index(self, value: int | float, index: int) -> None:
-        if not isinstance(index, int):
-            raise TypeError(f"Expected {index!r} to be an int.")
-        if index not in [0, 1]:
-            raise TypeError(f"Expected {index!r} to be either 0 or 1.")
-        densities = list(self.panel_densities)
-        densities[index] = value
-        self.panel_densities = tuple(densities)
-
-    def _set_mesh_distribution_index(self, value: int | float, index: int) -> None:
-        if not isinstance(index, int):
-            raise TypeError(f"Expected {index!r} to be an int.")
-        if index not in [0, 1]:
-            raise TypeError(f"Expected {index!r} to be either 0 or 1.")
-        distributions = list(self.mesh_distributions)
-        distributions[index] = value
-        self.mesh_distributions = tuple(distributions)
-
-    def get_approximate_lengths(self, num: int = NUM):
-        """Returns the largest boundary lengths based on a linear path
-        discretization algorithm based on num points along the path."""
-        # ! Not yet tested
-        arr_u = np.zeros((2, num))
-        arr_w = np.zeros((2, num))
-        for i in np.linspace(0, 1, num=num, endpoint=True):
-            arr_u[0, i] = self.surface_fn(u=i, w=0)
-            arr_u[1, i] = self.surface_fn(u=i, w=1)
-            arr_w[0, i] = self.surface_fn(u=0, w=i)
-            arr_w[1, i] = self.surface_fn(u=1, w=i)
-        length_u = np.max(np.sum(np.diff(arr_u, axis=1), axis=1), axis=0)
-        length_w = np.max(np.sum(np.diff(arr_w, axis=1), axis=1), axis=0)
-        return (length_u, length_w)
-
-    def _get_num_points(self) -> tuple[int]:
-        """Returns number of points along the u and w dimensions"""
-        density_u, density_w = self.panel_densities
-        num_points_u = density_u + 1
-        num_points_w = density_w + 1
-        if isinstance(density_u, float) or isinstance(density_w, float):
-            length_u, length_w = self.lengths
-            if isinstance(density_u, float):
-                num_points_u = int(np.ceil(length_u / density_u) + 1)
-            if isinstance(density_w, float):
-                num_points_w = int(np.ceil(length_w / density_w) + 1)
-        return num_points_u, num_points_w
-
-    def generate_mesh_points(self) -> NDArray3xNxN[np.float64]:
-        """Generates 3-dimensional surface mesh points."""
-        num_points_u, num_points_w = self._get_num_points()
-        distribution_u, distribution_w = self.mesh_distributions
+    @staticmethod
+    def _generate_mesh_points(mesh) -> NDArray3xNxN[np.float64]:
+        """Generates mesh points"""
+        path = mesh["path"]
+        num_points_u, num_points_w = mesh["num_points"]
+        distribution_u, distribution_w = mesh["distributions"]
         ufn = distribution_u.get_dist_fn()
         wfn = distribution_w.get_dist_fn()
         mp = np.zeros((3, num_points_u, num_points_w))
         for i, u in enumerate(np.linspace(0, 1, num=num_points_u, endpoint=True)):
             for j, w in enumerate(np.linspace(0, 1, num=num_points_w, endpoint=True)):
-                mp[:, i, j] = self.surface_fn(ufn(u), wfn(w))
+                mp[:, i, j] = path(ufn(u), wfn(w))
         return mp
+
+    @staticmethod
+    def _generate_panels(
+        mesh_points: NDArray3xNxN[np.float64], flipped_normal: bool
+    ) -> list[list[float]]:
+        """Returns list of quadrilateral panels.
+
+        Each panel is defined as a list of 12 floating numbers,
+        representing the xyz coordinates of the four panel vertices:
+        panel = [x0, y0, z0, x1, y1, z1, x2, y2, z2, x3, y3, z3]
+        """
+        panels = []
+        mp = mesh_points
+        for j in range(0, mp.shape[2] - 1):
+            for i in range(0, mp.shape[1] - 1):
+                xyz1 = mp[:, i, j]
+                xyz2 = mp[:, i + 1, j]
+                xyz3 = mp[:, i + 1, j + 1]
+                xyz4 = mp[:, i, j + 1]
+                if flipped_normal:
+                    xyz1, xyz2, xyz3, xyz4 = xyz4, xyz3, xyz2, xyz1
+                panels.append(
+                    [
+                        xyz1[0],
+                        xyz1[1],
+                        xyz1[2],
+                        xyz2[0],
+                        xyz2[1],
+                        xyz2[2],
+                        xyz3[0],
+                        xyz3[1],
+                        xyz3[2],
+                        xyz4[0],
+                        xyz4[1],
+                        xyz4[2],
+                    ]
+                )
+        return panels
+
+    def get_panels(self):
+        """Loops through mesh_surfaces and returns generated panels"""
+        panels = []
+        for data in self.surfaces:
+            mesh_points = self._generate_mesh_points(data)
+            surface_panels = self._generate_panels(mesh_points, data["flipped_normal"])
+            panels += surface_panels
+        return panels

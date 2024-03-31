@@ -21,7 +21,6 @@ class CoonsPatch(Surface):
     def __init__(self, curves: list[Curve] | tuple[Curve]):
         self._all_surfaces.append(self)
         self.curves = curves  # also sets self._flipped_curves
-        super().__init__()
 
     def __eq__(self, other):
         is_equal = True

@@ -23,7 +23,6 @@ class RuledSurface(Surface):
         self._all_surfaces.append(self)
         self.curve1 = curve1
         self.curve2 = curve2
-        super().__init__()
 
     def __eq__(self, other):
         return self.curve1 == other.curve1 and self.curve2 == other.curve2

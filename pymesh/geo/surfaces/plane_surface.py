@@ -30,7 +30,6 @@ class PlaneSurface(Surface):
         self.point0 = point0
         self.point1 = point1
         self.point2 = point2
-        super().__init__()
 
     def __eq__(self, other):
         return (

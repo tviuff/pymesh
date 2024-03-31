@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 from matplotlib import style as mpl_style
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-from pymesh.geo.surfaces.surface import Surface
+from pymesh.mesh.mesh_generator import MeshGenerator
 
 # ! fix typing of NDArray cases
 
@@ -14,7 +14,7 @@ from pymesh.geo.surfaces.surface import Surface
 class MeshViewer:
     """Plots surface panels and normals using matplotlib with seaborn-v0_8 style"""
 
-    def __init__(self, panel_normal_length: float = 1.0) -> None:
+    def __init__(self, mesh: MeshGenerator, panel_normal_length: float = 1.0) -> None:
         plt.close("all")
         mpl_style.use("seaborn-v0_8")
         fig = plt.figure()
@@ -26,6 +26,8 @@ class MeshViewer:
         self._panel_normal_length = panel_normal_length
         self._ax = ax
         self.xyzlim = np.array([1, 1, 1])
+        self.panels = mesh.get_panels()
+        self._add_panels(include_normals=True)
 
     def get_ax(self):
         return self._ax
@@ -43,6 +45,38 @@ class MeshViewer:
         if not isinstance(value, np.ndarray):
             raise TypeError("xyzlim must be of type 'ndarray'")
         self._xyzlim = np.ceil(value)
+
+    def _add_panels(
+        self,
+        include_normals: bool = False,
+        include_vertex_annotation: bool = False,
+        facecolor: str = "#0072BD",
+        edgecolor: str = "black",
+        linewidth: float = 0.5,
+        alpha: float = 0.8,
+        normalcolor: str = "grey",
+    ) -> None:
+        """"""
+        ax = self.get_ax()
+        for panel in self.panels:
+            xyz = np.array([panel[0:3], panel[3:6], panel[6:9], panel[9:12]])
+            self.__update_axis_limits(xyz)
+            if include_vertex_annotation:
+                ax.scatter(xyz[:, 0], xyz[:, 1], xyz[:, 2], color="blue")
+                for i in range(0, xyz.shape[0]):
+                    ax.text(xyz[i, 0], xyz[i, 1], xyz[i, 2], f"{i+1}", color="k")
+            if include_normals:
+                self._plot_normals(panel, colors=normalcolor)
+            verts = [list(zip(panel[0::3], panel[1::3], panel[2::3]))]
+            ax.add_collection3d(
+                Poly3DCollection(
+                    verts,
+                    facecolors=facecolor,
+                    linewidths=linewidth,
+                    edgecolors=edgecolor,
+                    alpha=alpha,
+                )
+            )
 
     def __update_axis_limits(self, xyz):
         if isinstance(xyz, list):
@@ -65,83 +99,6 @@ class MeshViewer:
                 raise ValueError()
         else:
             raise ValueError()
-
-    def __validate_surface_selection(self, selection) -> None:
-        if not isinstance(selection, (tuple, list, Surface)):
-            raise TypeError(
-                "selection must be of type 'Surface' or a tuple or list of such"
-            )
-        if isinstance(selection, (list, tuple)):
-            for item in selection:
-                if not isinstance(item, Surface):
-                    raise TypeError(
-                        f"selection {type(selection).__name__} must only contain items of type 'Surface'"
-                    )
-
-    def __organize_surface_selection(self, selection) -> tuple[Surface]:
-        if isinstance(selection, list):
-            return tuple(selection)
-        if isinstance(selection, Surface):
-            return (selection,)
-        return selection
-
-    def add_curve_points(self, xyz: np.ndarray) -> None:
-        """Adds curve xyz points to plot"""
-        ax = self.get_ax()
-        ax.scatter(xyz[:, 0], xyz[:, 1], xyz[:, 2], color="blue")
-        self.__update_axis_limits(xyz)
-
-    def add_mesh_points(self, surfaces) -> None:
-        self.__validate_surface_selection(surfaces)
-        surfaces = self.__organize_surface_selection(surfaces)
-        ax = self.get_ax()
-        for surface in surfaces:
-            xyz = surface.mesh_points
-            self.__update_axis_limits(xyz)
-            for i in range(0, xyz.shape[1]):
-                for j in range(0, xyz.shape[2]):
-                    ax.scatter(xyz[0, i, j], xyz[1, i, j], xyz[2, i, j], color="blue")
-
-    def add_panels(
-        self,
-        surfaces: Surface | list[Surface] | tuple[Surface],
-        restricted_panels: list[int] = None,
-        include_normals: bool = False,
-        include_vertex_annotation: bool = False,
-        facecolor: str = "#0072BD",
-        edgecolor: str = "black",
-        linewidth: float = 0.5,
-        alpha: float = 0.8,
-        normalcolor: str = "grey",
-    ) -> None:
-        """"""
-        if restricted_panels is None:
-            restricted_panels = []
-        self.__validate_surface_selection(surfaces)
-        surfaces = self.__organize_surface_selection(surfaces)
-        ax = self.get_ax()
-        for surface in surfaces:
-            for pno, panel in enumerate(surface.panels):
-                if pno in restricted_panels:
-                    continue
-                xyz = np.array([panel[0:3], panel[3:6], panel[6:9], panel[9:12]])
-                self.__update_axis_limits(xyz)
-                if include_vertex_annotation:
-                    ax.scatter(xyz[:, 0], xyz[:, 1], xyz[:, 2], color="blue")
-                    for i in range(0, xyz.shape[0]):
-                        ax.text(xyz[i, 0], xyz[i, 1], xyz[i, 2], f"{i+1}", color="k")
-                if include_normals:
-                    self._plot_normals(panel, colors=normalcolor)
-                verts = [list(zip(panel[0::3], panel[1::3], panel[2::3]))]
-                ax.add_collection3d(
-                    Poly3DCollection(
-                        verts,
-                        facecolors=facecolor,
-                        linewidths=linewidth,
-                        edgecolors=edgecolor,
-                        alpha=alpha,
-                    )
-                )
 
     def _plot_normals(self, panel: list, colors: str) -> None:
         ax = self.get_ax()

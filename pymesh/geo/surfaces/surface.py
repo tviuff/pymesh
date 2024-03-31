@@ -6,42 +6,18 @@ from typing import Self
 
 import numpy as np
 
-from pymesh.mesh.mesh_generator import MeshGenerator
-from pymesh.typing import NDArray3, NDArray3xNxN
+from pymesh.typing import NDArray3
 
 
 class Surface(ABC):
     """Surface abstract class"""
 
-    __normal_is_flipped: bool = False
-    _all_surfaces: list = []  # to contain every surface type instanciated
-
-    def __init__(self):
-        self._set_mesh_generator(
-            MeshGenerator(self.get_path(), self.get_max_lengths()), force=True
-        )
+    _all_surfaces: list = []
+    _is_normal_flipped: bool = False
 
     @property
-    def mesher(self) -> MeshGenerator:
-        """Used for setting mesh properties"""
-        return self._mesher
-
-    @mesher.setter
-    def mesher(self, value) -> None:
-        if not isinstance(value, MeshGenerator):
-            raise TypeError(f"Expected {value!r} to be an instance of MeshGenerator")
-        self._mesher = value
-
-    def _set_mesh_generator(self, mesher: MeshGenerator, force=False):
-        """Sets a surface mesh generator if force=True"""
-        if force:
-            if not isinstance(mesher, MeshGenerator):
-                raise TypeError(
-                    f"Expected {mesher!r} to an instance of {MeshGenerator!r}"
-                )
-            self._mesher = mesher
-        else:
-            raise AttributeError("Not possible to set a mesher attribute")
+    def is_normal_flipped(self) -> bool:
+        return self._is_normal_flipped
 
     @classmethod
     def get_all_surfaces(cls) -> list:
@@ -50,7 +26,7 @@ class Surface(ABC):
 
     def flip_normal(self) -> None:
         """Flips surface normal"""
-        self.__normal_is_flipped = not self.__normal_is_flipped
+        self._is_normal_flipped = not self._is_normal_flipped
 
     @abstractmethod
     def copy(self) -> Self:
@@ -131,51 +107,3 @@ class Surface(ABC):
         boundary length along each of the u and w dimensions. Indices
         0 and 1 represent the u and w dimensions, respectively.
         """
-
-    @property
-    def mesh_points(self) -> NDArray3xNxN[np.float64]:
-        """Returns surface mesh points as a numpy ndarray.
-
-        Calling the numpy .shape property will return the tuple
-        (3, num_panels_u + 1, num_panels_w + 1), where 3 represents
-        the x, y and z coordinates. num_panels_u and num_panels_w
-        are the number of panels along each of the two surface
-        dimensions.
-        """
-        return self.mesher.generate_mesh_points()
-
-    @property
-    def panels(self) -> list[list[float]]:
-        """Returns list of quadrilateral panels.
-
-        Each panel is defined as a list of 12 floating numbers,
-        representing the xyz coordinates of the four panel vertices:
-        panel = [x0, y0, z0, x1, y1, z1, x2, y2, z2, x3, y3, z3]
-        """
-        panels = []
-        mp = self.mesh_points
-        for j in range(0, mp.shape[2] - 1):
-            for i in range(0, mp.shape[1] - 1):
-                xyz1 = mp[:, i, j]
-                xyz2 = mp[:, i + 1, j]
-                xyz3 = mp[:, i + 1, j + 1]
-                xyz4 = mp[:, i, j + 1]
-                if self.__normal_is_flipped:
-                    xyz1, xyz2, xyz3, xyz4 = xyz4, xyz3, xyz2, xyz1
-                panels.append(
-                    [
-                        xyz1[0],
-                        xyz1[1],
-                        xyz1[2],
-                        xyz2[0],
-                        xyz2[1],
-                        xyz2[2],
-                        xyz3[0],
-                        xyz3[1],
-                        xyz3[2],
-                        xyz4[0],
-                        xyz4[1],
-                        xyz4[2],
-                    ]
-                )
-        return panels

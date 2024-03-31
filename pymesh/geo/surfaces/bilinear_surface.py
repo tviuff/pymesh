@@ -33,7 +33,6 @@ class BilinearSurface(Surface):
         self.p10 = p10
         self.p11 = p11
         self.p01 = p01
-        super().__init__()
 
     def __eq__(self, other):
         return (
