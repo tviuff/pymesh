@@ -1,13 +1,16 @@
 """Mdule containing utility functions
 """
 
+import math
 import time
 from typing import Callable, TypeVar, ParamSpec
 
+import numpy as np
+
+from pymesh.typing import NDArray3
+
 T = TypeVar("T")
 P = ParamSpec("P")
-
-# ! validate_rotate_parameters not working properly !
 
 
 def copy_doc(wrapper: Callable[P, T]):
@@ -47,17 +50,64 @@ def time_it(func):
     return wrapper
 
 
-def validate_move_parameters(dx: int | float, dy: int | float, dz: int | float) -> None:
-    """Validates parameters for the move method"""
-    for val in (dx, dy, dz):
+def rotate_point_xyz(
+    x: int | float,
+    y: int | float,
+    z: int | float,
+    angle: int | float,
+    a: int | float,
+    b: int | float,
+    c: int | float,
+    x0: int | float,
+    y0: int | float,
+    z0: int | float,
+) -> NDArray3:
+    """Rotates point around an axis.
+
+    angle: defined in radians with poitive diriction being
+    counter-clockwise, based on the right-hand rule.
+    a, b, c: axis vector direction.
+    x0, y0, z0: axis base, default is origin of coordinate system.
+
+    Implementation based on https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula.
+    """
+    for val in (x, y, z, angle, a, b, c, x0, y0, z0):
         if not isinstance(val, (int, float)):
-            raise TypeError(f"Expected {val!r} to be an int or float")
+            raise TypeError(f"Expected {val!r} to be int or float")
+    xyz = np.array([x, y, z])
+    xyz0 = np.array([x0, y0, z0])
+    abc = np.array([a, b, c])
+    avec = abc / math.sqrt(np.sum(abc**2))
+    pvec = xyz - xyz0
+    part1 = pvec * math.cos(angle)
+    part2 = np.cross(avec, pvec) * math.sin(angle)
+    part3 = avec * np.dot(avec, pvec) * (1 - math.cos(angle))
+    return xyz0 + part1 + part2 + part3
 
 
-def validate_rotate_parameters(axis, angle: int | float) -> None:
-    """Validates parameters for the rotate method"""
-    if not isinstance(angle, (int, float)):
-        raise TypeError(f"Expected {angle!r} to be an int or float")
+def mirror_point_xyz(x, y, z, a, b, c, x0, y0, z0) -> NDArray3:
+    """Mirrors point in a plane.
+
+    Plane is defined by a normal vector (a, b, c) and a point (x0, y0, z0).
+    By default x0 = 0.0, y0 = 0.0 and z0 = 0.0.
+
+    Implementation based on https://math.stackexchange.com/questions/3927881/reflection-over-planes-in-3d.
+    """
+    for val in (a, b, c, x0, y0, z0):
+        if not isinstance(val, (int, float)):
+            raise TypeError(f"Expected {val!r} to be int or float")
+    xyz = np.array([x, y, z])
+    xyz0 = np.array([x0, y0, z0])
+    abc = np.array([a, b, c])
+    a, b, c = abc / math.sqrt(np.sum(abc**2))
+    transformation_matrix = np.array(
+        [
+            [1 - 2 * a * a, -2 * a * b, -2 * a * c],
+            [-2 * a * b, 1 - 2 * b * b, -2 * b * c],
+            [-2 * a * c, -2 * b * c, 1 - 2 * c * c],
+        ]
+    )
+    return transformation_matrix.dot(xyz - xyz0) + xyz0
 
 
 def validate_curve_path_parameters(u: int | float, flip: bool = False) -> float:

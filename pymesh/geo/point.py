@@ -7,7 +7,7 @@ import numpy as np
 
 from pymesh.descriptors import AsNumber
 from pymesh.typing import NDArray3
-from pymesh.utils import validate_move_parameters, validate_rotate_parameters
+from pymesh.utils import rotate_point_xyz, mirror_point_xyz
 
 
 class Point:
@@ -48,7 +48,9 @@ class Point:
         return Point(self.x, self.y, self.z)
 
     def move(self, dx: int | float, dy: int | float, dz: int | float) -> Self:
-        validate_move_parameters(dx, dy, dz)
+        for val in (dx, dy, dz):
+            if not isinstance(val, (int, float)):
+                raise TypeError(f"Expected {val!r} to be an int or float")
         self.x += float(dx)
         self.y += float(dy)
         self.z += float(dz)
@@ -71,22 +73,26 @@ class Point:
         a, b, c: axis vector direction.
         x0, y0, z0: axis base, default is origin of coordinate system.
         """
-        for val in (angle, a, b, c, x0, y0, z0):
-            if not isinstance(val, (int, float)):
-                raise TypeError(f"Expected {val!r} to be int or float")
-        a, b, c = float(a), float(b), float(c)
-        length = math.sqrt(a**2 + b**2 + c**2)
-        a, b, c = a / length, b / length, c / length
-        x0, y0, z0 = float(x0), float(y0), float(z0)
-        pvec = np.array([self.x - x0, self.y - y0, self.z - z0])
-        avec = np.array([a, b, c])
-        xyz0 = np.array([x0, y0, z0])
-        part1 = pvec * math.cos(angle)
-        part2 = np.cross(avec, pvec) * math.sin(angle)
-        part3 = avec * np.dot(avec, pvec) * (1 - math.cos(angle))
-        xyz_rotated = xyz0 + part1 + part2 + part3
-        xyz_diff = xyz_rotated - self.xyz
-        return self.move(xyz_diff[0], xyz_diff[1], xyz_diff[2])
+        self.x, self.y, self.z = rotate_point_xyz(
+            self.x, self.y, self.z, angle, a, b, c, x0, y0, z0
+        )
+        return self
+        # for val in (angle, a, b, c, x0, y0, z0):
+        #     if not isinstance(val, (int, float)):
+        #         raise TypeError(f"Expected {val!r} to be int or float")
+        # a, b, c = float(a), float(b), float(c)
+        # length = math.sqrt(a**2 + b**2 + c**2)
+        # a, b, c = a / length, b / length, c / length
+        # x0, y0, z0 = float(x0), float(y0), float(z0)
+        # pvec = np.array([self.x - x0, self.y - y0, self.z - z0])
+        # avec = np.array([a, b, c])
+        # xyz0 = np.array([x0, y0, z0])
+        # part1 = pvec * math.cos(angle)
+        # part2 = np.cross(avec, pvec) * math.sin(angle)
+        # part3 = avec * np.dot(avec, pvec) * (1 - math.cos(angle))
+        # xyz_rotated = xyz0 + part1 + part2 + part3
+        # dx, dy, dz = xyz_rotated - self.xyz
+        # return self.move(dx, dy, dz)
 
     def mirror(
         self,
@@ -102,25 +108,29 @@ class Point:
         Plane is defined by a normal vector (a, b, c) and a point (x0, y0, z0).
         By default x0 = 0.0, y0 = 0.0 and z0 = 0.0.
         """
-        for val in (a, b, c, x0, y0, z0):
-            if not isinstance(val, (int, float)):
-                raise TypeError(f"Expected {val!r} to be int or float")
-        a, b, c = float(a), float(b), float(c)
-        length = math.sqrt(a**2 + b**2 + c**2)
-        a, b, c = a / length, b / length, c / length
-        x0, y0, z0 = float(x0), float(y0), float(z0)
-        transformation_matrix = np.array(
-            [
-                [1 - 2 * a * a, -2 * a * b, -2 * a * c],
-                [-2 * a * b, 1 - 2 * b * b, -2 * b * c],
-                [-2 * a * c, -2 * b * c, 1 - 2 * c * c],
-            ]
+        self.x, self.y, self.z = mirror_point_xyz(
+            self.x, self.y, self.z, a, b, c, x0, y0, z0
         )
-        xyz0 = np.array([x0, y0, z0])
-        dxyz = self.xyz - xyz0
-        dxyz_mirror = transformation_matrix.dot(dxyz)
-        dx, dy, dz = dxyz_mirror - self.xyz + xyz0
-        return self.move(dx, dy, dz)
+        return self
+        # for val in (a, b, c, x0, y0, z0):
+        #     if not isinstance(val, (int, float)):
+        #         raise TypeError(f"Expected {val!r} to be int or float")
+        # a, b, c = float(a), float(b), float(c)
+        # length = math.sqrt(a**2 + b**2 + c**2)
+        # a, b, c = a / length, b / length, c / length
+        # x0, y0, z0 = float(x0), float(y0), float(z0)
+        # transformation_matrix = np.array(
+        #     [
+        #         [1 - 2 * a * a, -2 * a * b, -2 * a * c],
+        #         [-2 * a * b, 1 - 2 * b * b, -2 * b * c],
+        #         [-2 * a * c, -2 * b * c, 1 - 2 * c * c],
+        #     ]
+        # )
+        # xyz0 = np.array([x0, y0, z0])
+        # dxyz = self.xyz - xyz0
+        # dxyz_mirror = transformation_matrix.dot(dxyz)
+        # dx, dy, dz = dxyz_mirror - self.xyz + xyz0
+        # return self.move(dx, dy, dz)
 
     def get_distance_to(self, point: Self) -> float:
         """Returns the shortest distance between point instance and another point"""

@@ -7,7 +7,6 @@ import numpy as np
 from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.point import Point
 from pymesh.typing import NDArray3
-from pymesh.utils import validate_move_parameters, validate_rotate_parameters
 
 
 # ! add vector math operations for easy use in the rest of the code
@@ -32,7 +31,6 @@ class Vector3D:
         return Vector3D(self.start.copy(), self.end.copy())
 
     def move(self, dx: int | float, dy: int | float, dz: int | float) -> Self:
-        validate_move_parameters(dx, dy, dz)
         self.start.move(dx, dy, dz)
         self.end.move(dx, dy, dz)
         return self

@@ -8,10 +8,7 @@ from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.point import Point
 from pymesh.typing import NDArray3
-from pymesh.utils import (
-    validate_move_parameters,
-    validate_curve_path_parameters,
-)
+from pymesh.utils import validate_curve_path_parameters
 
 
 TOLERANCE = 0.000001
@@ -62,7 +59,6 @@ class Arc3P(Curve):
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
     ) -> Self:
-        validate_move_parameters(dx, dy, dz)
         self.centre.move(dx, dy, dz)
         self.start.move(dx, dy, dz)
         self.end.move(dx, dy, dz)

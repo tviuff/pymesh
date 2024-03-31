@@ -6,7 +6,6 @@ from typing import Self
 
 import numpy as np
 
-from pymesh.geo.vector3d import Vector3D
 from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.typing import NDArray3, NDArray3xNxN
 
