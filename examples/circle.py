@@ -4,7 +4,7 @@ import sys, os
 
 sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
-from pymesh import Point, Line, Arc3P, CoonsPatch, LinearDistribution, MeshViewer
+from pymesh import Point, Line, Arc3P, CoonsPatch, MeshViewer
 
 # Points forming an inner rectangle in the circle
 point_ctr = Point(0, 0, 0)
@@ -32,9 +32,8 @@ line5 = Line(point_bl_ext, point_bl)
 line6 = Line(point_br_ext, point_br)
 line7 = Arc3P(point_ctr, point_bl_ext, point_br_ext)
 surface2 = CoonsPatch([line7, line1, line5, line6])
-surface2.panel_density_u = 7
-surface2.panel_density_w = 2
-surface2.boundary_distribution_w = LinearDistribution()
+surface2.mesher.set_u_parameters(panel_density=7)
+surface2.mesher.set_w_parameters(panel_density=2)
 surface2.flip_normal()
 
 # Top semi-circle and surface patch

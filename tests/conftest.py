@@ -5,7 +5,7 @@ import math
 import pytest
 import numpy as np
 
-from pymesh import Point, Vector3D, Line
+from pymesh import Point, Line
 
 
 @pytest.fixture

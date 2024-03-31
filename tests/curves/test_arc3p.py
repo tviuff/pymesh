@@ -86,7 +86,7 @@ def test_angle(curve1: Arc3P) -> None:
 
 def test_cross_product(point1: Point, point2: Point, point3: Point) -> None:
     curve = Arc3P(point1, point2, point3)
-    assert isinstance(curve.cross_product, ndarray)  #! should be Vector3D
+    assert isinstance(curve.cross_product, ndarray)
     cross_product_calc = np.cross(point2.xyz - point1.xyz, point3.xyz - point1.xyz)
     assert np.all(curve.cross_product == cross_product_calc)
     curve.inverse_sector = True
@@ -95,7 +95,7 @@ def test_cross_product(point1: Point, point2: Point, point3: Point) -> None:
 
 def test_plane_unit_normal(point1: Point, point2: Point, point3: Point) -> None:
     curve = Arc3P(point1, point2, point3)
-    assert isinstance(curve.plane_unit_normal, ndarray)  #! should be Vector3D
+    assert isinstance(curve.plane_unit_normal, ndarray)
     calc_cross_product = np.cross(point2.xyz - point1.xyz, point3.xyz - point1.xyz)
     calc_plane_unit_normal = calc_cross_product / np.sqrt(np.sum(calc_cross_product**2))
     assert np.all(curve.plane_unit_normal == calc_plane_unit_normal)

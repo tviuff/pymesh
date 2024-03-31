@@ -8,13 +8,12 @@ The `pymesh` package handles basic geometry and facilitates the creation of 3-di
 
 The package is based on object-oriented programming and the user will be interacting with the following classes when building the geometry:
 
-- Auxiliary geometry items:
+- Point:
     - `Point(x, y, z)` creates a point in 3-dimentional space
-    - `Vector3D(Point, Point)` creates a 3-dimentional vector
 - Curves:
     - `Line(Point, Point)` creates a straight line between two points
     - `Arc3P(Point, Point, Point)` creates a circular arc defined by a center point, a starting point and an ending point
-    - `ArcPVA(Point, Vector3D, angle)` creates a circular arc based on a point swept by an angle around a vector axis
+    - `ArcPVA(Point, angle, a, b, c, x0, y0, z0)` creates a circular arc based on a point swept by an angle around a vector defined by (a, b, c, x0, y0, z0).
 - Surfaces:
     - `CoonsPatch([Curve, Curve, Curve, Curve])` creates a 3-dimensional surface using four boundary curves
     - `PlaneSurface(Point, Point, Point)` creates a plane surface based on three points

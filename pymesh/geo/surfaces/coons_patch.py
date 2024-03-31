@@ -66,7 +66,6 @@ class CoonsPatch(Surface):
                 initial_selection[index].start,
                 initial_selection[index].end,
             )
-            print(ref_point, next_curve_points)
             if ref_point == next_curve_points[0] or ref_point == next_curve_points[1]:
                 if np.all(ref_point == next_curve_points[0]):
                     # next curve has matching starting point

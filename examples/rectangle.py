@@ -8,15 +8,9 @@ sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
 import math
 from pathlib import Path
-from pymesh import (
-    Point,
-    Vector3D,
-    Line,
-    CoonsPatch,
-    ExponentialDistribution,
-    MeshViewer,
-    GDFWriter,
-)
+from pymesh import Point, Line, CoonsPatch
+from pymesh import ExponentialDistribution
+from pymesh import MeshViewer, GDFWriter
 
 point1 = Point(0, 0, 0)
 point2 = Point(1, 0, 0)
@@ -50,5 +44,5 @@ viewer = MeshViewer(panel_normal_length=0.5)  # specify panel normal length
 viewer.add_panels(surface_selection, include_normals=True)  # include panel normals
 viewer.show()  # plot selected surface panels
 
-writer = GDFWriter()
-writer.write(surface_selection, filename=Path("output", "rectangle.gdf"))
+# writer = GDFWriter()
+# writer.write(surface_selection, filename=Path("output", "rectangle.gdf"))

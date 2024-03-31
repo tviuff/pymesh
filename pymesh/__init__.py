@@ -2,7 +2,6 @@
 """
 
 from pymesh.geo.point import Point
-from pymesh.geo.vector3d import Vector3D
 from pymesh.geo.curves.arc3p import Arc3P
 from pymesh.geo.curves.arcpva import ArcPVA
 from pymesh.geo.curves.line import Line

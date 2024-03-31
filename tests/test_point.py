@@ -5,7 +5,7 @@ import math
 import numpy as np
 import pytest
 
-from pymesh import Point, Vector3D
+from pymesh import Point
 
 
 def test_init(dx, dy, dz) -> None:

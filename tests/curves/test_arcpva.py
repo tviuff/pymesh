@@ -5,7 +5,7 @@ import math
 import numpy as np
 import pytest
 
-from pymesh import Point, Vector3D, ArcPVA
+from pymesh import Point, ArcPVA
 
 
 @pytest.fixture
