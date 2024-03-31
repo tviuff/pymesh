@@ -1,7 +1,8 @@
 """Module containing mesh distribution classes"""
 
-import math
 from abc import ABC, abstractmethod
+import math
+from typing import Self
 
 from pymesh.descriptors import AsNumber
 
@@ -24,6 +25,10 @@ class MeshDistribution(ABC):
         if not isinstance(value, bool):
             raise TypeError("flip_direction must be of type 'bool'")
         self._flip_direction = value
+
+    @abstractmethod
+    def copy(self) -> Self:
+        """Returns a copy of self"""
 
     @abstractmethod
     def get_dist_fn(self, flip_direction: bool):
@@ -62,6 +67,9 @@ class LinearDistribution(MeshDistribution):
     def __init__(self, flip_direction: bool = False):
         super().__init__(flip_direction=flip_direction)
 
+    def copy(self) -> Self:
+        return LinearDistribution(self.flip_direction)
+
     def get_dist_fn(self):
         flip = True if self.flip_direction else False  # breaks ref to self
 
@@ -80,6 +88,9 @@ class CosineDistribution(MeshDistribution):
 
     def __init__(self, flip_direction: bool = False):
         super().__init__(flip_direction=flip_direction)
+
+    def copy(self) -> Self:
+        return CosineDistribution(self.flip_direction)
 
     def get_dist_fn(self):
         flip = True if self.flip_direction else False  # breaks ref to self
@@ -103,6 +114,9 @@ class ExponentialDistribution(MeshDistribution):
         super().__init__(flip_direction=flip_direction)
         self.ratio = ratio
 
+    def copy(self) -> Self:
+        return ExponentialDistribution(self.ratio, self.flip_direction)
+
     def get_dist_fn(self):
         flip = True if self.flip_direction else False  # breaks ref to self
 
@@ -124,6 +138,9 @@ class PowerDistribution(MeshDistribution):
     def __init__(self, power: int | float = 1.0, flip_direction: bool = False):
         super().__init__(flip_direction=flip_direction)
         self.power = power
+
+    def copy(self) -> Self:
+        return PowerDistribution(self.power, self.flip_direction)
 
     def get_dist_fn(self):
         flip = True if self.flip_direction else False  # breaks ref to self
