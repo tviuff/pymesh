@@ -123,15 +123,6 @@ auto-generated using the pymesh package
 ...
 ```
 
-## Example files
-
-The `/examples` folder contain various code use examples of the package. Noteworthy example files are:
-
-- [Ruled Surface Example](/examples/ruled_surface.py)
-- [Swept Surface Example](/examples/swept_surface.py)
-- [Bilinear Surface Example](/examples/bilinear_surface.py)
-- [Vertical Cylinder Example](/examples/vertical_cylinder.py)
-
 ## Acknowledgements
 
 The various surface algorithms are based on lectures 48 and 49 from the [Lecture Series on Computer Aided Design](https://www.youtube.com/playlist?list=PLC3EE33F27CF14A06) by Dr. Anoop Chawla and P.V. Madhusudan Rao at the Department of Mechanical Engineering, IIT Delhi.
@@ -140,14 +131,4 @@ The `ArcPVA` curve path algotihm (re-used in the `rotate` method) allows for rot
 
 The `mirror` method returns a mirror image of the object, mirrored in a plane defined by a point and a normal vector. The implementation is based on code by [Jean Marie](https://math.stackexchange.com/questions/3927881/reflection-over-planes-in-3d).
 
-## Other resources
-
-- The [Seven Rules](https://cbea.ms/git-commit/#seven-rules) of a great Git Commit message:
-    1. Separate subject from body with a blank line
-    1. Limit the subject line to 50 characters
-    1. Capitalize the subject line
-    1. Do not end the subject line with a period
-    1. Use the imperative mood in the subject line, i.e. "Clean your room"
-    1. Wrap the body at 72 characters
-    1. Use the body to explain what and why vs. how
-- [Markdown Guide](https://www.markdownguide.org/basic-syntax/#overview)
+During work on the `pymesh` package, inspiration and guidance has come from various sources. Notable parties are [ArjanCodes](https://arjancodes.com/) and [Corey Schafer](https://www.youtube.com/@coreyms).
