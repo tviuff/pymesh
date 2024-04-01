@@ -1,4 +1,4 @@
-"""Circle panel example"""
+"""Cylinder example"""
 
 import sys, os
 
