@@ -2,7 +2,7 @@
 
 import sys, os
 
-sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
+sys.path.append(os.path.abspath(os.path.join("..", "pymesh")))
 
 from pymesh import Point, Line, Arc3P, SweptSurface
 from pymesh import ExponentialDistribution

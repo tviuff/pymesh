@@ -25,9 +25,10 @@ class Surface(ABC):
         """Returns a list of all generated surfaces, independent of surface class name"""
         return tuple(cls._all_surfaces)
 
-    def flip_normal(self) -> None:
+    def flip_normal(self) -> Self:
         """Flips surface normal"""
         self._is_normal_flipped = not self._is_normal_flipped
+        return self
 
     @abstractmethod
     def copy(self) -> Self:
