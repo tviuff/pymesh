@@ -15,9 +15,16 @@ The package is based on object-oriented programming and the user will be interac
     - `Arc3P(Point, Point, Point)` creates a circular arc defined by a center point, a starting point and an ending point
     - `ArcPVA(Point, angle, a, b, c, x0, y0, z0)` creates a circular arc based on a point swept by an angle around a vector defined by (a, b, c, x0, y0, z0).
 - Surfaces:
-    - `CoonsPatch([Curve, Curve, Curve, Curve])` creates a 3-dimensional surface using four boundary curves
-    - `PlaneSurface(Point, Point, Point)` creates a plane surface based on three points
-    - `SweptSurface(Curve, Curve)` creates a surface by sweeping a curve along the path of another
+    - `PlaneSurface(Point, Point, Point)` creates a plane surface based on three corner points.
+    - `BilinearSurface(Point, Point, Point, Point)` creates a bilinear surface based on four corner points.
+    - `RuledSurface(Curve, Curve)` creates a ruled surface based on two opposing boundary curves.
+    - `SweptSurface(Curve, Curve)` creates a surface by sweeping a curve along the path of another.
+    - `CoonsPatch([Curve, Curve, Curve, Curve])` creates a surface using four boundary curves.
+- Mesh:
+    - `mesh = MeshGenerator()` initializes the mesh and adds surfaces to it using `.mesh.add_surface()`.
+    - `viewer = MeshViewer(mesh)` handles visualization of the mesh and shows the final plot using the method `viewer.show()`.
+- Output:
+    - `writer = GDFWriter(mesh)` handles writing mesh to a .gdf file using the method `writer.write()`.
 
 ### Building a simple geometry in Python
 
