@@ -99,7 +99,7 @@ viewer = MeshViewer(mesh)
 viewer.show()
 ```
 
-![](/images/rectangle.png "Visualization of rectangle surface panels using MeshViewer")
+![Visualization of cylinder surface panels and normals using MeshViewer](/images/cylinder.png "Visualization of cylinder surface panels and normals using MeshViewer")
 
 ### Writing to a geometric data file
 
