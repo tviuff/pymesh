@@ -20,8 +20,9 @@ The package is based on object-oriented programming and the user will be interac
     - `RuledSurface(Curve, Curve)` creates a ruled surface based on two opposing boundary curves.
     - `SweptSurface(Curve, Curve)` creates a surface by sweeping a curve along the path of another.
     - `CoonsPatch([Curve, Curve, Curve, Curve])` creates a surface using four boundary curves.
+    - Using any of the above Surface classes, all existing surfaces can be recalled using the class method `.get_all_surfaces()`.
 - Mesh:
-    - `mesh = MeshGenerator()` initializes the mesh and adds surfaces to it using `.mesh.add_surface()`.
+    - `mesh = MeshGenerator()` initializes the mesh and adds surfaces to it using `mesh.add_surface()`.
     - `viewer = MeshViewer(mesh)` handles visualization of the mesh and shows the final plot using the method `viewer.show()`.
 - Output:
     - `writer = GDFWriter(mesh)` handles writing mesh to a .gdf file using the method `writer.write()`.
