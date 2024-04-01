@@ -51,7 +51,7 @@ surface_cylinder = SweptSurface(circle, line)
 mesh.add_surface(
     surface_cylinder,
     density_u=0.2,  # float indicating panel length
-    density_w=20,  # int specifying numper of panels
+    density_w=4,  # int specifying numper of panels
     distribution_w=ExponentialDistribution(flip_direction=True),
 )
 

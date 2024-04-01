@@ -41,7 +41,7 @@ from pymesh import MeshViewer, GDFWriter
 
 DIAMETER = 2.0
 RATIO = 0.4
-DEPTH = 5
+DEPTH = 1
 
 # Create oOne quarter of the circle plate inner part
 point00 = Point(0, 0, -DEPTH)
@@ -77,7 +77,7 @@ surface_cylinder = SweptSurface(circle, line)
 mesh.add_surface(
     surface_cylinder,
     density_u=0.2,  # float indicating panel length
-    density_w=20,  # int specifying numper of panels
+    density_w=4,  # int specifying numper of panels
     distribution_w=ExponentialDistribution(flip_direction=True),
 )
 
@@ -118,7 +118,7 @@ Above code generates the following `/output/cylinder.gdf` output. For informatio
 auto-generated using the pymesh package
 1.000000 9.816000
 0 0
-752
+240
 +0.0000e+00 +2.0000e-01 -1.0000e+00 +2.0000e-01 +2.0000e-01 -1.0000e+00 +2.0000e-01 +0.0000e+00 -1.0000e+00 +0.0000e+00 +0.0000e+00 -1.0000e+00
 +2.0000e-01 +2.0000e-01 -1.0000e+00 +4.0000e-01 +2.0000e-01 -1.0000e+00 +4.0000e-01 +0.0000e+00 -1.0000e+00 +2.0000e-01 +0.0000e+00 -1.0000e+00
 +0.0000e+00 +4.0000e-01 -1.0000e+00 +2.0000e-01 +4.0000e-01 -1.0000e+00 +2.0000e-01 +2.0000e-01 -1.0000e+00 +0.0000e+00 +2.0000e-01 -1.0000e+00
