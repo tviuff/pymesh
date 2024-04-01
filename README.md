@@ -20,9 +20,14 @@ The package is based on object-oriented programming and the user will be interac
     - `RuledSurface(Curve, Curve)` creates a ruled surface based on two opposing boundary curves.
     - `SweptSurface(Curve, Curve)` creates a surface by sweeping a curve along the path of another.
     - `CoonsPatch([Curve, Curve, Curve, Curve])` creates a surface using four boundary curves.
-    - Using any of the above Surface classes, all existing surfaces can be recalled using the class method `.get_all_surfaces()`.
+    - Using any of the above Surface classes, all existing surfaces can be recalled using the class method `.get_all_surfaces()` and each surface can be copied, moved, rotated, mirrored and flipped using the `.copy()`, `.move()`, `.rotate()`, `.mirror()`, `.flip_normal()` methods.
 - Mesh:
     - `mesh = MeshGenerator()` initializes the mesh and adds surfaces to it using `mesh.add_surface()`.
+    - Mesh boundary curve distribution options:
+        - `LinearDistribution()` creates a linear mesh distribution.
+        - `CosineDistribution()` creates a distribution based on the cosine function.
+        - `ExponentialDistribution()` creates distribution based on the exponential function.
+        - `PowerDistribution()` creates a distribution basd on the power law.
     - `viewer = MeshViewer(mesh)` handles visualization of the mesh and shows the final plot using the method `viewer.show()`.
 - Output:
     - `writer = GDFWriter(mesh)` handles writing mesh to a .gdf file using the method `writer.write()`.
