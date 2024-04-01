@@ -17,7 +17,7 @@ DIAMETER = 2.0
 RATIO = 0.4
 DEPTH = 1
 
-# Create oOne quarter of the circle plate inner part
+# Create one quarter of the circle plate inner part
 point00 = Point(0, 0, -DEPTH)
 point10 = Point(RATIO * DIAMETER / 2, 0, -DEPTH)
 point01 = Point(0, RATIO * DIAMETER / 2, -DEPTH)
