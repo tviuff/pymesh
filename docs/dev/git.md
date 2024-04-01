@@ -35,12 +35,12 @@ git branch -a
 ## GIT Cheat Sheet
 
 ```
-git status						See status between  working directory, staged and last commit
-    -s							Same as git status but showing only two-column info (left=staged, right=working directory) with A and M for added and modified:
+git status                      # see status between  working directory, staged and last commit
+    -s                          # same as git status but showing only two-column info (left=staged, right=working directory) with A and M for added and modified:
                                     M  readme
                                     M config
                                     the file 'readme' is modified and staged, while 'config' is modified but not staged
-git add							“add precisely this content to the next commit” rather than “add this file to the project”
+git add                         “add precisely this content to the next commit” rather than “add this file to the project”
 git diff						Compares staged files to last commit
     --staged					Compares working directory to staged files
 git commit -a -m "message"	    commits all modified files in the working directory (-a) and ads a commit message (-m)
