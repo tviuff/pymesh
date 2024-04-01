@@ -4,6 +4,7 @@ from pathlib import Path
 import os
 
 from pymesh.geo.surfaces.surface import Surface
+from pymesh.mesh.mesh_generator import MeshGenerator
 
 # ! fix typing of NDArray cases
 
@@ -20,19 +21,21 @@ class GDFWriter:
 
     def __init__(
         self,
+        mesh: MeshGenerator,
         ulen: float = 1.0,
         grav: float = 9.816,
         isx: bool = False,
         isy: bool = False,
         header: str = None,
     ) -> None:
-        if header is None:
-            header = "auto-generated using the pygdf package"
-        self.header = header
+        self.panels = mesh.get_panels()
         self.ulen = ulen
         self.grav = grav
         self.isx = isx
         self.isy = isy
+        if header is None:
+            header = "auto-generated using the pymesh package"
+        self.header = header
 
     @property
     def header(self) -> str:
@@ -90,26 +93,21 @@ class GDFWriter:
             raise TypeError("isy must be of type 'bool'")
         self._isy = value
 
-    def write(self, surfaces: Surface | list[Surface] | tuple[Surface], filename: Path):
+    def write(self, filename: Path):
         """Writes surface panels to file"""
         self.__validate_filename(filename)
-        self.__validate_content(surfaces)
-        surfaces = self.__organize_content(surfaces)
         with open(filename, "w+", encoding="utf-8") as file:
             file.write(f"{self.header}\n")
             file.write(f"{self.ulen:f} {self.grav:f}\n")
             file.write(f"{self.isx:.0f} {self.isy:.0f}\n")
-            npan = sum(
-                [len([panel for panel in surface.panels]) for surface in surfaces]
-            )
+            npan = len(self.panels)
             file.write(f"{npan:.0f}\n")
-            for surface in surfaces:
-                for panel in surface.panels:
-                    txt = ""
-                    for i, coord in enumerate(panel):
-                        txt_space = "" if i == 0 else " "
-                        txt += f"{txt_space}{coord:+.4e}"
-                    file.write(f"{txt}\n")
+            for panel in self.panels:
+                txt = ""
+                for i, coord in enumerate(panel):
+                    txt_space = "" if i == 0 else " "
+                    txt += f"{txt_space}{coord:+.4e}"
+                file.write(f"{txt}\n")
 
     def __validate_filename(self, filename: Path) -> None:
         if not isinstance(filename, Path):
@@ -121,22 +119,3 @@ class GDFWriter:
         _, extension = os.path.splitext(filename)
         extension = extension.lower()
         return extension == ".gdf"
-
-    def __validate_content(self, content) -> None:
-        if not isinstance(content, (tuple, list, Surface)):
-            raise TypeError(
-                "content must be of type 'Surface' or a tuple or list of such"
-            )
-        if isinstance(content, (list, tuple)):
-            for item in content:
-                if not isinstance(item, Surface):
-                    raise TypeError(
-                        f"content {type(content).__name__} must contain items of type 'Surface'"
-                    )
-
-    def __organize_content(self, content) -> tuple[Surface]:
-        if isinstance(content, list):
-            return tuple(content)
-        if isinstance(content, Surface):
-            return (content,)
-        return content

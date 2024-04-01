@@ -5,8 +5,10 @@ import sys, os
 sys.path.append(os.path.abspath(os.path.join("..", "pygdf")))
 
 import math
+from pathlib import Path
+
 from pymesh import Point, Line, Arc3P, ArcPVA, PlaneSurface, RuledSurface, SweptSurface
-from pymesh import MeshGenerator, MeshViewer
+from pymesh import MeshGenerator, MeshViewer, GDFWriter
 
 DIAMETER = 2.0
 RATIO = 0.4
@@ -51,3 +53,6 @@ mesh.add_surface(surface_cylinder, density_u=0.2, density_w=0.2)
 if __name__ == "__main__":
     viewer = MeshViewer(mesh)
     viewer.show()
+
+    writer = GDFWriter(mesh)
+    writer.write(filename=Path("output", "cylinder.gdf"))
