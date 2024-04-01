@@ -49,6 +49,5 @@ surface_cylinder = SweptSurface(circle, circle_line)
 mesh.add_surface(surface_cylinder, density_u=0.2, density_w=0.2)
 
 if __name__ == "__main__":
-    viewer = MeshViewer(mesh, panel_normal_length=0.2)
-    viewer.ax.set(xlim=(-2, 2), ylim=(-2, 2), zlim=(-6, 0))
+    viewer = MeshViewer(mesh)
     viewer.show()
