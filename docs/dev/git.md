@@ -14,7 +14,7 @@ The [Seven Rules](https://cbea.ms/git-commit/#seven-rules) of a great Git Commit
 
 ## Standard workflow using branches
 
-```Shell
+```PowerShell
 git switch -c <new-branch>
 git push -u origin <new-branch>
 git branch -a
