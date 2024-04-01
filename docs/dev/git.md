@@ -14,7 +14,7 @@ The [Seven Rules](https://cbea.ms/git-commit/#seven-rules) of a great Git Commit
 
 ## Standard workflow using branches
 
-```Bash
+```Shell
 git switch -c <new-branch>
 git push -u origin <new-branch>
 git branch -a
@@ -34,6 +34,6 @@ git branch -a
 
 ## GIT Cheat Sheet
 
-```Bash
+```Shell
 git status  # see status between working directory, staged and last commit
 ```
