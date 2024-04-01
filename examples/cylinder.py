@@ -15,7 +15,7 @@ from pymesh import MeshViewer, GDFWriter
 
 DIAMETER = 2.0
 RATIO = 0.4
-DEPTH = 5
+DEPTH = 1
 
 # Create oOne quarter of the circle plate inner part
 point00 = Point(0, 0, -DEPTH)
