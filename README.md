@@ -4,33 +4,36 @@ The `pymesh` package handles basic geometry and facilitates the creation of 3-di
 
 > *Sections on installation coming soon.*
 
-## Generating, inspecting and writing 3-dimesional surface panels to a .gdf file
+## Creating surface panels and the geometric data file
 
 The package is based on object-oriented programming and the user will be interacting with the following classes when building the geometry:
 
 - Point:
-    - `Point(x, y, z)` creates a point in 3-dimentional space
+    - `Point(x, y, z)` creates a point in 3-dimensional space.
 - Curves:
-    - `Line(Point, Point)` creates a straight line between two points
-    - `Arc3P(Point, Point, Point)` creates a circular arc defined by a center point, a starting point and an ending point
-    - `ArcPVA(Point, angle, a, b, c, x0, y0, z0)` creates a circular arc based on a point swept by an angle around a vector defined by (a, b, c, x0, y0, z0).
+    - `Line(Point, Point)` creates a straight line between two points.
+    - `Arc3P(Point, Point, Point)` creates a circular arc defined by a center point, a starting point and an ending point.
+    - `ArcPVA(Point, angle, a, b, c, x0, y0, z0)` creates a circular arc based on a point swept by an angle around a vector defined by the starting point (x0, y0, z0) and the dimensions (a, b, c).
 - Surfaces:
     - `PlaneSurface(Point, Point, Point)` creates a plane surface based on three corner points.
     - `BilinearSurface(Point, Point, Point, Point)` creates a bilinear surface based on four corner points.
     - `RuledSurface(Curve, Curve)` creates a ruled surface based on two opposing boundary curves.
     - `SweptSurface(Curve, Curve)` creates a surface by sweeping a curve along the path of another.
     - `CoonsPatch([Curve, Curve, Curve, Curve])` creates a surface using four boundary curves.
-    - Using any of the above Surface classes, all existing surfaces can be recalled using the class method `.get_all_surfaces()` and each surface can be copied, moved, rotated, mirrored and flipped using the `.copy()`, `.move()`, `.rotate()`, `.mirror()`, `.flip_normal()` methods.
+    - Using any of the above Surface classes, all existing surfaces can be re-called using the class method `get_all_surfaces` and each surface can be copied, moved, rotated, mirrored and flipped using the `copy`, `move`, `rotate`, `mirror` and `flip_normal` methods.
 - Mesh:
-    - `mesh = MeshGenerator()` initializes the mesh and adds surfaces to it using `mesh.add_surface()`.
-    - Mesh boundary curve distribution options:
-        - `LinearDistribution()` creates a linear mesh distribution.
-        - `CosineDistribution()` creates a distribution based on the cosine function.
-        - `ExponentialDistribution()` creates distribution based on the exponential function.
-        - `PowerDistribution()` creates a distribution basd on the power law.
-    - `viewer = MeshViewer(mesh)` handles visualization of the mesh and shows the final plot using the method `viewer.show()`.
-- Output:
-    - `writer = GDFWriter(mesh)` handles writing mesh to a .gdf file using the method `writer.write()`.
+    - `mesh = MeshGenerator()` initializes the mesh.
+    - `mesh.add_surface(density_u, density_w, distribution_u, distribution_w)` adds a surface to the mesh with various `density` and `distribution` settings for the two surface dimensions `u` and `w`.
+        - The `density` option can be given as an `int` or a `float`, depeding on whether you want to specify the number of panels, or the largest penel length along the surface dimension.
+        - The `distribution` option specifies how the panel verticies are distributed along the dimension. The following options are available:
+            - `LinearDistribution()` used to specify a linear mesh distribution.
+            - `CosineDistribution()` used to specify a distribution based on the cosine function.
+            - `ExponentialDistribution()` used to specify a distribution based on the exponential function.
+            - `PowerDistribution()` used to specify a distribution basd on the power law.
+- Inspecting the mesh:
+    - `viewer = MeshViewer(mesh)` handles visualization of the mesh and shows the final plot using the method `show`.
+- Writing the mesh to a file:
+    - `writer = GDFWriter(mesh)` handles writing mesh to a .gdf file using the method `write`.
 
 ### Building a simple geometry in Python
 
@@ -140,8 +143,8 @@ auto-generated using the pymesh package
 
 The various surface algorithms are based on lectures 48 and 49 from the [Lecture Series on Computer Aided Design](https://www.youtube.com/playlist?list=PLC3EE33F27CF14A06) by Dr. Anoop Chawla and P.V. Madhusudan Rao at the Department of Mechanical Engineering, IIT Delhi.
 
-The `ArcPVA` curve path algotihm (re-used in the `rotate` method) allows for rotation of a point or vector around a given axis. The implementation is based on [WikiPedia](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula).
+The `ArcPVA` curve path algoithm (re-used in all the `rotate` method) allows for rotation of a vector around another. The implementation is based on [WikiPedia](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula).
 
 The `mirror` method returns a mirror image of the object, mirrored in a plane defined by a point and a normal vector. The implementation is based on code by [Jean Marie](https://math.stackexchange.com/questions/3927881/reflection-over-planes-in-3d).
 
-During work on the `pymesh` package, inspiration and guidance has come from various sources. Notable parties are [ArjanCodes](https://arjancodes.com/) and [Corey Schafer](https://www.youtube.com/@coreyms).
+During work on the `pymesh` package, inspiration and guidance has come from various sources. Notable parties are [ArjanCodes](https://arjancodes.com/), [Corey Schafer](https://www.youtube.com/@coreyms) and [Michael Viuff](https://github.com/MichaelViuff).

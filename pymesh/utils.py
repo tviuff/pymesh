@@ -58,9 +58,9 @@ def rotate_point_xyz(
     a: int | float,
     b: int | float,
     c: int | float,
-    x0: int | float,
-    y0: int | float,
-    z0: int | float,
+    x0: int | float = 0.0,
+    y0: int | float = 0.0,
+    z0: int | float = 0.0,
 ) -> NDArray3:
     """Rotates point around an axis.
 
@@ -85,7 +85,17 @@ def rotate_point_xyz(
     return xyz0 + part1 + part2 + part3
 
 
-def mirror_point_xyz(x, y, z, a, b, c, x0, y0, z0) -> NDArray3:
+def mirror_point_xyz(
+    x: int | float,
+    y: int | float,
+    z: int | float,
+    a: int | float,
+    b: int | float,
+    c: int | float,
+    x0: int | float = 0.0,
+    y0: int | float = 0.0,
+    z0: int | float = 0.0,
+) -> NDArray3:
     """Mirrors point in a plane.
 
     Plane is defined by a normal vector (a, b, c) and a point (x0, y0, z0).
@@ -93,7 +103,7 @@ def mirror_point_xyz(x, y, z, a, b, c, x0, y0, z0) -> NDArray3:
 
     Implementation based on https://math.stackexchange.com/questions/3927881/reflection-over-planes-in-3d.
     """
-    for val in (a, b, c, x0, y0, z0):
+    for val in (x, y, z, a, b, c, x0, y0, z0):
         if not isinstance(val, (int, float)):
             raise TypeError(f"Expected {val!r} to be int or float")
     xyz = np.array([x, y, z])
