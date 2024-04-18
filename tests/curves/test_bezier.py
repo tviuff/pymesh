@@ -1,8 +1,5 @@
 """Module for testing the Bezier class functionality"""
 
-import math
-
-import numpy as np
 import pytest
 
 from pymesh import Point, Bezier
@@ -24,5 +21,6 @@ def curve1(points) -> Bezier:
 def test_path(assert_curve_path_rounded, points) -> None:
     decimals = 4
     curve = Bezier(points)
-    assert_curve_path_rounded(curve, 0, False, points[0].xyz, decimals)
-    assert_curve_path_rounded(curve, 1, False, points[-1].xyz, decimals)
+    assert_curve_path_rounded(curve, 0.0, False, points[0].xyz, decimals)
+    assert_curve_path_rounded(curve, 0.5, False, points[1].xyz, decimals)
+    assert_curve_path_rounded(curve, 1.0, False, points[2].xyz, decimals)

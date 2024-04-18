@@ -7,17 +7,19 @@ import numpy as np
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.point import Point
 from pymesh.typing import NDArray3
+from pymesh.descriptors import AsContainerOf
 from pymesh.utils import validate_curve_path_parameters
 
 
 class Bezier(Curve):
     """Bezier curve generated from n points in space"""
 
-    def __init__(self, points: list[Point]):
-        self.points = points
-        for point in self.points:
-            if not isinstance(point, Point):
-                raise TypeError(f"{point!r} is not an instance of Point")
+    points = AsContainerOf(tuple, Point, min_length=2)
+
+    def __init__(self, points: list[Point] | tuple[Point]):
+        if not isinstance(points, (tuple, list)):
+            raise TypeError(f"{points!r} is not a tuple or list")
+        self.points = tuple(points)
         self.start = self.points[0]
         self.end = self.points[-1]
 
@@ -50,7 +52,7 @@ class Bezier(Curve):
         u = validate_curve_path_parameters(u, flip)
 
         def bezier(points, t):
-            """Recursive bezier definition.
+            """Recursive bezier curve definition.
 
             Based on https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Constructing_B%C3%A9zier_curves
             """
