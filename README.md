@@ -66,7 +66,7 @@ line10 = Line(point10, point11)
 arc10 = Arc3P(point00, point10c, point11c)
 RuledSurface(line10, arc10).copy().mirror(a=-1, b=-1, c=0).flip_normal()
 
-# Cretae a full circular plate by copying and rotating existing surfaces
+# Create a full circular plate by copying and rotating existing surfaces
 for surface in RuledSurface.get_all_surfaces():
     for angle in (90, 180, 270):
         surface.copy().rotate(angle * math.pi / 180, a=0, b=0, c=1)
