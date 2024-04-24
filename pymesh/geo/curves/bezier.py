@@ -10,6 +10,8 @@ from pymesh.typing import NDArray3
 from pymesh.descriptors import AsContainerOf
 from pymesh.utils import validate_curve_path_parameters
 
+NUM_POINTS = 1000
+
 
 class Bezier(Curve):
     """Bezier curve generated from n points in space"""
@@ -20,8 +22,6 @@ class Bezier(Curve):
         if not isinstance(points, (tuple, list)):
             raise TypeError(f"{points!r} is not a tuple or list")
         self.points = tuple(points)
-        self.start = self.points[0]
-        self.end = self.points[-1]
 
     def __eq__(self, other):
         is_equal = True
@@ -45,8 +45,24 @@ class Bezier(Curve):
         return txt
 
     @property
+    def start(self) -> NDArray3[np.float64]:
+        x, y, z = self.path(0)
+        return Point(x, y, z)
+
+    @property
+    def end(self) -> NDArray3[np.float64]:
+        x, y, z = self.path(1)
+        return Point(x, y, z)
+
+    @property
     def length(self) -> float:
-        raise NotImplementedError()
+        distance = 0.0
+        xyz0 = self.path(0)
+        for u in np.linspace(start=0, stop=1, num=NUM_POINTS, endpoint=True):
+            xyz1 = self.path(u)
+            distance += np.sqrt(np.sum((xyz1 - xyz0) ** 2))
+            xyz0 = xyz1
+        return distance
 
     def path(self, u: int | float, flip: bool = False) -> NDArray3[np.float64]:
         u = validate_curve_path_parameters(u, flip)
@@ -71,12 +87,8 @@ class Bezier(Curve):
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
     ) -> Self:
-        points = []
         for point in self.points:
-            points.append(point.move(dx, dy, dz))
-        self.points = points
-        self.start = points[0]
-        self.end = points[-1]
+            point.move(dx, dy, dz)
         return self
 
     def rotate(
@@ -89,8 +101,8 @@ class Bezier(Curve):
         y0: int | float = 0.0,
         z0: int | float = 0.0,
     ) -> Self:
-        self.start.rotate(angle, a, b, c, x0, y0, z0)
-        self.end.rotate(angle, a, b, c, x0, y0, z0)
+        for point in self.points:
+            point.rotate(angle, a, b, c, x0, y0, z0)
         return self
 
     def mirror(
@@ -102,6 +114,6 @@ class Bezier(Curve):
         y0: int | float = 0.0,
         z0: int | float = 0.0,
     ) -> Self:
-        self.start.mirror(a, b, c, x0, y0, z0)
-        self.end.mirror(a, b, c, x0, y0, z0)
+        for point in self.points:
+            point.mirror(a, b, c, x0, y0, z0)
         return self
