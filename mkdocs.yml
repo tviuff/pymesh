@@ -1,22 +1,7 @@
 site_name: PyMesh
 site_url: https://tviuff.github.io/pymesh
 theme:
-  name: material
-  features:
-    - navigation.tabs
-    - navigation.sections
-    - toc.integrate
-    - navigation.top
-    - search.suggest
-    - search.highlight
-    - content.tabs.link
-    - content.code.annotation
-    - content.code.copy
-  language: en
-  palette:
-    - scheme: slate
-      primary: teal
-      accent: lime
+  name: readthedocs
 
 plugins:
   - mkdocstrings
@@ -24,20 +9,4 @@ plugins:
 
 nav:
   - Overview: index.md
-
-markdown_extensions:
-  - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.inlinehilite
-  - pymdownx.snippets
-  - admonition
-  - pymdownx.arithmatex:
-      generic: true
-  - footnotes
-  - pymdownx.details
-  - pymdownx.superfences
-  - pymdownx.mark
-  - attr_list
-
-copyright: |
-  &copy; 2024 <a href="https://github.com/tviuff"  target="_blank" rel="noopener">tviuff</a>
+  - Overview: about.md
