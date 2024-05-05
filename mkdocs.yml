@@ -1,5 +1,5 @@
 site_name: PyMesh
-#site_url: https://tviuff.github.io/pymesh
+site_url: https://tviuff.github.io/pymesh
 theme:
   name: material
   features:
@@ -28,6 +28,7 @@ theme:
       accent: lime
 
 plugins:
+  - mkdocstrings
   - search
 
 markdown_extensions:
