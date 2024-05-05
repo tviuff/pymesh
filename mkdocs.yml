@@ -1,5 +1,5 @@
-site_name: PyMesh #Karen og Emil og Anker
-#site_url: https://james-willett.github.io/mkdocs-material-youtube-tutorial/
+site_name: PyMesh
+site_url: https://tviuff.github.io/pymesh
 theme:
   name: material
   features:
@@ -19,7 +19,11 @@ theme:
       accent: lime
 
 plugins:
+  - mkdocstrings
   - search
+
+nav:
+  - Overview: index.md
 
 markdown_extensions:
   - pymdownx.highlight:
