@@ -2,4 +2,4 @@
 
 ## Curve Docs
 
-::: pymesh.curves.curve
+::: pymesh.geo.curves.curve
