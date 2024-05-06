@@ -1,17 +1,7 @@
-# Home
+# Welcome to The PyMesh Docs
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+The [PyMesh](https://github.com/tviuff/pymesh) package handles basic geometry and facilitates the creation of 3-dimensional surface panels. These surface panels are converted into a low-order geometric data file for import and use in [WAMIT](https://www.wamit.com/).
 
-## Commands
+## Package at a Glance
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        about.md  # Other markdown pages, images and other files.
+...

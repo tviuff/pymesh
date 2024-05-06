@@ -1,4 +1,4 @@
-site_name: PyMesh
+site_name: PyMesh Docs
 site_url: https://tviuff.github.io/pymesh
 theme:
   name: material
@@ -46,6 +46,7 @@ markdown_extensions:
   - attr_list
 
 nav:
-  - Home: index.md
+  - Welcome: index.md
+  - Documentation: documentation.md
+  - How-To Guides: how-to-guides.md
   - About: about.md
-  - References: references.md
