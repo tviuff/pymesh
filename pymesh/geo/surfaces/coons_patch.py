@@ -1,5 +1,3 @@
-"""Module containing the CoonsPatch class"""
-
 from typing import Self
 
 import numpy as np
@@ -14,11 +12,25 @@ from pymesh.utils import validate_surface_path_parameters
 
 
 class CoonsPatch(Surface):
-    """Coons patch class taking a selection of four curves
-    and creates mesh points for generating panels.
+    """Creates a Coons Patch from a selection of four curves.
+
+    Attributes:
+        curves (list[Curve] | tuple[Curve]): List or tuple with four
+            Curve instances defining the surface boundary curves.
     """
 
     def __init__(self, curves: list[Curve] | tuple[Curve]):
+        """Initialization method.
+
+        Args:
+            curves: List or tuple with four Curve instances
+                defining the surface boundary curves.
+
+        Raises:
+            TypeError: If curves is not of type list or tuple.
+            ValueError: If length of curves is not equal to four.
+            TypeError: If elements of curves are not of type Curve.
+        """
         self._all_surfaces.append(self)
         self.curves = curves  # also sets self._flipped_curves
 

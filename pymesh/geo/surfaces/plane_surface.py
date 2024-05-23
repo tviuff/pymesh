@@ -1,5 +1,3 @@
-"""Module containing the PlaneSurface class"""
-
 from typing import Self
 
 import numpy as np
@@ -12,8 +10,16 @@ from pymesh.utils import validate_surface_path_parameters
 
 
 class PlaneSurface(Surface):
-    """Creates a plane surface based on three points in space
-    and creates mesh points for generating panels.
+    """Creates a plane surface based on three points in space.
+
+    The plane is drawn from the vectors |point1 - point0| and
+    |point2 - point0|, where point0 is a shared point between
+    the two vectors.
+
+    Attributes:
+        point0 (Point): Shared point between two plane defining vectors.
+        point1 (Point): Point defining the |point1-point0| vector.
+        point2 (Point): Point defining the |point2-point0| vector.
     """
 
     point0 = AsInstanceOf(Point)
@@ -21,10 +27,15 @@ class PlaneSurface(Surface):
     point2 = AsInstanceOf(Point)
 
     def __init__(self, point0: Point, point1: Point, point2: Point):
-        """Creates a plane surface from three points in space.
+        """Initialiation method.
 
-        The plane is drawn from the vectors |point1-poin0| and
-        |point2-poin0|, where point0 is shared between the vectors.
+        Args:
+            point0: Shared point between two plane defining vectors.
+            point1: Point defining the |point1-point0| vector.
+            point2: Point defining the |point2-point0| vector.
+
+        Raises:
+            TypeError: If point0, point1 or point2 are not of type Point.
         """
         self._all_surfaces.append(self)
         self.point0 = point0

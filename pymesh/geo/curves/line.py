@@ -1,5 +1,3 @@
-"""Module containing the Line class"""
-
 from typing import Self
 
 import numpy as np
@@ -11,9 +9,21 @@ from pymesh.utils import validate_curve_path_parameters
 
 
 class Line(Curve):
-    """Line generated from two points in space"""
+    """Creates a straight line object, generated from two points in space.
+
+    For more information, see Curve documentation.
+    """
 
     def __init__(self, start: Point, end: Point):
+        """Initialization method.
+
+        Args:
+            start (Point): Line start point
+            end (Point): Line end point
+
+        Raises:
+            ValueError: If start and end points are the same.
+        """
         self.start = start
         self.end = end
         if start == end:

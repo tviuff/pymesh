@@ -1,6 +1,3 @@
-"""Module including the SweptSurface class
-"""
-
 from typing import Self
 
 import numpy as np
@@ -13,19 +10,25 @@ from pymesh.utils import validate_surface_path_parameters
 
 
 class SweptSurface(Surface):
-    """Creates a surface based on a curve swept by another
-    and creates mesh points for generating panels.
+    """Creates a swept surface from a curve and a sweeper curve.
+
+    Attributes:
+        curve (Curve): Curve defining the path to be swept.
+        sweeper (Curve): Curve defining the path curve is swept along.
     """
 
     curve = AsInstanceOf(Curve)
     sweeper = AsInstanceOf(Curve)
 
     def __init__(self, curve: Curve, sweeper: Curve):
-        """Creates a swept surface using a curve and a sweeper curve.
+        """Initialization method.
 
-        curve: defines the path to be swept
+        Args:
+            curve: Curve defining the path to be swept.
+            sweeper: Curve defining the path curve is swept along.
 
-        sweper: defines the path curve is swept along
+        Raises:
+            TypeError: If curve or sweeper are not of type Curve.
         """
         self._all_surfaces.append(self)
         self.curve = curve

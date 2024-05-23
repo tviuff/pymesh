@@ -1,52 +1,101 @@
 site_name: PyMesh Docs
+repo_url: https://github.com/tviuff/pymesh
 site_url: https://tviuff.github.io/pymesh
+
 theme:
-  name: material
   features:
     - navigation.tabs
-    - navigation.sections
-    - toc.integrate
-    - navigation.top
-    - search.suggest
-    - search.highlight
-    - content.tabs.link
-    - content.code.annotation
+    # - navigation.tracking
+    # - navigation.sections
+    # - navigation.indexes
+    - toc
     - content.code.copy
+    - content.code.select
+    - content.code.annotate
+  icon:
+      repo: fontawesome/brands/github
   language: en
+  name: material
   palette:
+    # Palette toggle for light mode
     - scheme: default
+      primary: indigo
+      accent: indigo
       toggle:
-        icon: material/toggle-switch-off-outline
+        icon: material/brightness-7
         name: Switch to dark mode
-      primary: teal
-      accent: purple
+    # Palette toggle for dark mode
     - scheme: slate
+      primary: indigo
+      accent: indigo
       toggle:
-        icon: material/toggle-switch
+        icon: material/brightness-4
         name: Switch to light mode
-      primary: teal
-      accent: lime
 
 plugins:
-  - mkdocstrings
+  #- awesome-pages
   - search
+  - autorefs
+  # AUTO GENERATE DOCUMENTATION FILES
+  # - gen-files:
+  #     scripts:
+  #     - docs/auto_docstring.py
+  #     - docs/gen_ref_pages.py
+  # - literate-nav:
+  #     nav_file: SUMMARY.md
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          paths: [.]
+          options:
+            members_order: source
+            separate_signature: true
+            # filters: ["!^_"]  # removes magic methods
+            docstring_options:
+              ignore_init_summary: false
+            merge_init_into_class: false
+  # - section-index
 
 markdown_extensions:
+  - admonition
+  - attr_list
+  - footnotes
+  - pymdownx.arithmatex:
+      generic: true
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
-  - pymdownx.snippets
-  - admonition
-  - pymdownx.arithmatex:
-      generic: true
-  - footnotes
   - pymdownx.details
-  - pymdownx.superfences
   - pymdownx.mark
-  - attr_list
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - toc:
+      permalink: "#"
+      baselevel: 1
+      separator: "-"
 
 nav:
   - Welcome: index.md
-  - Documentation: documentation.md
+  - Documentation:
+      - point.md
+      - Curves:
+        - curve.md
+        - line.md
+        - arc3p.md
+        - arcpva.md
+        - bezier.md
+      - Surfaces:
+        - surface.md
+        - plane_surface.md
+        - ruled_surface.md
+        - bilinear_surface.md
+        - swept_surface.md
+        - coons_patch.md
+      - Mesh:
+        - mesh_generator.md
+        - mesh_distributions.md
+      - Other:
+        - other.md
   - How-To Guides: how-to-guides.md
   - About: about.md

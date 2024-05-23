@@ -14,11 +14,25 @@ NUM_POINTS = 1000
 
 
 class Bezier(Curve):
-    """Bezier curve generated from n points in space"""
+    """Creates a bezier curve from a collection of three-dimensional points.
+
+    Attributes:
+        points (list[Point] | tuple[Point]): List or tuple of points.
+    """
 
     points = AsContainerOf(tuple, Point, min_length=2)
 
     def __init__(self, points: list[Point] | tuple[Point]):
+        """Initialization method.
+
+        Args:
+            points: List or tuple of points.
+
+        Raises:
+            TypeError: If points is not a list or tuple
+            ValueError: If points has less than two elements.
+            TypeError: If elements of points are not of type Point.
+        """
         if not isinstance(points, (tuple, list)):
             raise TypeError(f"{points!r} is not a tuple or list")
         self.points = tuple(points)

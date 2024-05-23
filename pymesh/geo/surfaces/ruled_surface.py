@@ -1,5 +1,3 @@
-"""Module containing the ruled RuledSurface class"""
-
 from typing import Self
 
 import numpy as np
@@ -12,14 +10,26 @@ from pymesh.utils import validate_surface_path_parameters
 
 
 class RuledSurface(Surface):
-    """Creates a ruled surface based on two curves
-    and creates mesh points for generating panels.
+    """Creates a ruled surface based on two opposing boundary curves.
+
+    Attributes:
+        curve1 (Curve): Curve defining one surface boundary.
+        curve2 (Curve): Curve defining opposing surface boundary.
     """
 
     curve1 = AsInstanceOf(Curve)
     curve2 = AsInstanceOf(Curve)
 
     def __init__(self, curve1: Curve, curve2: Curve):
+        """Initialization method.
+
+        Args:
+            curve1: Curve defining one surface boundary.
+            curve2: Curve defining opposing surface boundary.
+
+        Raises:
+            TypeError: If curve1 or curve2 are not of type Curve.
+        """
         self._all_surfaces.append(self)
         self.curve1 = curve1
         self.curve2 = curve2

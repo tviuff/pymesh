@@ -4,4 +4,7 @@ The [PyMesh](https://github.com/tviuff/pymesh) package handles basic geometry an
 
 ## Package at a Glance
 
-...
+```python
+def fn():
+    pass
+```

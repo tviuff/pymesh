@@ -1,8 +1,9 @@
 """Module containing the Arc3P class"""
 
 import math
-import numpy as np
 from typing import Self
+
+import numpy as np
 
 from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.curves.curve import Curve
@@ -15,9 +16,16 @@ TOLERANCE = 0.0001
 
 
 class Arc3P(Curve):
-    """Circular arc generated from 3 points in space.
+    """Creates an arc curve object, generated from three points in space.
 
-    Implementation based on: https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
+    Implementation based on [WikiPedia](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula).
+    For more information, see Curve documentation.
+
+    Args:
+        centre (Point): Arc center point
+        inverse_sector (bool): Specifies if to use the outer
+            (True) or inner (False) sector of the swept circle.
+            Defaults to False.
     """
 
     centre = AsInstanceOf(Point)
@@ -30,6 +38,22 @@ class Arc3P(Curve):
         end: Point,
         inverse_sector: bool = False,
     ):
+        """Initialization method.
+
+        Args:
+            centre: Arc center point
+            start: Arc start point
+            end: Arc end point
+            inverse_sector: Specifies if to use the outer (True)
+                or inner (False) sector of the swept circle.
+                Defaults to False.
+
+        Raises:
+            ValueError: If the start and end points are located
+                at different radii from the centre point.
+            ValueError: If cross product of the centre-to-start
+                and centre-to-end vectors is zero.
+        """
         self.centre = centre
         self.start = start
         self.end = end

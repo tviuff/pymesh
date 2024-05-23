@@ -1,8 +1,8 @@
 """Module containing the ArcPVA class"""
 
 import math
-import numpy as np
 from typing import Self
+import numpy as np
 
 from pymesh.descriptors import AsNumber
 from pymesh.geo.point import Point
@@ -16,8 +16,17 @@ from pymesh.utils import (
 
 
 class ArcPVA(Curve):
-    """Circular arc generated from a point, an axis of rotation and an angle (rad).
-    For more iformation, see https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula.
+    """Creates a circular arc based on a point, a vector axis of rotation and an angle.
+
+    Attributes:
+        angle (int | float): Angle in radians.
+            Positive direction defined as counter-clockwise, based on the right-hand rule.
+        a (int | float): Axis vector x direction.
+        b (int | float): Axis vector y direction.
+        c (int | float): Axis vector z direction.
+        x0 (int | float): Axis base x coordinate, default is zero.
+        y0 (int | float): Axis base y coordinate, default is zero.
+        z0 (int | float): Axis base z coordinate, default is zero.
     """
 
     angle = AsNumber(return_type=float)
@@ -39,12 +48,18 @@ class ArcPVA(Curve):
         y0: int | float = 0.0,
         z0: int | float = 0.0,
     ):
-        """Creates a circular arc based on a point, a vector and an angle.
+        """Initialization method.
 
-        start: point to rotate around the vector.
-        angle: counter-clockwise rotation angle in radians.
-        a, b, c: form the direction of the vector.
-        x0, y0, z0: forms the base of the vector.
+        Args:
+            start: Point being rotated around the vector.
+            angle: Angle in radians.
+                Positive direction defined as counter-clockwise, based on the right-hand rule.
+            a: Axis vector x direction.
+            b: Axis vector y direction.
+            c: Axis vector z direction.
+            x0: Axis base x coordinate, default is zero.
+            y0: Axis base y coordinate, default is zero.
+            z0: Axis base z coordinate, default is zero.
         """
         self.start = start
         self.angle = angle
@@ -85,6 +100,7 @@ class ArcPVA(Curve):
 
     @property
     def radius(self) -> float:
+        """Returns the arc radius."""
         xyz0 = np.array([self.x0, self.y0, self.z0])
         a = self.start.xyz - xyz0
         b = np.array([self.a, self.b, self.c])

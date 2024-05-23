@@ -1,5 +1,3 @@
-"""Module containing the BilinearSurface class"""
-
 from typing import Self
 
 import numpy as np
@@ -12,8 +10,17 @@ from pymesh.utils import validate_surface_path_parameters
 
 
 class BilinearSurface(Surface):
-    """Creates a bilinear surface based on four points in space
-    and creates mesh points for generating panels.
+    """Creates a bilinear surface from the points p00, p10, p11 and p01.
+
+    These four points represent the surface corners going counter-clockwise.
+    The first number represents the value of u, while the second number
+    represents the value of w.
+
+    Attributes:
+        p00 (Point): Bottom-left point (u=0, w=0).
+        p10 (Point): Bottom-right point (u=1, w=0).
+        p01 (Point): Top-left point (u=0, w=1).
+        p11 (Point): Top-right point (u=1, w=1).
     """
 
     p00 = AsInstanceOf(Point)
@@ -22,11 +29,16 @@ class BilinearSurface(Surface):
     p11 = AsInstanceOf(Point)
 
     def __init__(self, p00: Point, p10: Point, p11: Point, p01: Point):
-        """Creates a bilinear surface from the points p00, p10, p11 and p01.
+        """Initialization method.
 
-        These four points represent the surface corners going counter-clockwise.
-        The first number represents the value of u, while the second number
-        represents the value of w.
+        Args:
+            p00: Bottom-left point
+            p10: Bottom-right point
+            p01: Top-left point
+            p11: Top-right point
+
+        Raises:
+            TypeError: If p00, p10, p01 or p11 are not of type Point.
         """
         self._all_surfaces.append(self)
         self.p00 = p00

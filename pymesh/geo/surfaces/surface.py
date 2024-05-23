@@ -1,5 +1,3 @@
-"""Module containing the Surface class"""
-
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections.abc import Callable
@@ -11,7 +9,11 @@ from pymesh.typing import NDArray3
 
 
 class Surface(ABC):
-    """Surface abstract class"""
+    """Abstract base class used which all surface classes inherit from.
+
+    Attributes:
+        is_normal_flipped (bool): Specifies surface normal direction.
+    """
 
     _all_surfaces: list = []
     _is_normal_flipped: bool = False
@@ -22,7 +24,7 @@ class Surface(ABC):
 
     @classmethod
     def get_all_surfaces(cls) -> tuple[Surface]:
-        """Returns a list of all generated surfaces, independent of surface class name"""
+        """Returns a list of all generated surfaces, independent of surface class name."""
         return tuple(cls._all_surfaces)
 
     def flip_normal(self) -> Self:
@@ -32,13 +34,26 @@ class Surface(ABC):
 
     @abstractmethod
     def copy(self) -> Self:
-        """Returns a recursive copy of surface instance"""
+        """Returns a recursive copy of surface instance."""
 
     @abstractmethod
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
     ) -> Self:
-        """Moves the surface a given relative position"""
+        """Moves the surface a given relative position in space.
+
+        Args:
+            dx: Distance moved in the x-direction.
+            dy: Distance moved in the y-direction.
+            dz: Distance moved in the z-direction.
+
+        Returns:
+            (Surface): Surface with updated xyz coordinates.
+
+        Raises:
+            TypeError: If dx, dy or dz are not of type int or float.
+            ValueError: If dx, dy and dz are all zero.
+        """
 
     @abstractmethod
     def rotate(
@@ -51,12 +66,28 @@ class Surface(ABC):
         y0: int | float = 0.0,
         z0: int | float = 0.0,
     ) -> Self:
-        """Rotates the curve around an axis.
+        """Rotates surface around an axis.
 
-        angle: defined in radians with poitive diriction being
-        counter-clockwise, based on the right-hand rule.
-        a, b, c: axis vector direction.
-        x0, y0, z0: axis base, default is origin of coordinate system.
+        Implementation based on [WikiPedia](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula).
+
+        Args:
+            angle: Angle in radians.
+                Poitive direction defined as counter-clockwise, based on the right-hand rule.
+            a: Axis vector x direction.
+            b: Axis vector y direction.
+            c: Axis vector z direction.
+            x0: Axis base x coordinate
+                Default is zero.
+            y0: Axis base y coordinate
+                Default is zero.
+            z0: Axis base z coordinate
+                Default is zero.
+
+        Returns:
+            (Surface): Rotated surface instance.
+
+        Raises:
+            TypeError: If input value are not of type int or float.
         """
 
     @abstractmethod
@@ -71,8 +102,25 @@ class Surface(ABC):
     ) -> Self:
         """Mirrors surface in a plane.
 
-        Plane is defined by a normal vector (a, b, c) and a point (x0, y0, z0).
-        By default x0 = 0.0, y0 = 0.0 and z0 = 0.0.
+        Plane is defined by a plane normal vector (a, b, c) and a point (x0, y0, z0) in the plane.
+        Implementation based on formulation by [Jean Marie](https://math.stackexchange.com/questions/3927881/reflection-over-planes-in-3d).
+
+        Args:
+            a: Plane normal vector x dimension.
+            b: Plane normal vector y dimension.
+            c: Plane normal vector z dimension.
+            x0: Plane normal vector base x coordinate
+                Default is zero.
+            y0: Plane normal vector base y coordinate
+                Default is zero.
+            z0: Plane normal vector base z coordinate
+                Default is zero.
+
+        Returns:
+            (Surface): Mirrored surface instance.
+
+        Raises:
+            TypeError: If input value are not of type int or float.
         """
 
     def get_path(
@@ -85,22 +133,24 @@ class Surface(ABC):
     def path(
         self, u: int | float, w: int | float, uflip: bool = False, wflip: bool = False
     ) -> NDArray3[np.float64]:
-        """Surface path function that returns a point in physical space.
+        """Surface path function that converts two normalized inputs u and w to a physical xyz point on the surface.
 
-        u:
-        Normalized path parameter between 0 and 1
+        Args:
+            u: Normalized surface dimension path parameter between 0 and 1,
+                where 0 and 1 represents the start and end locations, respectively.
+            w: Normalized surface dimension path parameter between 0 and 1,
+                where 0 and 1 represents the start and end locations, respectively.
+            uflip: Defaults to False.
+                If True then u = (1 - u), i.e. the direction is flipped.
+            wflip: Defaults to False.
+                If True then w = (1 - w), i.e. the direction is flipped.
 
-        w:
-        Normalized path parameter between 0 and 1
+        Returns:
+            (NDArray3[float]): Numpy ndarray with shape (3,)
 
-        uflip:
-        Optional, if True then u = (1 - u), i.e. the direction is flipped
-
-        wflip:
-        Optional, if True then u = (1 - u), i.e. the direction is flipped
-
-        return:
-        u, w
+        Raises:
+            TypeError: If u or w are not of type int or float.
+            ValueError: If u or w are not part of the number set [0 1].
         """
 
     @abstractmethod
