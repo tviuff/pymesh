@@ -1,5 +1,3 @@
-# How-To Guides
-
 ## Creating panels for a vertical cylinder
 
 ```py linenums="1" title="cylinder.py"

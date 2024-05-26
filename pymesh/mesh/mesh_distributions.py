@@ -1,5 +1,3 @@
-"""Module containing mesh distribution classes"""
-
 from abc import ABC, abstractmethod
 import math
 from typing import Self
@@ -8,7 +6,7 @@ from pymesh.descriptors import AsNumber
 
 
 class MeshDistribution(ABC):
-    """Abstract mesh distribution class"""
+    """Abstract mesh distribution base class."""
 
     def __init__(self, flip_direction: bool = False):
         self.flip_direction = flip_direction

@@ -3,39 +3,59 @@ repo_url: https://github.com/tviuff/pymesh
 site_url: https://tviuff.github.io/pymesh
 
 theme:
+  name: material
+  language: en
   features:
     - navigation.tabs
-    # - navigation.tracking
-    # - navigation.sections
+    - navigation.top
+    # - navigation.expand
     # - navigation.indexes
-    - toc
     - content.code.copy
     - content.code.select
     - content.code.annotate
   icon:
       repo: fontawesome/brands/github
-  language: en
-  name: material
   palette:
-    # Palette toggle for light mode
-    - scheme: default
-      primary: indigo
-      accent: indigo
+
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
       toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    # Palette toggle for dark mode
-    - scheme: slate
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-4
+        icon: material/brightness-auto
         name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/lightbulb
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: purple
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to light mode
+
+extra:
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
 
 plugins:
   #- awesome-pages
   - search
-  - autorefs
+  - gen-files:
+      scripts:
+      - docs/gen_pages.py
   # AUTO GENERATE DOCUMENTATION FILES
   # - gen-files:
   #     scripts:
@@ -64,38 +84,56 @@ markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.highlight:
+      use_pygments: true
+      auto_title: false
+      linenums: true
+      linenums_style: pymdownx-inline
       anchor_linenums: true
+      line_spans: __span
   - pymdownx.inlinehilite
   - pymdownx.details
   - pymdownx.mark
   - pymdownx.snippets
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          # format: !!python/name:pymdownx.superfences.fence_code_format
   - toc:
       permalink: "#"
-      baselevel: 1
-      separator: "-"
+
+extra_javascript:
+  - javascripts/mathjax.js
 
 nav:
   - Welcome: index.md
   - Documentation:
-      - point.md
+      - pymesh/geo/Point.md
       - Curves:
-        - curve.md
-        - line.md
-        - arc3p.md
-        - arcpva.md
-        - bezier.md
+        - pymesh/geo/curves/Curve.md
+        - pymesh/geo/curves/Line.md
+        - pymesh/geo/curves/Arc3P.md
+        - pymesh/geo/curves/ArcPVA.md
+        - pymesh/geo/curves/Bezier.md
       - Surfaces:
-        - surface.md
-        - plane_surface.md
-        - ruled_surface.md
-        - bilinear_surface.md
-        - swept_surface.md
-        - coons_patch.md
+        - pymesh/geo/surfaces/Surface.md
+        - pymesh/geo/surfaces/PlaneSurface.md
+        - pymesh/geo/surfaces/RuledSurface.md
+        - pymesh/geo/surfaces/BilinearSurface.md
+        - pymesh/geo/surfaces/SweptSurface.md
+        - pymesh/geo/surfaces/CoonsPatch.md
       - Mesh:
-        - mesh_generator.md
-        - mesh_distributions.md
-      - Other:
-        - other.md
+        - pymesh/mesh/MeshGenerator.md
+        - MeshDistributions:
+          - pymesh/mesh/distributions/MeshDistribution.md
+          - pymesh/mesh/distributions/LinearDistribution.md
+          - pymesh/mesh/distributions/CosineDistribution.md
+          - pymesh/mesh/distributions/ExponentialDistribution.md
+          - pymesh/mesh/distributions/PowerDistribution.md
+        - pymesh/mesh/MeshViewer.md
+      - Writers:
+        - pymesh/GDFWriter.md
+      - pymesh/Utils.md
   - How-To Guides: how-to-guides.md
   - About: about.md
+  # - Test: foo.md

@@ -1,23 +1,9 @@
-# Geminum ipse bulla obliquat Aurora
+# Acknowledgements
 
-## Inponi terras exhalantur tu sitim obliquos terra
+The various surface algorithms are based on lectures 48 and 49 from the [Lecture Series on Computer Aided Design](https://www.youtube.com/playlist?list=PLC3EE33F27CF14A06) by Dr. Anoop Chawla and P.V. Madhusudan Rao at the Department of Mechanical Engineering, IIT Delhi.
 
-Moresque sub luminibus Pallas *ille genitoris* voluitque geminato tibi capillis
-Caenis saltu locorum Taurusque descendere exire. Fluens adulterium bisque,
-audentem it oborto qui *nunc natis*. Admovit verbisque datos dedit addat totum
-trepidus nympha, nec est. Tremiscens sibi in undis soporiferam *criminis*:
-dilata vidisset di similes, huic.
+The `ArcPVA` curve path algoithm (re-used in all the `rotate` method) allows for rotation of a vector around another. The implementation is based on [WikiPedia](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula).
 
-- Est summaque nam iubet putes utraque misso
-- Funduntque in
-- Cum alit
-- Alta qui fraudem iacent hoc
-- Precor Italis et nec in anhelitus tunc
+The `mirror` method returns a mirror image of the object, mirrored in a plane defined by a point and a normal vector. The implementation is based on code by [Jean Marie](https://math.stackexchange.com/questions/3927881/reflection-over-planes-in-3d).
 
-## Code blocks
-
-``` py linenums="1" hl_lines="2 3"
-def myfunc(num1, num2):
-    # Adds numbers together
-    return num1 + num2
-```
+During work on the `pymesh` package, inspiration and guidance has come from various sources. Notable parties are [ArjanCodes](https://arjancodes.com/), [Corey Schafer](https://www.youtube.com/@coreyms) and [Michael Viuff](https://github.com/MichaelViuff).

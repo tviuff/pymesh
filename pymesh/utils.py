@@ -36,7 +36,7 @@ def rotate_point_xyz(
             Default is origin of coordinate system.
 
     Returns:
-        NDArray3: Rotated point xyz coordinates
+        (NDArray3): Rotated point xyz coordinates
             given as a numpy array shaped (3,)
 
     Raises:

@@ -3,7 +3,6 @@
 from pathlib import Path
 import os
 
-from pymesh.geo.surfaces.surface import Surface
 from pymesh.mesh.mesh_generator import MeshGenerator
 
 # ! fix typing of NDArray cases
@@ -17,6 +16,13 @@ class GDFWriter:
     isx = False: The x = 0 plane is not a geometric plane of symmetry
     isy = True:  The y = 0 plane is a geometric plane of symmetry
     isy = False: The y = 0 plane is not a geometric plane of symmetry
+
+    Attributes:
+        ulen (float): unit length
+        grav (float): gravitational constant
+        isx (bool): symmetry in x=0
+        isy (bool): symmetry in y=0
+        header (str): header line in output file
     """
 
     def __init__(

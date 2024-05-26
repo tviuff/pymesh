@@ -1,5 +1,3 @@
-"""Module containing MeshGenerator class"""
-
 import numpy as np
 
 from pymesh.geo.surfaces.surface import Surface
@@ -9,7 +7,11 @@ from pymesh.typing import NDArray3xNxN
 
 
 class MeshGenerator:
-    """Surface mesh generator"""
+    """Mesh generator class.
+
+    Attributes:
+        surfaces: List of surface dictionaries with mesh information.
+    """
 
     surfaces: list = []
 
@@ -21,6 +23,19 @@ class MeshGenerator:
         distribution_u: MeshDistribution = LinearDistribution(),
         distribution_w: MeshDistribution = LinearDistribution(),
     ) -> None:
+        """Adds a surface to the mesh.
+
+        Args:
+            surface: Surface object to be added.
+            density_u: Panel density along the u dimension.
+                Integer values represent the number of panels,
+                while float values represent panel size.
+            density_w: Panel density along the w dimension.
+                Integer values represent the number of panels,
+                while float values represent panel size.
+            distribution_u: Distribution type along the u dimension.
+            distribution_w: Distribution type along the w dimension.
+        """
         length_u, length_w = surface.get_max_lengths()
         num_points_u = self.get_num_points(length_u, density_u)
         num_points_w = self.get_num_points(length_w, density_w)
@@ -33,8 +48,18 @@ class MeshGenerator:
         self.surfaces.append(data)
 
     @staticmethod
-    def get_num_points(length, density) -> tuple[int]:
-        """Returns number of points along a dimension"""
+    def get_num_points(length: float, density: int | float) -> int:
+        """Returns number of points along a dimension.
+
+        Args:
+            length: Lagest length of relevant surface boundary curves.
+            density: Panel density along the dimension.
+                Integer values represent the number of panels,
+                while float values represent panel size.
+
+        Returns:
+            num_points: Nummber of points needed along surface dimension.
+        """
         num_points = density + 1
         if isinstance(density, float):
             num_points = int(np.ceil(length / density) + 1)
@@ -92,8 +117,15 @@ class MeshGenerator:
                 )
         return panels
 
-    def get_panels(self):
-        """Loops through mesh_surfaces and returns generated panels"""
+    def get_panels(self) -> list[list[float]]:
+        """Loops through mesh_surfaces and returns generated panels.
+
+        Returns:
+            panels: List of quadrilateral panels.
+                Each panel is defined as a list of 12 floating numbers,
+                representing the xyz coordinates of the four panel vertices:
+                panel = [x0, y0, z0, x1, y1, z1, x2, y2, z2, x3, y3, z3].
+        """
         panels = []
         for data in self.surfaces:
             mesh_points = self._generate_mesh_points(data)
