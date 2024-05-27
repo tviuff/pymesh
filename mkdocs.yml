@@ -36,7 +36,7 @@ theme:
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       primary: teal
-      accent: purple
+      accent: amber
       toggle:
         icon: material/lightbulb-outline
         name: Switch to light mode
@@ -134,6 +134,7 @@ nav:
       - Writers:
         - pymesh/GDFWriter.md
       - pymesh/Utils.md
+      - pymesh/typing.md
   - How-To Guides: how-to-guides.md
   - About: about.md
   # - Test: foo.md

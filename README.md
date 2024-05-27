@@ -4,7 +4,7 @@ The `pymesh` package handles basic geometry and facilitates the creation of 3-di
 
 ## The PyMesh website
 
-Visit the [PyMesh](https://tviuff.github.io/pymesh/point/) website to learn more about the package and how to use it.
+Visit the [PyMesh](https://tviuff.github.io/pymesh/) website to learn more about the package and how to use it.
 
 ## Installation
 
