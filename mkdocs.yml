@@ -134,7 +134,7 @@ nav:
       - Writers:
         - pymesh/GDFWriter.md
       - pymesh/Utils.md
-      - pymesh/typing.md
+      - pymesh/Typing.md
+      - Auto-Docs: foo.md
   - How-To Guides: how-to-guides.md
   - About: about.md
-  # - Test: foo.md
