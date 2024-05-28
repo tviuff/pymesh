@@ -56,13 +56,9 @@ plugins:
   - gen-files:
       scripts:
       - docs/gen_pages.py
-  # AUTO GENERATE DOCUMENTATION FILES
-  # - gen-files:
-  #     scripts:
-  #     - docs/auto_docstring.py
-  #     - docs/gen_ref_pages.py
-  # - literate-nav:
-  #     nav_file: SUMMARY.md
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - section-index
   - mkdocstrings:
       default_handler: python
       handlers:
@@ -75,7 +71,6 @@ plugins:
             docstring_options:
               ignore_init_summary: false
             merge_init_into_class: false
-  # - section-index
 
 markdown_extensions:
   - admonition
@@ -101,40 +96,3 @@ markdown_extensions:
           # format: !!python/name:pymdownx.superfences.fence_code_format
   - toc:
       permalink: "#"
-
-extra_javascript:
-  - javascripts/mathjax.js
-
-nav:
-  - Welcome: index.md
-  - Documentation:
-      - pymesh/geo/Point.md
-      - Curves:
-        - pymesh/geo/curves/Curve.md
-        - pymesh/geo/curves/Line.md
-        - pymesh/geo/curves/Arc3P.md
-        - pymesh/geo/curves/ArcPVA.md
-        - pymesh/geo/curves/Bezier.md
-      - Surfaces:
-        - pymesh/geo/surfaces/Surface.md
-        - pymesh/geo/surfaces/PlaneSurface.md
-        - pymesh/geo/surfaces/RuledSurface.md
-        - pymesh/geo/surfaces/BilinearSurface.md
-        - pymesh/geo/surfaces/SweptSurface.md
-        - pymesh/geo/surfaces/CoonsPatch.md
-      - Mesh:
-        - pymesh/mesh/MeshGenerator.md
-        - MeshDistributions:
-          - pymesh/mesh/distributions/MeshDistribution.md
-          - pymesh/mesh/distributions/LinearDistribution.md
-          - pymesh/mesh/distributions/CosineDistribution.md
-          - pymesh/mesh/distributions/ExponentialDistribution.md
-          - pymesh/mesh/distributions/PowerDistribution.md
-        - pymesh/mesh/MeshViewer.md
-      - Writers:
-        - pymesh/GDFWriter.md
-      - pymesh/Utils.md
-      - pymesh/Typing.md
-      - Auto-Docs: foo.md
-  - How-To Guides: how-to-guides.md
-  - About: about.md

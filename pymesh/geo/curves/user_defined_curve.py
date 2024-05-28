@@ -1,14 +1,20 @@
 from collections.abc import Callable
 from typing import Self
+import copy
 
 import numpy as np
 
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.point import Point
 from pymesh.typing import NDArray3
-from pymesh.utils import validate_curve_path_parameters
+from pymesh.utils import (
+    validate_curve_path_parameters,
+    rotate_point_xyz,
+    mirror_point_xyz,
+)
 
 NUM_POINTS = 1000
+TOLERANCE = 1e-3
 
 # ! change from .path() to .get_path(), so we can create a path attribute
 # ! in this class __init__...
@@ -20,16 +26,25 @@ class UserDefinedCurve(Curve):
     For more information, see Curve documentation.
     """
 
-    def __init__(self, path: Callable[[float], tuple[float, float, float]]):
+    def __init__(self, path: Callable[[int | float], NDArray3[np.float64]]):
         """Initialization method.
 
         Args:
             path (Callable): User-defined curve path function,
                 that takes a float between 0 and 1 and returns
-                a tuple with three floats representing the x,
-                y and z values of the point on the path corresponding
-                to the input path ratio.
+                a numpy.ndarray with shape (3,) and elements
+                representing the x, y and z values of the point
+                on the path corresponding to the input path ratio.
         """
+        result = path(0)
+        if not isinstance(result, np.ndarray):
+            raise TypeError(
+                f"Expected path function to return a numpy ndarray, but got {result!r}"
+            )
+        if not result.shape == (3,):
+            raise TypeError(
+                f"Expected path function to return a numpy ndarray of shape (3,), but got {result.shape}"
+            )
         self._path = path
 
     def __eq__(self, other):
@@ -40,7 +55,7 @@ class UserDefinedCurve(Curve):
             for u in np.linspace(0, 1, num=NUM_POINTS, endpoint=True):
                 xyz1 = self.path(u)
                 xyz2 = other.path(u)
-                if xyz1 != xyz2:
+                if not np.isclose(xyz1, xyz2, atol=TOLERANCE).all():
                     is_equal = False
                     break
         return is_equal
@@ -53,12 +68,12 @@ class UserDefinedCurve(Curve):
         return txt
 
     @property
-    def start(self) -> NDArray3[np.float64]:
+    def start(self) -> Point:
         x, y, z = self.path(0)
         return Point(x, y, z)
 
     @property
-    def end(self) -> NDArray3[np.float64]:
+    def end(self) -> Point:
         x, y, z = self.path(1)
         return Point(x, y, z)
 
@@ -77,12 +92,18 @@ class UserDefinedCurve(Curve):
         return self._path(u)
 
     def copy(self) -> Self:
-        return UserDefinedCurve(self._path)
+        return UserDefinedCurve(copy.copy(self._path))
 
     def move(
         self, dx: int | float = 0.0, dy: int | float = 0.0, dz: int | float = 0.0
     ) -> Self:
-        raise NotImplementedError()
+        _path = copy.copy(self._path)
+
+        def moved_path(u):
+            return _path(u) + np.array([dx, dy, dz])
+
+        self._path = moved_path
+        return self
 
     def rotate(
         self,
@@ -94,7 +115,14 @@ class UserDefinedCurve(Curve):
         y0: int | float = 0.0,
         z0: int | float = 0.0,
     ) -> Self:
-        raise NotImplementedError()
+        _path = copy.copy(self._path)
+
+        def rotated_path(u):
+            x, y, z = _path(u)
+            return rotate_point_xyz(x, y, z, angle, a, b, c, x0, y0, z0)
+
+        self._path = rotated_path
+        return self
 
     def mirror(
         self,
@@ -105,4 +133,11 @@ class UserDefinedCurve(Curve):
         y0: int | float = 0.0,
         z0: int | float = 0.0,
     ) -> Self:
-        raise NotImplementedError()
+        _path = copy.copy(self._path)
+
+        def mirored_path(u):
+            x, y, z = _path(u)
+            return mirror_point_xyz(x, y, z, a, b, c, x0, y0, z0)
+
+        self._path = mirored_path
+        return self

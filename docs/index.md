@@ -12,7 +12,7 @@ To view the final mesh, a mesh viewer `viewer = MeshViewer(mesh)` is instanciate
 
 Finally, the product of the `PyMesh` package is to write the panel mesh geometry into a text file. For this purpose, the `GDFWriter` class is used to generate a low-order geometric data file with the extension `.gdf`.
 
-For more information the reader is refered to the [documentation](pymesh/geo/Point.md).
+For more information the reader is refered to the [documentation](doc-pages/Point.md).
 
 ### Building a simple geometry in Python
 
