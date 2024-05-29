@@ -20,8 +20,10 @@ jobs:
           path: .cache
       - run: pip install mkdocs
       - run: pip install mkdocs-material
+      - run: pip install mkdocs-gen-files
+      - run: pip install mkdocs-literate-nav
+      - run: pip install mkdocs-section-index
       - run: pip install mkdocstrings
       - run: pip install mkdocstrings-python
-      - run: pip install mkdocs-gen-files
       - run: pip install pillow cairosvg
       - run: mkdocs gh-deploy --force
