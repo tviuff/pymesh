@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 from matplotlib import style as mpl_style
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-from pymesh.other.typing import NDArray3
+from pymesh.typing import NDArray3
 from pymesh.mesh.mesh_generator import MeshGenerator
 
 

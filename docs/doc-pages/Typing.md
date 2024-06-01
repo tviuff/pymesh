@@ -1,1 +1,1 @@
-::: pymesh.other.typing
+::: pymesh.typing

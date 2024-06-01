@@ -2,11 +2,18 @@ from abc import ABC, abstractmethod
 import math
 from typing import Self
 
-from pymesh.other.descriptors import AsNumber
+from pymesh.descriptors import AsNumber
 
 
 class MeshDistribution(ABC):
-    """Abstract mesh distribution base class."""
+    """Abstract mesh distribution base class.
+
+    See also:
+        - [LinearDistribution][pymesh.mesh.mesh_distributions.LinearDistribution]
+        - [CosineDistribution][pymesh.mesh.mesh_distributions.CosineDistribution]
+        - [PowerDistribution][pymesh.mesh.mesh_distributions.PowerDistribution]
+        - [ExponentialDistribution][pymesh.mesh.mesh_distributions.ExponentialDistribution]
+    """
 
     def __init__(self, flip_direction: bool = False):
         self.flip_direction = flip_direction
@@ -60,6 +67,8 @@ class MeshDistribution(ABC):
 class LinearDistribution(MeshDistribution):
     """Linear path distribution class
     expression: fn(u) = u
+
+    For more information, see [MeshDistribution][pymesh.mesh.mesh_distributions.MeshDistribution].
     """
 
     def __init__(self, flip_direction: bool = False):
@@ -82,6 +91,8 @@ class LinearDistribution(MeshDistribution):
 class CosineDistribution(MeshDistribution):
     """Cosine path distribution class
     expression: fn(u) = cos[(u-1)*pi/2]
+
+    For more information, see [MeshDistribution][pymesh.mesh.mesh_distributions.MeshDistribution].
     """
 
     def __init__(self, flip_direction: bool = False):
@@ -104,6 +115,8 @@ class CosineDistribution(MeshDistribution):
 class ExponentialDistribution(MeshDistribution):
     """Exponential path distribution class
     expression: fn(u) = exp[ratio*u]
+
+    For more information, see [MeshDistribution][pymesh.mesh.mesh_distributions.MeshDistribution].
     """
 
     ratio = AsNumber(return_type=float)
@@ -129,6 +142,9 @@ class ExponentialDistribution(MeshDistribution):
 class PowerDistribution(MeshDistribution):
     """Power path distribution class
     expression: fn(u) = u**power
+    expression: fn(u) = u
+
+    For more information, see [MeshDistribution][pymesh.mesh.mesh_distributions.MeshDistribution].
     """
 
     power = AsNumber(return_type=float)

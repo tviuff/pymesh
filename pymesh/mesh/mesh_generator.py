@@ -3,7 +3,7 @@ import numpy as np
 from pymesh.geo.surfaces.surface import Surface
 
 from pymesh.mesh.mesh_distributions import MeshDistribution, LinearDistribution
-from pymesh.other.typing import NDArray3xNxN
+from pymesh.typing import NDArray3xNxN
 
 
 class MeshGenerator:
@@ -13,7 +13,22 @@ class MeshGenerator:
         surfaces: List of surface dictionaries with mesh information.
     """
 
-    surfaces: list = []
+    surfaces: list[dict] = []
+    """List of surface dictionaries with mesh information.
+
+    Each surface dictionary follows the structure:
+
+    .. code-block:: python3
+        surface = {
+            "path": Callable[[float], NDArray3],
+            "flipped_normal": bool,
+            "num_points": tuple[int],
+            "distributions": tuple[MeshDistribution],
+        }
+
+    Note:
+        Above code block works in Visual Studio Code.
+    """
 
     def add_surface(
         self,
@@ -35,6 +50,23 @@ class MeshGenerator:
                 while float values represent panel size.
             distribution_u: Distribution type along the u dimension.
             distribution_w: Distribution type along the w dimension.
+
+        Examples:
+            Initialize a mesh and add a surface with two panels (linearly distributed
+            by default) along the u dimension and a panel length of 0.1 units along
+            the w dimension. These panels are distributed exponentially.
+
+            >>> surface = PlaneSurface(Point(0, 0, 0), Point(1, 0, 0), Point(0, 1, 0))
+            >>> dist_exp = ExponentialDistribution()
+            >>> mesh = MeshGenerator()
+            >>> mesh.add_surface(surface, density_u=2, density_w=0.1, distribution_w=dist_exp)
+
+            The user is referred to [pymesh.mesh.mesh_distributions][] for more
+            information on distribution_u and distribution_w options.
+
+        Note:
+            Above example code block style works with MkDocs, but does not look nice
+            in Visual Studio Code.
         """
         length_u, length_w = surface.get_max_lengths()
         num_points_u = self.get_num_points(length_u, density_u)
@@ -118,7 +150,7 @@ class MeshGenerator:
         return panels
 
     def get_panels(self) -> list[list[float]]:
-        """Loops through mesh_surfaces and returns generated panels.
+        """Generates and returns panels for each item in the surfaces attribute list.
 
         Returns:
             panels: List of quadrilateral panels.

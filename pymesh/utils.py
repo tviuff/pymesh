@@ -1,8 +1,38 @@
+"""Package utility functions.
+
+Geometry helder functions:
+    - rotate_point_xyz
+    - mirror_point_xyz
+
+Validation functions:
+    - validate_curve_path_parameters
+    - validate_surface_path_parameters
+
+Benchmark functions:
+    - time_it
+"""
+
 import math
+import time
 
 import numpy as np
 
-from pymesh.other.typing import NDArray3
+from pymesh.typing import NDArray3
+
+
+def time_it(func):
+    """Wrapper function used to time function execution time"""
+
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(
+            f"Exceution of '{func.__name__}' took {round((end - start) * 1000)} mil sec."
+        )
+        return result
+
+    return wrapper
 
 
 def rotate_point_xyz(

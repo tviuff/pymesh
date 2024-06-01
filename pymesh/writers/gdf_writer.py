@@ -100,7 +100,11 @@ class GDFWriter:
         self._isy = value
 
     def write(self, filename: Path):
-        """Writes surface panels to file"""
+        """Writes surface panels to file.
+
+        Args:
+            filename (Path): Filename path without extention.
+        """
         self.__validate_filename(filename)
         with open(filename, "w+", encoding="utf-8") as file:
             file.write(f"{self.header}\n")

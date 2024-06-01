@@ -1,5 +1,4 @@
-"""Module with code for handling errors and exceptions
-"""
+"""Module with code for handling errors and exceptions."""
 
 
 class CurveIntersectionError(Exception):

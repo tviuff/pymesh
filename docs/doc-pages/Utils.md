@@ -1,1 +1,1 @@
-::: pymesh.other.utils
+::: pymesh.utils

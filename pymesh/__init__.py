@@ -19,6 +19,3 @@ from pymesh.mesh.mesh_distributions import CosineDistribution
 from pymesh.mesh.mesh_generator import MeshGenerator
 from pymesh.mesh.mesh_viewer import MeshViewer
 from pymesh.writers.gdf_writer import GDFWriter
-from pymesh.other import descriptors
-from pymesh.other import typing
-from pymesh.other import utils

@@ -2,11 +2,11 @@ from typing import Self
 
 import numpy as np
 
-from pymesh.other.descriptors import AsInstanceOf
+from pymesh.descriptors import AsInstanceOf
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.surfaces.surface import Surface
-from pymesh.other.typing import NDArray3
-from pymesh.other.utils import validate_surface_path_parameters
+from pymesh.typing import NDArray3
+from pymesh.utils import validate_surface_path_parameters
 
 
 class RuledSurface(Surface):

@@ -5,8 +5,8 @@ import numpy as np
 from pymesh.exceptions import CurveIntersectionError
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.surfaces.surface import Surface
-from pymesh.other.typing import NDArray3
-from pymesh.other.utils import validate_surface_path_parameters
+from pymesh.typing import NDArray3
+from pymesh.utils import validate_surface_path_parameters
 
 # ! Consider using sets instead of list|tuple: enforcing uniquenes !
 

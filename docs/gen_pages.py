@@ -1,11 +1,7 @@
 """Generate code reference pages and navigation.
 
-Based on the recipe of mkdocstrings:
+Based on the recipe from mkdocstrings:
 https://github.com/mkdocstrings/mkdocstrings
-
-Credits:
-Timothée Mazzucotelli
-https://github.com/pawamoy
 """
 
 from pathlib import Path
@@ -17,7 +13,9 @@ PKG_FILE_SRCH_PAT = "*.py"
 
 DOC_SRC_DIR = "auto-doc-pages"
 DOC_SUMMARY_FILE = "SUMMARY.md"
+import matplotlib.pyplot as plt
 
+plt.plot
 nav = mkdocs_gen_files.Nav()
 for path in sorted(Path(PKG_SRC_DIR).rglob(PKG_FILE_SRCH_PAT)):
 

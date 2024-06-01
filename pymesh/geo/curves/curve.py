@@ -5,8 +5,8 @@ from typing import Self
 import numpy as np
 
 from pymesh.geo.point import Point
-from pymesh.other.descriptors import AsInstanceOf
-from pymesh.other.typing import NDArray3
+from pymesh.descriptors import AsInstanceOf
+from pymesh.typing import NDArray3
 
 
 class Curve(ABC):

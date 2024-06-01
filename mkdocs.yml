@@ -55,8 +55,7 @@ plugins:
   - search
   - gen-files:
       scripts:
-      - docs/gen_pages_from_package_directory.py
-      # - docs/gen_pages_from_package_initializer.py
+      - docs/gen_pages.py
   - literate-nav:
       nav_file: SUMMARY.md
   - section-index

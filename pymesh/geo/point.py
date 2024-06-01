@@ -3,9 +3,9 @@ from typing import Self
 
 import numpy as np
 
-from pymesh.other.descriptors import AsNumber
-from pymesh.other.typing import NDArray3
-from pymesh.other.utils import rotate_point_xyz, mirror_point_xyz
+from pymesh.descriptors import AsNumber
+from pymesh.typing import NDArray3
+from pymesh.utils import rotate_point_xyz, mirror_point_xyz
 
 
 class Point:
@@ -92,7 +92,7 @@ class Point:
     ) -> Self:
         """Rotates point around an axis.
 
-        Parameters are passed to rotate_point_xyz.
+        Parameters are passed to [pymesh.utils.rotate_point_xyz][].
         """
         self.x, self.y, self.z = rotate_point_xyz(
             self.x, self.y, self.z, angle, a, b, c, x0, y0, z0
@@ -110,7 +110,7 @@ class Point:
     ) -> Self:
         """Mirrors point in a plane.
 
-        Parameters are passed to mirror_point_xyz.
+        Parameters are passed to [pymesh.utils.mirror_point_xyz][].
         """
         self.x, self.y, self.z = mirror_point_xyz(
             self.x, self.y, self.z, a, b, c, x0, y0, z0

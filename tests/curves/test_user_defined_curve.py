@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from pymesh import Point, UserDefinedCurve
-from pymesh.other.typing import NDArray3
+from pymesh.typing import NDArray3
 
 
 TOLERANCE = 0.0001
