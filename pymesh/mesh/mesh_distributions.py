@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import math
 from typing import Self
 
-from pymesh.descriptors import AsNumber
+from pymesh.other.descriptors import AsNumber
 
 
 class MeshDistribution(ABC):

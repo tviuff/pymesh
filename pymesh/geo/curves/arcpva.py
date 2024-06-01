@@ -4,11 +4,11 @@ import math
 from typing import Self
 import numpy as np
 
-from pymesh.descriptors import AsNumber
+from pymesh.other.descriptors import AsNumber
 from pymesh.geo.point import Point
 from pymesh.geo.curves.curve import Curve
-from pymesh.typing import NDArray3
-from pymesh.utils import (
+from pymesh.other.typing import NDArray3
+from pymesh.other.utils import (
     validate_curve_path_parameters,
     rotate_point_xyz,
     mirror_point_xyz,

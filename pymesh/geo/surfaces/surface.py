@@ -5,7 +5,7 @@ from typing import Self
 
 import numpy as np
 
-from pymesh.typing import NDArray3
+from pymesh.other.typing import NDArray3
 
 
 class Surface(ABC):

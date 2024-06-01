@@ -9,7 +9,7 @@ from typing import Callable, TypeVar, ParamSpec
 
 import numpy as np
 
-from pymesh.typing import NDArray3
+from pymesh.other.typing import NDArray3
 
 T = TypeVar("T")
 P = ParamSpec("P")

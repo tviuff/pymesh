@@ -5,14 +5,14 @@ from typing import Self
 
 import numpy as np
 
-from pymesh.descriptors import AsInstanceOf
+from pymesh.other.descriptors import AsInstanceOf
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.point import Point
-from pymesh.typing import NDArray3
-from pymesh.utils import validate_curve_path_parameters
+from pymesh.other.typing import NDArray3
+from pymesh.other.utils import validate_curve_path_parameters
 
 
-TOLERANCE = 0.0001
+ATOL = 0.000001
 
 
 class Arc3P(Curve):
@@ -156,7 +156,7 @@ class Arc3P(Curve):
 def validate_radii_and_cross_product(centre: Point, start: Point, end: Point) -> None:
     radius_start = np.sqrt(np.sum((start - centre) ** 2))
     radius_end = np.sqrt(np.sum((end - centre) ** 2))
-    if np.abs(radius_end - radius_start) / radius_start > TOLERANCE:
+    if np.abs(radius_end - radius_start) > ATOL:
         raise ValueError("Resulting radii at start and end are different")
     cross_product = np.cross((start - centre), (end - centre))
     if np.all(cross_product == 0):

@@ -6,9 +6,9 @@ import numpy as np
 
 from pymesh.geo.curves.curve import Curve
 from pymesh.geo.point import Point
-from pymesh.typing import NDArray3
-from pymesh.descriptors import AsContainerOf
-from pymesh.utils import validate_curve_path_parameters
+from pymesh.other.typing import NDArray3
+from pymesh.other.descriptors import AsContainerOf
+from pymesh.other.utils import validate_curve_path_parameters
 
 NUM_POINTS = 1000
 

@@ -2,7 +2,7 @@ import math
 
 import numpy as np
 
-from pymesh.typing import NDArray3
+from pymesh.other.typing import NDArray3
 
 
 def rotate_point_xyz(

@@ -1,1 +1,1 @@
-::: pymesh.gdf_writer.GDFWriter
+::: pymesh.writers.gdf_writer.GDFWriter

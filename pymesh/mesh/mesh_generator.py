@@ -3,7 +3,7 @@ import numpy as np
 from pymesh.geo.surfaces.surface import Surface
 
 from pymesh.mesh.mesh_distributions import MeshDistribution, LinearDistribution
-from pymesh.typing import NDArray3xNxN
+from pymesh.other.typing import NDArray3xNxN
 
 
 class MeshGenerator:

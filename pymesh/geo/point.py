@@ -3,9 +3,9 @@ from typing import Self
 
 import numpy as np
 
-from pymesh.descriptors import AsNumber
-from pymesh.typing import NDArray3
-from pymesh.utils import rotate_point_xyz, mirror_point_xyz
+from pymesh.other.descriptors import AsNumber
+from pymesh.other.typing import NDArray3
+from pymesh.other.utils import rotate_point_xyz, mirror_point_xyz
 
 
 class Point:

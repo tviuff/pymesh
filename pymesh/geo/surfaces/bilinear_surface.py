@@ -2,11 +2,11 @@ from typing import Self
 
 import numpy as np
 
-from pymesh.descriptors import AsInstanceOf
+from pymesh.other.descriptors import AsInstanceOf
 from pymesh.geo.point import Point
 from pymesh.geo.surfaces.surface import Surface
-from pymesh.typing import NDArray3
-from pymesh.utils import validate_surface_path_parameters
+from pymesh.other.typing import NDArray3
+from pymesh.other.utils import validate_surface_path_parameters
 
 
 class BilinearSurface(Surface):
