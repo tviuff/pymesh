@@ -1,0 +1,3 @@
+# The Project
+
+The `PyMesh` project is the first attempt of a package made by [tviuff](https://github.com/tviuff). The idea behind the package came when working on a floating wind turbine (FWT) concept and having to defined the FWT geometry as part of the hydrodynamic wave load analysis in [WAMIT](https://www.wamit.com/). At the time, no input low-order geometric data file (GDF) was available and so the geometry was made using functional programming, based on project-specified dimensions. Ever since then, the idea of creating a simpe API for generating simple geometries and converting them to low-order geometric data files was born.

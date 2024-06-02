@@ -1,6 +1,6 @@
 """Package utility functions.
 
-Geometry helder functions:
+Geometry helper functions:
     - rotate_point_xyz
     - mirror_point_xyz
 

@@ -1,6 +1,6 @@
 """Package module for testing docstring copy methods.
 
-Warning:
+Note:
     Currently the @copy_docstring implementation does not work!
 """
 

@@ -11,7 +11,7 @@ import mkdocs_gen_files
 PKG_SRC_DIR = "pymesh"
 PKG_FILE_SRCH_PAT = "*.py"
 
-DOC_SRC_DIR = "auto-doc-pages"
+DOC_SRC_DIR = "doc-pages/auto-generated/"
 DOC_SUMMARY_FILE = "SUMMARY.md"
 
 nav = mkdocs_gen_files.Nav()

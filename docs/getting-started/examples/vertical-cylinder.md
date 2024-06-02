@@ -1,6 +1,6 @@
-## Creating panels for a vertical cylinder
+# Vertical cylinder
 
-```py linenums="1" title="cylinder.py"
+```py linenums="1""
 import math
 from pathlib import Path
 
@@ -54,5 +54,5 @@ viewer = MeshViewer(mesh)
 viewer.show()
 
 writer = GDFWriter(mesh)
-writer.write(filename=Path("output", "cylinder.gdf"))
+writer.write(filename=Path("output", "vertical-cylinder.gdf"))
 ```

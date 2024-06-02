@@ -9,19 +9,20 @@ from pymesh.mesh.mesh_generator import MeshGenerator
 
 
 class GDFWriter:
-    """Writes surface panels to filename with the extension '.gdf'
+    """Writes surface panels to filename with the extension 'gdf'.
 
-    Planes of symmetry:
-    isx = True:  The x = 0 plane is a geometric plane of symmetry
-    isx = False: The x = 0 plane is not a geometric plane of symmetry
-    isy = True:  The y = 0 plane is a geometric plane of symmetry
-    isy = False: The y = 0 plane is not a geometric plane of symmetry
+    For information regarding the file formatting, refer to Section 6.1
+    in the [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pdf).
 
     Attributes:
         ulen (float): unit length
         grav (float): gravitational constant
-        isx (bool): symmetry in x=0
-        isy (bool): symmetry in y=0
+        isx (bool): symmetry in x=0.
+            If True, the x = 0 plane is a geometric plane of symmetry.
+            If False, the x = 0 plane is *not* a geometric plane of symmetry.
+        isy (bool): symmetry in y=0.
+            If True, the y = 0 plane is a geometric plane of symmetry.
+            If False, the y = 0 plane is *not* a geometric plane of symmetry.
         header (str): header line in output file
     """
 
