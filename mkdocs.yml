@@ -8,8 +8,7 @@ theme:
   features:
     - navigation.tabs
     - navigation.top
-    # - navigation.expand
-    # - navigation.indexes
+    # - navigation.indexes  # ! conflicts with the section-index plugin for auto-generated docs
     - content.code.copy
     - content.code.select
     - content.code.annotate
@@ -51,7 +50,6 @@ extra:
       make our documentation better.
 
 plugins:
-  #- awesome-pages
   - search
   - gen-files:
       scripts:
@@ -93,6 +91,5 @@ markdown_extensions:
       custom_fences:
         - name: mermaid
           class: mermaid
-          # format: !!python/name:pymdownx.superfences.fence_code_format
   - toc:
       permalink: "#"

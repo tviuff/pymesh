@@ -13,19 +13,19 @@ PKG_FILE_SRCH_PAT = "*.py"
 
 DOC_SRC_DIR = "auto-doc-pages"
 DOC_SUMMARY_FILE = "SUMMARY.md"
-import matplotlib.pyplot as plt
 
-plt.plot
 nav = mkdocs_gen_files.Nav()
 for path in sorted(Path(PKG_SRC_DIR).rglob(PKG_FILE_SRCH_PAT)):
 
     # Get path in module, documentation and absolute
-    path_no_ext = path.relative_to(PKG_SRC_DIR).with_suffix("")
+    path_noext = path.relative_to(PKG_SRC_DIR).with_suffix("")
     path_md = path.relative_to(PKG_SRC_DIR).with_suffix(".md")
     path_md_full = Path(DOC_SRC_DIR, path_md)
 
     # Handle edge cases
-    parts = (PKG_SRC_DIR,) + tuple(path_no_ext.parts)
+    parts = (PKG_SRC_DIR,) + tuple(
+        path_noext.parts
+    )  # tuple(src_dir, /file1, /file2, ...)
     if parts[-1] == "__init__":
         parts = parts[:-1]
         path_md = path_md.with_name("index.md")
