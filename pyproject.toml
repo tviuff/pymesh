@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pymesh"
-version = "1.0.0"
+version = "1.1.0"
 description = "Geometry package for generating geometric data files for import and use in WAMIT"
 authors = ["Thomas Viuff <tviuff@gmail.com>"]
 license = "MIT"
