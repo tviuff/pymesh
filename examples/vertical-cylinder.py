@@ -1,10 +1,10 @@
-"""Cylinder example"""
+"""Vertical Cylinder Example"""
 
 import sys, os
 
 sys.path.append(os.path.abspath(os.path.join("..", "pymesh")))
 
-# /examples/cylinder.py
+# ```py linenums="1"" title="pymesh/examples/vertical-cylinder.py"
 
 import math
 from pathlib import Path
@@ -55,9 +55,12 @@ mesh.add_surface(
     distribution_w=ExponentialDistribution(flip_direction=True),
 )
 
-if __name__ == "__main__":
-    viewer = MeshViewer(mesh)
-    viewer.show()
+# Inspect the mesh geometry
+viewer = MeshViewer(mesh)
+viewer.show()
 
-    writer = GDFWriter(mesh)
-    writer.write(filename=Path("output", "cylinder.gdf"))
+# Write mesh to a geometric data file
+writer = GDFWriter(mesh)
+writer.write(filename=Path("output", "vertical-cylinder.gdf"))
+
+# ```

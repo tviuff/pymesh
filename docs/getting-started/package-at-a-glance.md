@@ -6,7 +6,7 @@ The package is based on object-oriented programming and generates three-dimentio
 
 ### Creating the mesh geometry
 
-```python linenums="1"
+```python linenums="1" title="pymesh/examples/vertical-cylinder.py"
 from pymesh import Point, Line, Arc3P, SweptSurface
 from pymesh import MeshGenerator, MeshViewer, GDFWriter
 
@@ -24,7 +24,7 @@ line = Line(start=p1, end=p4)
 surface = SweptSurface(curve=arc, sweeper=line)
 
 # Initialize the mesh and add the surface to it
-mesh = MeshGenerater()
+mesh = MeshGenerator()
 mesh.add_surface(surface)
 ```
 
@@ -38,7 +38,7 @@ viewer = MeshViewer(mesh)
 viewer.show()
 ```
 
-![Visualization of cylinder surface panels and normals using MeshViewer](../img/cylinder.png "Visualization of cylinder surface panels and normals using MeshViewer")
+![Visualization of panel mesh using MeshViewer](../img/simple-example.png "Visualization of panel mesh using MeshViewer")
 
 ### Write the mesh to a geometric data file
 
@@ -49,7 +49,7 @@ from pathlib import Path
 
 # Write geometry to a gdf file
 writer = GDFWriter(mesh)
-writer.write(filename=Path("example.gdf"))
+writer.write(filename=Path("output", "simple-example.gdf"))
 ```
 
 Above code generates the following text file. For information regarding `GDFWriter` file formatting, the reader is referred to Section 6.1 in the [WAMIT Manual](https://www.wamit.com/manual7.x/v75_manual.pdf).
@@ -58,15 +58,14 @@ Above code generates the following text file. For information regarding `GDFWrit
 auto-generated using the pymesh package
 1.000000 9.816000
 0 0
-240
-+0.0000e+00 +2.0000e-01 -1.0000e+00 +2.0000e-01 +2.0000e-01 -1.0000e+00 +2.0000e-01 +0.0000e+00 -1.0000e+00 +0.0000e+00 +0.0000e+00 -1.0000e+00
-+2.0000e-01 +2.0000e-01 -1.0000e+00 +4.0000e-01 +2.0000e-01 -1.0000e+00 +4.0000e-01 +0.0000e+00 -1.0000e+00 +2.0000e-01 +0.0000e+00 -1.0000e+00
-+0.0000e+00 +4.0000e-01 -1.0000e+00 +2.0000e-01 +4.0000e-01 -1.0000e+00 +2.0000e-01 +2.0000e-01 -1.0000e+00 +0.0000e+00 +2.0000e-01 -1.0000e+00
-+2.0000e-01 +4.0000e-01 -1.0000e+00 +4.0000e-01 +4.0000e-01 -1.0000e+00 +4.0000e-01 +2.0000e-01 -1.0000e+00 +2.0000e-01 +2.0000e-01 -1.0000e+00
-+4.0000e-01 +0.0000e+00 -1.0000e+00 +4.0000e-01 +1.0000e-01 -1.0000e+00 +5.9360e-01 +1.3170e-01 -1.0000e+00 +6.0000e-01 +0.0000e+00 -1.0000e+00
-+4.0000e-01 +1.0000e-01 -1.0000e+00 +4.0000e-01 +2.0000e-01 -1.0000e+00 +5.7463e-01 +2.6089e-01 -1.0000e+00 +5.9360e-01 +1.3170e-01 -1.0000e+00
-+4.0000e-01 +2.0000e-01 -1.0000e+00 +4.0000e-01 +3.0000e-01 -1.0000e+00 +5.4382e-01 +3.8519e-01 -1.0000e+00 +5.7463e-01 +2.6089e-01 -1.0000e+00
-+4.0000e-01 +3.0000e-01 -1.0000e+00 +4.0000e-01 +4.0000e-01 -1.0000e+00 +5.0237e-01 +5.0237e-01 -1.0000e+00 +5.4382e-01 +3.8519e-01 -1.0000e+00
-+6.0000e-01 +0.0000e+00 -1.0000e+00 +5.9360e-01 +1.3170e-01 -1.0000e+00 +7.8719e-01 +1.6339e-01 -1.0000e+00 +8.0000e-01 +0.0000e+00 -1.0000e+00
+40
+-1.0000e+00 +0.0000e+00 +0.0000e+00 -9.8079e-01 -1.9509e-01 +0.0000e+00 -9.8079e-01 -1.9509e-01 +2.0000e-01 -1.0000e+00 +0.0000e+00 +2.0000e-01
+-9.8079e-01 -1.9509e-01 +0.0000e+00 -9.2388e-01 -3.8268e-01 +0.0000e+00 -9.2388e-01 -3.8268e-01 +2.0000e-01 -9.8079e-01 -1.9509e-01 +2.0000e-01
+-9.2388e-01 -3.8268e-01 +0.0000e+00 -8.3147e-01 -5.5557e-01 +0.0000e+00 -8.3147e-01 -5.5557e-01 +2.0000e-01 -9.2388e-01 -3.8268e-01 +2.0000e-01
+-8.3147e-01 -5.5557e-01 +0.0000e+00 -7.0711e-01 -7.0711e-01 +0.0000e+00 -7.0711e-01 -7.0711e-01 +2.0000e-01 -8.3147e-01 -5.5557e-01 +2.0000e-01
+-7.0711e-01 -7.0711e-01 +0.0000e+00 -5.5557e-01 -8.3147e-01 +0.0000e+00 -5.5557e-01 -8.3147e-01 +2.0000e-01 -7.0711e-01 -7.0711e-01 +2.0000e-01
+-5.5557e-01 -8.3147e-01 +0.0000e+00 -3.8268e-01 -9.2388e-01 +0.0000e+00 -3.8268e-01 -9.2388e-01 +2.0000e-01 -5.5557e-01 -8.3147e-01 +2.0000e-01
+-3.8268e-01 -9.2388e-01 +0.0000e+00 -1.9509e-01 -9.8079e-01 +0.0000e+00 -1.9509e-01 -9.8079e-01 +2.0000e-01 -3.8268e-01 -9.2388e-01 +2.0000e-01
+-1.9509e-01 -9.8079e-01 +0.0000e+00 -6.1232e-17 -1.0000e+00 +0.0000e+00 -6.1232e-17 -1.0000e+00 +2.0000e-01 -1.9509e-01 -9.8079e-01 +2.0000e-01
 ...
 ```

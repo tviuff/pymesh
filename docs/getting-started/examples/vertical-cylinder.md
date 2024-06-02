@@ -1,6 +1,4 @@
-# Vertical cylinder
-
-```py linenums="1""
+```py linenums="1""  title="pymesh/examples/vertical-cylinder.py"
 import math
 from pathlib import Path
 
@@ -50,9 +48,11 @@ mesh.add_surface(
     distribution_w=ExponentialDistribution(flip_direction=True),
 )
 
+# Inspect the mesh geometry
 viewer = MeshViewer(mesh)
 viewer.show()
 
+# Write mesh to a geometric data file
 writer = GDFWriter(mesh)
 writer.write(filename=Path("output", "vertical-cylinder.gdf"))
 ```

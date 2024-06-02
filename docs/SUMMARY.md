@@ -1,6 +1,6 @@
-* [Getting Started](getting-started/index.md)
-    * [Installation](getting-started/installation.md)
+* Getting Started
     * [Package at a Glance](getting-started/package-at-a-glance.md)
+    * [Installation](getting-started/installation.md)
     * [How-To-Guides](getting-started/how-to-guides/)
     * [Examples](getting-started/examples/)
 * [Documentation](doc-pages/index.md)
