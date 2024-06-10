@@ -6,6 +6,9 @@ from pymesh.mesh.mesh_distributions import MeshDistribution, LinearDistribution
 from pymesh.typing import NDArray3xNxN
 
 
+# ! create a Surface method 'get_mesh_info()' to use here in the initializer.
+
+
 class MeshGenerator:
     """Mesh generator class.
 
@@ -90,7 +93,7 @@ class MeshGenerator:
                 while float values represent panel size.
 
         Returns:
-            num_points: Nummber of points needed along surface dimension.
+            num_points: Number of points needed along surface dimension.
         """
         num_points = density + 1
         if isinstance(density, float):

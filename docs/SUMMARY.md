@@ -7,7 +7,10 @@
     * [API](doc-pages/)
     * [API (auto-generated)](doc-pages/auto-generated/)
 * [Development](dev/index.md)
-    * ULM Diagrams
+    * Relevant Design Patterns
+        * [Strategy Design Pattern](dev/design_pattern_strategy.md)
+        * [Bridge Design Pattern](dev/design_pattern_bridge.md)
+    * PyMesh ULM Diagrams
         * [Curves](dev/curves.md)
         * [Mesh Distributions](dev/mesh_distributions.md)
 * About

@@ -180,7 +180,7 @@ def validate_surface_path_parameters(
             then w = (1 - w), i.e. the direction is flipped.
 
     Returns:
-        (tuple): Tuple (u, w) with normalized parameters btween 0 and 1.
+        (tuple): Tuple (u, w) with normalized parameters between 0 and 1.
 
     Raises:
         TypeError: If u or w is not of type int or float
